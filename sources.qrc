@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/favicon.png</file>
+        <file>icons/fileA.png</file>
+        <file>icons/fileB.png</file>
+        <file>icons/graph.png</file>
+        <file>icons/tableA.png</file>
+        <file>icons/tableB.png</file>
+        <file>icons/algorithm.png</file>
+        <file>icons/info.png</file>
+        <file>icons/shortcuts.png</file>
+    </qresource>
+</RCC>

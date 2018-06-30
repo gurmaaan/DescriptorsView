@@ -32,3 +32,8 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+RESOURCES += \
+    sources.qrc
+
+win32: RC_FILE = iconsource.rc
