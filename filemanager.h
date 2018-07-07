@@ -19,7 +19,11 @@ public:
     explicit FileManager(QObject *parent = nullptr);
     QString getOpenedFilePath();
 
+    //QVector<double> selected;
     QStandardItemModel *getCsvModel(QString filePath);
+
+
+    QString getTextOfFile(QString path);
 
 signals:
     void rowCountChanged( int newRowCount);
@@ -31,6 +35,7 @@ private:
     QString cutOnset(QString longString);
     QStringList cutAndSplit(QString str);
     QString getFirst(QString str);
+
 };
 
 #endif // FILEMANAGER_H

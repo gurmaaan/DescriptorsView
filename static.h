@@ -13,4 +13,8 @@
 #define ENCODING "Windows-1251"
 #endif
 
+#ifndef DOESNT_EXIST
+#define DOESNT_EXIST "File not exists"
+#endif
+
 #endif // STATIC_H

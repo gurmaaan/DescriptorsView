@@ -15,6 +15,11 @@ QString FileManager::getOpenedFilePath()
     return  fileName;
 }
 
+//QVector<double> FileManager::getSelected() const
+//{
+//    return selected;
+//}
+
 QStandardItemModel *FileManager::getCsvModel(QString filePath)
 {
     QStandardItemModel *csvModel = new QStandardItemModel();
@@ -22,7 +27,7 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
 
     if ( !file.open(QFile::ReadOnly | QFile::Text ) )
     {
-        qDebug() << tr("File not exists");
+        qDebug() << tr(DOESNT_EXIST);
         csvModel->setColumnCount(1);
         return csvModel;
     } else
@@ -43,8 +48,10 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
 
         for (int i = 0; i < colCnt; i++)
         {
-            QStandardItem *hHeaderItem = new QStandardItem(hHStrList.at(i));
-            hHeaderItem->setData(hHStrList.at(i) );
+            QString curHStr = hHStrList.at(i);
+            QStandardItem *hHeaderItem = new QStandardItem(curHStr);
+            hHeaderItem->setData(curHStr);
+            hHeaderItem->setStatusTip(curHStr);
             hHeaderItem->setTextAlignment(Qt::AlignCenter);
             hHeaderItem->setEditable(false);
             hHeaderItem->setFont(QFont(hHeaderItem->font().family(), 13, QFont::Bold));
@@ -62,6 +69,8 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
              QStandardItem* vHItem = new QStandardItem(vHStr);
              vHItem->setData(vHStr, Qt::EditRole);
              vHItem->setData(cutOnset(vHStr), Qt::DisplayRole);
+             vHItem->setWhatsThis(vHStr);
+             vHItem->setStatusTip(vHStr);
              vHItem->setTextAlignment(Qt::AlignRight);
              vHItem->setTextAlignment(Qt::AlignVCenter);
              vHItem->setFont(QFont(vHItem->font().family(), 13, QFont::Bold));
@@ -73,25 +82,45 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
              for (QString itemStr : itemsStrList)
              {
                  QStandardItem *item = new QStandardItem(itemStr);
-                 item->setData(itemStr.toDouble(), Qt::EditRole);
+
+                 itemStr.replace(",", ".");
+                 double numericValue = itemStr.toDouble();
+
+                 item->setData(numericValue, Qt::EditRole);
+                 item->setStatusTip(QString::number(numericValue));
+                 item->setWhatsThis(itemStr);
+
                  item->setData(itemStr, Qt::DisplayRole);
                  item->setTextAlignment(Qt::AlignCenter);
+
                  standardItemsList.append(item);
 
              }
              csvModel->insertRow(csvModel->rowCount(), standardItemsList);
              csvModel->setVerticalHeaderItem(csvModel->rowCount() - 1, vHItem);
-             //csvModel->verticalHeaderItem(csvModel->rowCount())->setFont(headerVFont);
-             //csvModel->verticalHeaderItem(csvModel->rowCount()-1)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-             //csvModel->setHeaderData(csvModel->rowCount() - 1, Qt::Vertical, headerVFont, Qt::FontRole);
-             //csvModel->setHeaderData(csvModel->rowCount() - 1, Qt::Vertical, Qt::AlignRight, Qt::TextAlignmentRole);
-             //csvModel->setHeaderData(csvModel->rowCount() - 1, Qt::Vertical, newVerticalLabel);
-             //csvModel->horizontalHeaderItem(csvModel->rowCount() - 1)->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 
          }
          file.close();
          return csvModel;
     }
+}
+
+QString FileManager::getTextOfFile(QString path)
+{
+    QFile file(path);
+    QString textOfFile;
+    if ( !file.open(QFile::ReadOnly | QFile::Text ) )
+    {
+        qDebug() << tr(DOESNT_EXIST);
+        textOfFile = "";
+    } else
+    {
+         QTextStream in(&file);
+         in.setCodec(QTextCodec::codecForName(ENCODING));
+         textOfFile = in.readAll();
+    }
+    file.close();
+    return textOfFile;
 }
 
 QString FileManager::requiredPath(QDir currentDir, const QString &redirect)
