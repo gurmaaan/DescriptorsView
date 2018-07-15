@@ -52,6 +52,28 @@ void MainWindow::chartInit()
 
 }
 
+void MainWindow::makeAllItemsTextColor(QAbstractItemModel *model, int colorCode)
+{
+    for(int c = 0; c < model->columnCount(); c++)
+        for(int r = 0; r < model->rowCount(); r++)
+            model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
+}
+
+void MainWindow::setFontBold(QStandardItem *item)
+{
+    item->setFont(QFont(item->font().family(), item->font().pointSize(), QFont::Bold));
+}
+
+void MainWindow::makeItemTextColor(QStandardItem *item, int colorCode)
+{
+    item->setData(QColor(colorCode), Qt::TextColorRole);
+}
+
+void MainWindow::makeItemTextColor(QAbstractItemModel *model, int r, int c, int colorCode)
+{
+    model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
+}
+
 void MainWindow::on_openFileAction_triggered()
 {
     QString path = fm.getOpenedFilePath();
@@ -67,33 +89,47 @@ void MainWindow::on_openFileAction_triggered()
 
 void MainWindow::on_tableView_clicked(const QModelIndex &index)
 {
-//    if(ui->selectionTableView->model()->columnCount() > 0)
-//        ui->selectionTableView->model()->removeColumn(0);
-
     QStandardItemModel *selectionModel = new QStandardItemModel;
     QAbstractItemModel *tm = ui->tableView->model();
-
+    //FixMe:: при первом клике сильно тупит
+    //makeAllItemsTextColor(tm, Qt::black);
+    makeItemTextColor(tm, index.row(), index.column(), Qt::red);
     QList<QStandardItem*> selectedItemsList;
     for(int i = 0; i < tm->columnCount(); i++)
     {
         QString selectedRowTextAtI = tm->index(index.row(), i).data().toString();
-        selectedItemsList << new QStandardItem(selectedRowTextAtI);
+        QStandardItem *itemAtI = new QStandardItem(selectedRowTextAtI);
+        if(i == index.column())
+            itemAtI->setData(QColor(Qt::red), Qt::TextColorRole);
+        selectedItemsList << itemAtI;
     }
     selectionModel->insertColumn(0, selectedItemsList);
 
-    QStandardItem *selectedVerticalHeaderItem = new QStandardItem;
+    for(int i = 0; i < tm->columnCount(); i++)
+    {
+        QStandardItem *vHItemAtI = new QStandardItem;
+        QString hHTextAtI = tm->headerData(i, Qt::Horizontal).toString();
+        vHItemAtI->setData(hHTextAtI, Qt::DisplayRole);
+        setFontBold(vHItemAtI);
+        if(i == index.column())
+            vHItemAtI->setData(QColor(Qt::red), Qt::TextColorRole);
+        selectionModel->setVerticalHeaderItem(i, vHItemAtI);
+    }
+
+    QStandardItem *selectedvHItem = new QStandardItem;
     QString hHeaderSelectedRowText = tm->headerData(index.row(), Qt::Vertical).toString();
-    selectedVerticalHeaderItem->setData(hHeaderSelectedRowText, Qt::DisplayRole);
-    selectionModel->setHeaderData(0, Qt::Horizontal, hHeaderSelectedRowText);
+    selectedvHItem->setData(hHeaderSelectedRowText, Qt::DisplayRole);
+    setFontBold(selectedvHItem);
+    selectionModel->setHorizontalHeaderItem(0, selectedvHItem);
 
     ui->selectionTableView->setModel(selectionModel);
+    QAbstractItemModel *sm = ui->selectionTableView->model();
+    ui->selectionTableView->scrollTo( sm->index(index.column(), 0));
 }
 
 void MainWindow::on_originalTextButton_clicked()
 {
-    int selectedRow = 0;
     ui->originalTextAction->trigger();
-
 }
 
 void MainWindow::on_originalTextAction_triggered()
@@ -105,5 +141,29 @@ void MainWindow::on_originalTextAction_triggered()
         ui->textTab->setEnabled(true);
         ui->textTab->setVisible(true);
         ui->tabWidget->setCurrentIndex(1);
+    }
+}
+
+void MainWindow::on_selectionTableView_clicked(const QModelIndex &index)
+{
+    QAbstractItemModel *tm = ui->tableView->model();
+    QAbstractItemModel *sm = ui->selectionTableView->model();
+
+    for(int r = 0; r < sm->rowCount(); r++)
+        sm->setHeaderData(r, Qt::Vertical, QColor(Qt::black), Qt::TextColorRole);
+
+    if(sm->columnCount() >= 1)
+    {
+        makeAllItemsTextColor(sm, Qt::black);
+        makeAllItemsTextColor(tm, Qt::black);
+        QString sHHtext = sm->headerData(index.column(), Qt::Horizontal).toString();
+        int rowN = 0;
+        for(int r = 0; r < tm->rowCount(); r++)
+        {
+            if( tm->headerData(r, Qt::Vertical).toString() == sHHtext)
+                rowN = r;
+        }
+        makeItemTextColor(tm, rowN, index.row(), Qt::red);
+        ui->tableView->scrollTo(tm->index(rowN, index.row()));
     }
 }

@@ -29,11 +29,17 @@ private slots:
 
     void on_originalTextAction_triggered();
 
+    void on_selectionTableView_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
     FileManager fm;
     void connectAll();
     void chartInit();
+    void makeAllItemsTextColor(QAbstractItemModel *model, int colorCode);
+    void setFontBold(QStandardItem *item);
+    void makeItemTextColor(QStandardItem *item, int colorCode);
+    void makeItemTextColor(QAbstractItemModel *model, int r, int c, int colorCode);
 };
 
 #endif // MAINWINDOW_H

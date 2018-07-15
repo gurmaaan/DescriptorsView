@@ -72,7 +72,7 @@
             </size>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="alternatingRowColors">
             <bool>true</bool>
@@ -127,7 +127,7 @@
      <x>0</x>
      <y>0</y>
      <width>937</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -156,7 +156,11 @@
    <widget class="QWidget" name="selectionContentWidget">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QTableView" name="selectionTableView"/>
+      <widget class="QTableView" name="selectionTableView">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
