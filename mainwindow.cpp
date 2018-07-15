@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
+    chartInit();
     showMaximized();
     connectAll();
 }
@@ -33,18 +34,22 @@ void MainWindow::connectAll()
             ui->firstRowCOlLineEdit, &QLineEdit::setText);
 
 }
-
 void MainWindow::chartInit()
 {
     QChart *chart = new QChart;
     chart->setAnimationOptions(QChart::AllAnimations);
-
     QLineSeries *series = new QLineSeries;
-    QXYModelMapper *mapper = new QXYModelMapper(this);
-    mapper->setXSection(0);
-    mapper->setYSection(1);
-    mapper->setSeries(series);
-    mapper->setModel(ui->tableView->selectionModel());
+    chart->addSeries(series);
+    QChartView *chartView = new QChartView;
+    chartView->setChart(chart);
+
+    ui->splitter->insertWidget(1, chartView);
+//    QXYModelMapper *mapper = new QXYModelMapper(this);
+//    mapper->(0);
+//    mapper->setYSection(1);
+//    mapper->setSeries(series);
+   // mapper->setModel(ui->tableView->selectionModel());
+
 }
 
 void MainWindow::on_openFileAction_triggered()
@@ -62,11 +67,31 @@ void MainWindow::on_openFileAction_triggered()
 
 void MainWindow::on_tableView_clicked(const QModelIndex &index)
 {
-    qDebug() << "Selected row : " << index.row() << "Selected column : " << index.column();
+//    if(ui->selectionTableView->model()->columnCount() > 0)
+//        ui->selectionTableView->model()->removeColumn(0);
+
+    QStandardItemModel *selectionModel = new QStandardItemModel;
+    QAbstractItemModel *tm = ui->tableView->model();
+
+    QList<QStandardItem*> selectedItemsList;
+    for(int i = 0; i < tm->columnCount(); i++)
+    {
+        QString selectedRowTextAtI = tm->index(index.row(), i).data().toString();
+        selectedItemsList << new QStandardItem(selectedRowTextAtI);
+    }
+    selectionModel->insertColumn(0, selectedItemsList);
+
+    QStandardItem *selectedVerticalHeaderItem = new QStandardItem;
+    QString hHeaderSelectedRowText = tm->headerData(index.row(), Qt::Vertical).toString();
+    selectedVerticalHeaderItem->setData(hHeaderSelectedRowText, Qt::DisplayRole);
+    selectionModel->setHeaderData(0, Qt::Horizontal, hHeaderSelectedRowText);
+
+    ui->selectionTableView->setModel(selectionModel);
 }
 
 void MainWindow::on_originalTextButton_clicked()
 {
+    int selectedRow = 0;
     ui->originalTextAction->trigger();
 
 }

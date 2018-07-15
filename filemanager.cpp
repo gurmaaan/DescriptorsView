@@ -54,8 +54,8 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
             hHeaderItem->setStatusTip(curHStr);
             hHeaderItem->setTextAlignment(Qt::AlignCenter);
             hHeaderItem->setEditable(false);
-            hHeaderItem->setFont(QFont(hHeaderItem->font().family(), 13, QFont::Bold));
-            hHeaderItem->setSizeHint(QSize(100, 30));
+            hHeaderItem->setFont(QFont(hHeaderItem->font().family(), hHeaderItem->font().pointSize(), QFont::Bold));
+           // hHeaderItem->setSizeHint(QSize(100, 30));
             hHeaderItem->setBackground(QBrush(QColor(Qt::gray)));
             csvModel->setHorizontalHeaderItem(i, hHeaderItem);
         }
@@ -73,7 +73,7 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
              vHItem->setStatusTip(vHStr);
              vHItem->setTextAlignment(Qt::AlignRight);
              vHItem->setTextAlignment(Qt::AlignVCenter);
-             vHItem->setFont(QFont(vHItem->font().family(), 13, QFont::Bold));
+             vHItem->setFont(QFont(vHItem->font().family(), vHItem->font().pointSize(), QFont::Bold));
              vHItem->setEditable(false);
 
              QStringList itemsStrList = cutAndSplit(line);
@@ -163,3 +163,13 @@ QString FileManager::getFirst(QString str)
 {
     return str.split(";").first();
 }
+
+//QFont *FileManager::makeFontBold(QStandardItem &item)
+//{
+//    QFont *updatedFont = new QFont();
+//    updatedFont->setFamily(item.font().family());
+//    updatedFont->setPointSize(item.font().pointSize());
+//    updatedFont->setBold(true);
+
+//    return updatedFont;
+//}

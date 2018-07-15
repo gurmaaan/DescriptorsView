@@ -19,6 +19,7 @@ public:
     explicit FileManager(QObject *parent = nullptr);
     QString getOpenedFilePath();
 
+    //virtual QFont *makeFontBold(QStandardItem &item);
     //QVector<double> selected;
     QStandardItemModel *getCsvModel(QString filePath);
 
@@ -35,6 +36,7 @@ private:
     QString cutOnset(QString longString);
     QStringList cutAndSplit(QString str);
     QString getFirst(QString str);
+
 
 };
 
