@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -44,6 +45,8 @@ void MainWindow::chartInit()
     chartView->setChart(chart);
 
     ui->splitter->insertWidget(1, chartView);
+    //Костыль для одинаковой ширины таблицы и графика
+    ui->splitter->setSizes(QList<int>({INT_MAX, INT_MAX}));
 //    QXYModelMapper *mapper = new QXYModelMapper(this);
 //    mapper->(0);
 //    mapper->setYSection(1);

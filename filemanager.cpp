@@ -58,6 +58,7 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
            // hHeaderItem->setSizeHint(QSize(100, 30));
             hHeaderItem->setBackground(QBrush(QColor(Qt::gray)));
             csvModel->setHorizontalHeaderItem(i, hHeaderItem);
+
         }
 
          while (!in.atEnd())
@@ -69,6 +70,7 @@ QStandardItemModel *FileManager::getCsvModel(QString filePath)
              QStandardItem* vHItem = new QStandardItem(vHStr);
              vHItem->setData(vHStr, Qt::EditRole);
              vHItem->setData(cutOnset(vHStr), Qt::DisplayRole);
+             vHItem->setData(Qt::Checked, Qt::CheckStateRole);
              vHItem->setWhatsThis(vHStr);
              vHItem->setStatusTip(vHStr);
              vHItem->setTextAlignment(Qt::AlignRight);

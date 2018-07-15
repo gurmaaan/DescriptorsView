@@ -40,6 +40,7 @@ private:
     void setFontBold(QStandardItem *item);
     void makeItemTextColor(QStandardItem *item, int colorCode);
     void makeItemTextColor(QAbstractItemModel *model, int r, int c, int colorCode);
+
 };
 
 #endif // MAINWINDOW_H
