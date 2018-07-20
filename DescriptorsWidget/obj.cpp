@@ -96,11 +96,11 @@ void Obj::apendDescriptor(Descriptor *descriptor)
 QList<QStandardItem *> Obj::modelRow()
 {
     QList<QStandardItem*> list;
-    foreach(Descriptor descr, this->descriptors())
+    foreach(auto descr, this->descriptors())
     {
         QStandardItem *item = new QStandardItem();
-        item->setData( ItemsService::displayingStr(descr.data()), Qt::DisplayRole);
-        item->setData(descr.data(), Qt::EditRole);
+        item->setData( ItemsService::displayingStr(descr->data()), Qt::DisplayRole);
+        item->setData(descr->data(), Qt::EditRole);
         list << item;
     }
 

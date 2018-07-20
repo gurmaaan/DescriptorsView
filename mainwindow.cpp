@@ -29,7 +29,9 @@ void MainWindow::connectAll()
     connect(ui->viewer, &DescriptorsWidget::cornerRowChanged,
             ui->firstRowCOlLineEdit, &QLineEdit::setText);
 
-    connect(ui->viewer, &DescriptorsWidget::colCountChanged,
+    connect(ui->viewer, &DescriptorsWidget::colCountInFileChanged,
+            ui->fileColSpin, &QSpinBox::setValue);
+    connect(ui->viewer, &DescriptorsWidget::colCountinModelChanged,
             ui->modelColSpin, &QSpinBox::setValue);
 
     connect(ui->viewer, &DescriptorsWidget::rowCountInModelChanged,

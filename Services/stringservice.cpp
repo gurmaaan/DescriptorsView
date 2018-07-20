@@ -44,6 +44,11 @@ QStringList StringService::splitAndRemoveFirstRow(QString fileText)
     return list;
 }
 
+QStringList StringService::splitBySemicolon(QString str)
+{
+    return str.split(";");
+}
+
 QString StringService::getFirstCol(QString str)
 {
     return str.split(";").first();

@@ -22,6 +22,7 @@ public:
 
     QStringList splitAndRemoveFirstColOfFirstRow(QString fileText);
     QStringList splitAndRemoveFirstRow(QString fileText);
+    QStringList splitBySemicolon(QString str);
     static QString cutFilePath(QString longString);
 
     static QString replaceForDouble(QString &strWithComme);

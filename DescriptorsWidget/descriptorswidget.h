@@ -27,7 +27,7 @@ public:
     explicit DescriptorsWidget(QWidget *parent = nullptr);
     ~DescriptorsWidget();
 
-
+    QStandardItemModel *convertintoStandardModel(QVector<Obj*> objectsVector);
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
@@ -35,7 +35,8 @@ public slots:
 signals:
     void fileNameChanged(QString newFileName);
     void cornerRowChanged(QString newCornerRow);
-    void colCountChanged(int newColCount);
+    void colCountinModelChanged(int newColCount);
+    void colCountInFileChanged(int newColCount);
     void rowCountInModelChanged(int newRowCount);
     void rowCountInFileChanged(int newRowCount);
 

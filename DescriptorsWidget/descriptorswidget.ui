@@ -59,6 +59,9 @@
       <property name="horizontalScrollMode">
        <enum>QAbstractItemView::ScrollPerItem</enum>
       </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
     </widget>
    </item>
