@@ -3,6 +3,10 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QStandardItem>
+
+#include "Services/itemsservice.h"
+#include "Services/stringservice.h"
 #include "descriptor.h"
 
 class Obj : public QObject
@@ -11,7 +15,7 @@ class Obj : public QObject
 public:
     explicit Obj(QObject *parent = nullptr);
     Obj(const Obj &other);
-    Obj(int id, QString name);
+    Obj(int id, QString fullName);
     Obj(int id, QString name, QVector<Descriptor *> &descriptors);
 
     Obj &operator =(const Obj &o);
@@ -26,6 +30,12 @@ public:
     void setDescriptors(const QVector<Descriptor *> &descriptors);
     void apendDescriptor(Descriptor *descriptor);
 
+    QList<QStandardItem *> modelRow();
+    QStandardItem *rowHeader();
+
+    QString fullName() const;
+    void setFullName(const QString &fullName);
+
 signals:
 
 public slots:
@@ -33,12 +43,15 @@ public slots:
 private:
     int id_;
     QString name_;
+    QString fullName_;
     QVector<Descriptor *> descriptors_;
+
+    ItemsService *is_;
 };
 
 Q_DECLARE_METATYPE(Obj);
 
 bool operator ==(const Obj &o1, const Obj &o2);
-QDebug operator <<(QDebug dbg, const Obj &o);
+QDebug operator <<(QDebug dbg, const Obj *o);
 
 #endif // OBJECT_H

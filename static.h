@@ -5,12 +5,12 @@
 #define DATA_PATH "TableMapper/data"
 #endif
 
-#ifndef FILE_TYPE
-#define FILE_TYPE "Таблица CSV (*.csv);;Таблица Excel(*.xls*)"
-#endif
-
 #ifndef ENCODING
 #define ENCODING "Windows-1251"
+#endif
+
+#ifndef OPEN_FD_TITTLE
+#define OPEN_FD_TITTLE "Выберите файл с таблицей значений признаков"
 #endif
 
 #ifndef DOESNT_EXIST

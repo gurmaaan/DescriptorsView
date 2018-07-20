@@ -26,24 +26,28 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        filemanager.cpp \
+        DescriptorsWidget/descriptorswidget.cpp \
         DescriptorsWidget/descriptorsmodel.cpp \
-    DescriptorsWidget/descriptor.cpp \
-    DescriptorsWidget/obj.cpp \
-    DescriptorsWidget/descriptorswidget.cpp
+        DescriptorsWidget/obj.cpp \
+        DescriptorsWidget/descriptor.cpp \
+        Services/fileservice.cpp \
+        Services/itemsservice.cpp \
+        Services/stringservice.cpp
 
 HEADERS += \
         mainwindow.h \
-        filemanager.h \
         static.h \
+        DescriptorsWidget/descriptorswidget.h \
         DescriptorsWidget/descriptorsmodel.h \
-    DescriptorsWidget/descriptor.h \
-    DescriptorsWidget/obj.h \
-    DescriptorsWidget/descriptorswidget.h
+        DescriptorsWidget/obj.h \
+        DescriptorsWidget/descriptor.h \
+        Services/fileservice.h \
+        Services/itemsservice.h \
+        Services/stringservice.h
 
 FORMS += \
         mainwindow.ui \
-    DescriptorsWidget/descriptorswidget.ui
+        DescriptorsWidget/descriptorswidget.ui
 
 RESOURCES += \
     sources.qrc
