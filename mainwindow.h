@@ -34,6 +34,7 @@ private:
     FileService *fs_;
     ItemsService *is_;
     void connectAll();
+    void changeWindowProperties();
 };
 
 #endif // MAINWINDOW_H

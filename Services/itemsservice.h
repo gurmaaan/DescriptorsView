@@ -19,7 +19,7 @@ public:
     static void makeFontBold(QStandardItem *item);
 
     static QSize sizeOfOneSymb(QStandardItem *anyItem);
-    static void sizeCorrection(QStandardItem *item);
+    static QSize sizeCorrection(QStandardItem *item);
     static void alignText(QStandardItem *item,  Qt::Alignment flag);
 
     static void changeTextColor(QStandardItem *item, QColor color);

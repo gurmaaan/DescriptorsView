@@ -69,3 +69,20 @@ QString StringService::getFirstRow(QString str)
 {
     return str.split("\n").first();
 }
+
+QString StringService::multipleLine(QString str)
+{
+    int midUnderScore = str.count("_") / 2 + 1;
+    int underScoreCounter = 0;
+    int midPosition = 0;
+    for(int i = 0; i < str.length(); i++)
+    {
+        if(str.at(i) == "_")
+        {
+            underScoreCounter++;
+            if(underScoreCounter == midUnderScore)
+                midPosition = i;
+        }
+    }
+    return str.replace(midPosition, 1, "\n");
+}

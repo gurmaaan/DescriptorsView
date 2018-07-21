@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     fs_ = new FileService();
     is_ = new ItemsService();
     connectAll();
+    changeWindowProperties();
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +41,17 @@ void MainWindow::connectAll()
 
     connect(ui->viewer, &DescriptorsWidget::sendStatusMessage,
             this, &MainWindow::messageResiver);
+}
+
+void MainWindow::changeWindowProperties()
+{
+    if (QGuiApplication::screens().count() > 1)
+    {
+        QRect secndScrnGeom = QGuiApplication::screens().at(1)->geometry();
+        setGeometry(secndScrnGeom);
+        showFullScreen();
+    } else
+        showMaximized();
 }
 
 void MainWindow::on_openFileAction_triggered()

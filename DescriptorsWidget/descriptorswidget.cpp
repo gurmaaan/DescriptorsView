@@ -9,6 +9,8 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
     fs_ = new FileService();
     ss_ = new StringService();
     is_ = new ItemsService();
+
+    setupTableView();
     initChart();
 }
 
@@ -28,7 +30,8 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
 
     int curC = 0;
     for (QString& descrNameStr : descrNameList_) {
-        QStandardItem *hHeaderItem = new QStandardItem(descrNameStr);
+        QStandardItem *hHeaderItem = new QStandardItem(StringService::multipleLine(descrNameStr));
+        ItemsService::addDescription(hHeaderItem, descrNameStr);
         ItemsService::makeHHeader(hHeaderItem);
         model->setHorizontalHeaderItem(curC, hHeaderItem);
         curC++;
@@ -80,7 +83,7 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
         }
     }
     QTime t2 = QTime::currentTime();
-    QString msgTxt = tr("Converting from file into Object Class model finished at ") + QString::number(t2.second() - t1.second()) + tr("second");
+    QString msgTxt = tr("Converting from file into Object Class model finished at ") + QString::number(t2.second() - t1.second()) + tr(" second");
     emit sendStatusMessage(msgTxt);
     model_ = convertintoStandardModel(objInFileVector);
 
@@ -103,5 +106,8 @@ void DescriptorsWidget::initChart()
 
 void DescriptorsWidget::setupTableView()
 {
-
+    ui->tableView->horizontalHeader()->resetDefaultSectionSize();
+    ui->tableView->horizontalHeader()->setTextElideMode(Qt::ElideNone);
+    ui->tableView->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
 }

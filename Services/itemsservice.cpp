@@ -26,12 +26,13 @@ QSize ItemsService::sizeOfOneSymb(QStandardItem *anyItem)
     return QSize(w,h);
 }
 
-void ItemsService::sizeCorrection(QStandardItem *item)
+QSize ItemsService::sizeCorrection(QStandardItem *item)
 {
     QSize newSize = sizeOfOneSymb(item);
-    newSize.setWidth( newSize.width() * item->text().length() );
-    newSize.setHeight( newSize.height() * 2) ;
+    newSize.setWidth( newSize.width() * (item->text().length()/2) );
+    newSize.setHeight( newSize.height() * 4) ;
     item->setSizeHint(newSize);
+    return newSize;
 }
 
 void ItemsService::alignText(QStandardItem *item, Qt::Alignment flag)
@@ -90,7 +91,7 @@ void ItemsService::makeHHeader(QStandardItem *item)
     alignText(item, Qt::AlignCenter);
     changeBgColor(item, Qt::lightGray);
     sizeCorrection(item);
-    addDescription(item, item->text());
+    //addDescription(item, item->text());
 }
 
 void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode)

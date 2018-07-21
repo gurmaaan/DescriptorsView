@@ -18,7 +18,7 @@
 #endif
 
 #ifndef MSG_TIME
-#define MSG_TIME 1500
+#define MSG_TIME 4500
 #endif
 
 #ifndef SYMB_MAXSIZE_W
