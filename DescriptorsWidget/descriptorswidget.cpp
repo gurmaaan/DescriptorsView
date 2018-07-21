@@ -24,10 +24,6 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
     QStandardItemModel *model = new QStandardItemModel();
     model->setColumnCount( descrNameList_.count() );
 
-//    int maxL = StringService::maximumLen(descrNameList_);
-//    QString msg = tr("Maximum lenth of hHeaders") + QString::number(maxL);
-    //emit sendStatusMessage(msg);
-
     int curC = 0;
     for (QString& descrNameStr : descrNameList_) {
         QStandardItem *hHeaderItem = new QStandardItem(StringService::multipleLine(descrNameStr));
@@ -36,10 +32,11 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
         model->setHorizontalHeaderItem(curC, hHeaderItem);
         curC++;
     }
-//    foreach (Obj *ob, objectsVector) {
-//        model->setVerticalHeaderItem(objectsVector.indexOf(ob), ob->rowHeader());
-//        model->appendColumn(ob->modelRow());
-//    }
+    for (Obj *ob : objectsVector)
+    {
+        model->appendRow(ob->modelRow());
+        model->setVerticalHeaderItem(model->rowCount() - 1, ob->rowVerticalHeader());
+    }
     return model;
 }
 
@@ -106,8 +103,16 @@ void DescriptorsWidget::initChart()
 
 void DescriptorsWidget::setupTableView()
 {
-    ui->tableView->horizontalHeader()->resetDefaultSectionSize();
-    ui->tableView->horizontalHeader()->setTextElideMode(Qt::ElideNone);
-    ui->tableView->horizontalHeader()->resizeSections(QHeaderView::ResizeToContents);
-    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    QHeaderView *hH = ui->tableView->horizontalHeader();
+    hH->resetDefaultSectionSize();
+    hH->setTextElideMode(Qt::ElideNone);
+    hH->resizeSections(QHeaderView::ResizeToContents);
+    hH->setSectionResizeMode(QHeaderView::Interactive);
+    hH->setSortIndicatorShown(false);
+
+    QHeaderView *vH = ui->tableView->verticalHeader();
+    vH->setAlternatingRowColors(true);
+    vH->setSectionResizeMode(QHeaderView::Stretch);
+
+
 }

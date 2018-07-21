@@ -27,7 +27,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         DescriptorsWidget/descriptorswidget.cpp \
-        DescriptorsWidget/descriptorsmodel.cpp \
         DescriptorsWidget/obj.cpp \
         DescriptorsWidget/descriptor.cpp \
         Services/fileservice.cpp \
@@ -38,7 +37,6 @@ HEADERS += \
         mainwindow.h \
         static.h \
         DescriptorsWidget/descriptorswidget.h \
-        DescriptorsWidget/descriptorsmodel.h \
         DescriptorsWidget/obj.h \
         DescriptorsWidget/descriptor.h \
         Services/fileservice.h \

@@ -35,9 +35,10 @@ QSize ItemsService::sizeCorrection(QStandardItem *item)
     return newSize;
 }
 
-void ItemsService::alignText(QStandardItem *item, Qt::Alignment flag)
+void ItemsService::alignText(QStandardItem *item, Qt::AlignmentFlag flag)
 {
-    item->setTextAlignment(flag);
+    item->setTextAlignment(Qt::Alignment(flag));
+    item->setData(flag, Qt::TextAlignmentRole);
 }
 
 void ItemsService::changeTextColor(QStandardItem *item, QColor color)
@@ -80,7 +81,7 @@ void ItemsService::addDescription(QStandardItem *item, QString text)
 QString ItemsService::displayingStr(double data)
 {
     QString visualData;
-    visualData.sprintf("%+06.2f", data);
+    visualData.sprintf("%06.4f", data);
     return visualData;
 }
 

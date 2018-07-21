@@ -99,8 +99,9 @@ QList<QStandardItem *> Obj::modelRow()
     foreach(auto descr, this->descriptors())
     {
         QStandardItem *item = new QStandardItem();
-        item->setData( ItemsService::displayingStr(descr->data()), Qt::DisplayRole);
-        item->setData(descr->data(), Qt::EditRole);
+        item->setData( ItemsService::displayingStr(descr->data()), Qt::EditRole);
+        ItemsService::alignText(item, Qt::AlignCenter);
+        ItemsService::addDescription(item, QString::number(descr->data()) );
         list << item;
     }
 
@@ -113,7 +114,7 @@ QStandardItem *Obj::rowVerticalHeader()
     ItemsService::makeFontBold(headerItem);
     ItemsService::alignText(headerItem, Qt::AlignRight);
     ItemsService::alignText(headerItem, Qt::AlignVCenter);
-    ItemsService::changeBgColor(headerItem, Qt::lightGray);
+    ItemsService::changeBgColor(headerItem, Qt::gray);
     ItemsService::addDescription(headerItem, this->fullName());
     return headerItem;
 }

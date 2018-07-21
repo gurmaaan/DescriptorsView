@@ -20,7 +20,7 @@ public:
 
     static QSize sizeOfOneSymb(QStandardItem *anyItem);
     static QSize sizeCorrection(QStandardItem *item);
-    static void alignText(QStandardItem *item,  Qt::Alignment flag);
+    static void alignText(QStandardItem *item,  Qt::AlignmentFlag flag);
 
     static void changeTextColor(QStandardItem *item, QColor color);
     static void changeTextColor(QStandardItem *item, QRgb colorCode);
