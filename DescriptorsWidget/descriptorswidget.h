@@ -4,14 +4,12 @@
 #include <QWidget>
 #include <QDebug>
 #include <QStandardItemModel>
-
 #include <QtCharts/QtCharts>
 #include <QtCharts/QChartView>
 
 #include "Services/stringservice.h"
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
-#include "descriptorsmodel.h"
 #include "descriptor.h"
 #include "obj.h"
 
@@ -39,6 +37,7 @@ signals:
     void colCountInFileChanged(int newColCount);
     void rowCountInModelChanged(int newRowCount);
     void rowCountInFileChanged(int newRowCount);
+    void sendStatusMessage(QString messageText);
 
 private:
     Ui::DescriptorsWidget *ui;
@@ -52,6 +51,7 @@ private:
     QChartView *chartView_;
 
     void initChart();
+    void setupTableView();
 };
 
 #endif // DESCRIPTORSWIDGET_H

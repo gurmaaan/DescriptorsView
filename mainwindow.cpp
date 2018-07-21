@@ -1,14 +1,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    fs = new FileService();
-    showMaximized();
+    fs_ = new FileService();
+    is_ = new ItemsService();
     connectAll();
 }
 
@@ -38,11 +37,14 @@ void MainWindow::connectAll()
             ui->modelRowSpin, &QSpinBox::setValue);
     connect(ui->viewer, &DescriptorsWidget::rowCountInFileChanged,
             ui->fileRowSpin, &QSpinBox::setValue);
+
+    connect(ui->viewer, &DescriptorsWidget::sendStatusMessage,
+            this, &MainWindow::messageResiver);
 }
 
 void MainWindow::on_openFileAction_triggered()
 {
-    QString path = fs->initDialogAndGetOpenedFileName(QString(OPEN_FD_TITTLE), FileType::CSV);
+    QString path = fs_->initDialogAndGetOpenedFileName(QString(OPEN_FD_TITTLE), FileType::CSV);
     ui->viewer->loadModelFromCSVFile(path);
 }
 
@@ -53,5 +55,13 @@ void MainWindow::on_originalTextButton_clicked()
 
 void MainWindow::on_originalTextAction_triggered()
 {
-    qDebug() << "Test";
+    QFileInfo fi(ui->pathLineEdit->text());
+    if( fi.exists() && fi.isFile() )
+        ui->textBrowser->setText(FileService::getTextOfFile( ui->pathLineEdit->text() ) );
+}
+
+void MainWindow::messageResiver(QString message)
+{
+    qDebug() << message;
+    ui->statusBar->showMessage(message, MSG_TIME);
 }

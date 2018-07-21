@@ -29,6 +29,17 @@ bool StringService::notEmpty(QString str)
         return true;
 }
 
+int StringService::maximumLen(QStringList list)
+{
+    int max = 0;
+    foreach(QString str, list)
+    {
+        if(str.length() > max)
+            max = str.length();
+    }
+    return max;
+}
+
 QStringList StringService::splitAndRemoveFirstColOfFirstRow(QString fileText)
 {
     QString first = getFirstRow(fileText);

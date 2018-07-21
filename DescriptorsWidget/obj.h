@@ -1,5 +1,5 @@
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef OBJ_H
+#define OBJ_H
 
 #include <QObject>
 #include <QDebug>
@@ -16,7 +16,7 @@ public:
     explicit Obj(QObject *parent = nullptr);
     Obj(const Obj &other);
     Obj(int id, QString fullName);
-    Obj(int id, QString name, QVector<Descriptor *> &descriptors);
+    Obj(int id, QString fullName, QVector<Descriptor *> &descriptors);
 
     Obj &operator =(const Obj &o);
 
@@ -31,7 +31,7 @@ public:
     void apendDescriptor(Descriptor *descriptor);
 
     QList<QStandardItem *> modelRow();
-    QStandardItem *rowHeader();
+    QStandardItem *rowVerticalHeader();
 
     QString fullName() const;
     void setFullName(const QString &fullName);
@@ -54,4 +54,4 @@ Q_DECLARE_METATYPE(Obj);
 bool operator ==(const Obj &o1, const Obj &o2);
 QDebug operator <<(QDebug dbg, const Obj *o);
 
-#endif // OBJECT_H
+#endif // OBJ_H

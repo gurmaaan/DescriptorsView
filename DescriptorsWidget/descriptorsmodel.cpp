@@ -1,4 +1,4 @@
-#include "descriptorsmodel.h"
+#include "DescriptorsWidget/descriptorsmodel.h"
 
 DescriptorsModel::DescriptorsModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -14,10 +14,10 @@ QVariant DescriptorsModel::headerData(int section, Qt::Orientation orientation, 
                 return Qt::AlignRight;
         }
             break;
-//        case Qt::DisplayRole:
-//        {
-//            return StringService::cutFilePath(objectsVector.at(section)->name());
-//        }
+        case Qt::DisplayRole:
+        {
+            return StringService::cutFilePath(objectsVector.at(section)->name());
+        }
         default:
         {
             return QVariant();
@@ -27,17 +27,17 @@ QVariant DescriptorsModel::headerData(int section, Qt::Orientation orientation, 
     return QVariant();
 }
 
-//bool DescriptorsModel::setHeaderData(int index, Qt::Orientation orient, int role)
-//{
-//    if(orient == Qt::Horizontal)
-//    {
-//        return QAbstractTableModel::setHeaderData(index, orient, role);
+bool DescriptorsModel::setHeaderData(int index, Qt::Orientation orient, int role)
+{
+    if(orient == Qt::Horizontal)
+    {
+        return QAbstractTableModel::setHeaderData(index, orient, role);
 
-//    }else if (orient == Qt::Vertical)
-//    {
+    }else if (orient == Qt::Vertical)
+    {
 
-//    }
-//}
+    }
+}
 
 int DescriptorsModel::rowCount(const QModelIndex &parent) const
 {
@@ -53,7 +53,7 @@ int DescriptorsModel::columnCount(const QModelIndex &parent) const
     return objectsVector.at(0)->descriptors().count();
 }
 
-QVariant DescriptorsModel::data(const QModelIndex &index, int role) const
+QVariant DescriptorsModel::data(const QModelIndex &index, int role)
 {
     if (!index.isValid())
         return QVariant();

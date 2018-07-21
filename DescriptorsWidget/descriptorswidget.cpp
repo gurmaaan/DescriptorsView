@@ -9,10 +9,6 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
     fs_ = new FileService();
     ss_ = new StringService();
     is_ = new ItemsService();
-
-//    tm_ = new QAbstractTableModel();
-//    ui->table->setModel(tm_);
-
     initChart();
 }
 
@@ -26,19 +22,22 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
     QStandardItemModel *model = new QStandardItemModel();
     model->setColumnCount( descrNameList_.count() );
 
-    foreach (QString descrNameStr, descrNameList_) {
-        QStandardItem *hHeaderItem = new QStandardItem();
-        hHeaderItem->setData(descrNameStr, Qt::DisplayRole);
-        hHeaderItem->setCheckable(false);
-        ItemsService::makeHHeader(hHeaderItem);
-        model->setHorizontalHeaderItem(descrNameList_.indexOf(descrNameStr), hHeaderItem);
-    }
+//    int maxL = StringService::maximumLen(descrNameList_);
+//    QString msg = tr("Maximum lenth of hHeaders") + QString::number(maxL);
+    //emit sendStatusMessage(msg);
 
-//    model->setRowCount( objectsVector.count() );
-    foreach (Obj *ob, objectsVector) {
-        model->setVerticalHeaderItem(objectsVector.indexOf(ob), ob->rowHeader());
-        model->appendColumn(ob->modelRow());
+    int curC = 0;
+    for (QString& descrNameStr : descrNameList_) {
+        QStandardItem *hHeaderItem = new QStandardItem(descrNameStr);
+        ItemsService::makeHHeader(hHeaderItem);
+        model->setHorizontalHeaderItem(curC, hHeaderItem);
+        curC++;
     }
+//    foreach (Obj *ob, objectsVector) {
+//        model->setVerticalHeaderItem(objectsVector.indexOf(ob), ob->rowHeader());
+//        model->appendColumn(ob->modelRow());
+//    }
+    return model;
 }
 
 void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
@@ -61,7 +60,6 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     emit rowCountInFileChanged(rowsInFCnt);
 
     QTime t1 = QTime::currentTime();
-    qDebug() << t1;
     QVector<Obj*> objInFileVector;
     for(int r = 0; r < rowsInFCnt; r++)
     {
@@ -69,7 +67,7 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
         if( StringService::notEmpty(rowString) )
         {
             emit rowCountInModelChanged(r);
-            Obj* objAtRowR = new Obj(r, StringService::cutFilePath(ss_->getFirstCol(rowString)) );
+            Obj* objAtRowR = new Obj( r, ss_->getFirstCol(rowString) );
             QStringList itemsOfRowStringList = ss_->splitAndRemoveFirstColOfFirstRow(rowString);
             for(int c = 0; c < descrCnt; c++)
             {
@@ -82,10 +80,11 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
         }
     }
     QTime t2 = QTime::currentTime();
-    qDebug() << t2;
-    qDebug() << tr("Converting from file into Object Class model finished at ") << (t2.second() - t1.second()) << tr(" second");
-    //model_ = convertintoStandardModel(objInFileVector);
-    //ui->table->setModel(model_);
+    QString msgTxt = tr("Converting from file into Object Class model finished at ") + QString::number(t2.second() - t1.second()) + tr("second");
+    emit sendStatusMessage(msgTxt);
+    model_ = convertintoStandardModel(objInFileVector);
+
+    ui->tableView->setModel(model_);
 
 }
 
@@ -100,4 +99,9 @@ void DescriptorsWidget::initChart()
 
     //QLineSeries *ls = new QLineSeries();
     //ls->append()
+}
+
+void DescriptorsWidget::setupTableView()
+{
+
 }

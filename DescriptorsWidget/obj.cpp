@@ -107,7 +107,7 @@ QList<QStandardItem *> Obj::modelRow()
     return list;
 }
 
-QStandardItem *Obj::rowHeader()
+QStandardItem *Obj::rowVerticalHeader()
 {
     QStandardItem *headerItem = new QStandardItem(this->name());
     ItemsService::makeFontBold(headerItem);

@@ -28,6 +28,8 @@ public:
     static QString replaceForDouble(QString &strWithComme);
     static bool notEmpty(QString str);
 
+    static int maximumLen(QStringList list);
+
 private:
 
 

@@ -5,7 +5,7 @@ ItemsService::ItemsService(QObject *parent) : QObject(parent)
 
 }
 
-void ItemsService::makeAllItemsTextColor(QAbstractItemModel *model, int colorCode)
+void ItemsService::makeAllItemsTextColor(QAbstractItemModel *model, QRgb colorCode)
 {
     for(int c = 0; c < model->columnCount(); c++)
         for(int r = 0; r < model->rowCount(); r++)
@@ -17,6 +17,23 @@ void ItemsService::makeFontBold(QStandardItem *item)
     item->setFont(QFont(item->font().family(), item->font().pointSize(), QFont::Bold));
 }
 
+QSize ItemsService::sizeOfOneSymb(QStandardItem *anyItem)
+{
+    QFont itemFont(anyItem->font().family(), anyItem->font().pointSize());
+    QFontMetrics fm(itemFont);
+    int w = fm.width(SYMB_MAXSIZE_W);
+    int h = fm.height();
+    return QSize(w,h);
+}
+
+void ItemsService::sizeCorrection(QStandardItem *item)
+{
+    QSize newSize = sizeOfOneSymb(item);
+    newSize.setWidth( newSize.width() * item->text().length() );
+    newSize.setHeight( newSize.height() * 2) ;
+    item->setSizeHint(newSize);
+}
+
 void ItemsService::alignText(QStandardItem *item, Qt::Alignment flag)
 {
     item->setTextAlignment(flag);
@@ -24,30 +41,34 @@ void ItemsService::alignText(QStandardItem *item, Qt::Alignment flag)
 
 void ItemsService::changeTextColor(QStandardItem *item, QColor color)
 {
-    item->setData(color, Qt::TextColorRole);
+    item->setData(QBrush(color, Qt::SolidPattern), Qt::ForegroundRole);
 }
 
-void ItemsService::changeTextColor(QStandardItem *item, int colorCode)
+void ItemsService::changeTextColor(QStandardItem *item, QRgb colorCode)
 {
-    item->setData(QColor(colorCode), Qt::TextColorRole);
+    item->setData(QBrush(QColor(colorCode), Qt::SolidPattern), Qt::ForegroundRole);
 }
 
 void ItemsService::changeBgColor(QStandardItem *item, QColor color)
 {
-    item->setData(color, Qt::BackgroundColorRole);
+    QBrush brush(color, Qt::Dense5Pattern);
+    item->setBackground(brush);
 }
-
-void ItemsService::changeBgColor(QStandardItem *item, int colorCode)
+void ItemsService::changeBgColor(QStandardItem *item, QRgb colorCode)
 {
-    item->setData(QColor(colorCode), Qt::BackgroundColorRole);
+    QBrush brush(QColor(colorCode), Qt::Dense7Pattern);
+    item->setBackground(brush);
 }
 
 void ItemsService::makeCheckable(QStandardItem *item, bool state)
 {
     item->setEditable(state);
+    item->setSelectable(state);
     item->setCheckable(state);
-    item->setCheckState(Qt::Unchecked);
+    Qt::CheckState checkState = state ? Qt::Checked : Qt::Unchecked;
+    item->setCheckState(checkState);
 }
+
 
 void ItemsService::addDescription(QStandardItem *item, QString text)
 {
@@ -65,99 +86,14 @@ QString ItemsService::displayingStr(double data)
 void ItemsService::makeHHeader(QStandardItem *item)
 {
     makeFontBold(item);
+    makeCheckable(item, true);
     alignText(item, Qt::AlignCenter);
-    changeBgColor(item, Qt::gray);
+    changeBgColor(item, Qt::lightGray);
+    sizeCorrection(item);
     addDescription(item, item->text());
 }
 
-void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, int colorCode)
+void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode)
 {
     model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
 }
-
-//QStandardItemModel *StringService::getCsvModel(QString filePath)
-//{
-//    QStandardItemModel *csvModel = new QStandardItemModel();
-//    QFile file(filePath);
-
-//    if ( !file.open(QFile::ReadOnly | QFile::Text ) )
-//    {
-//        qDebug() << tr(DOESNT_EXIST);
-//        csvModel->setColumnCount(1);
-//        return csvModel;
-//    } else
-//    {
-//         QTextStream in(&file);
-//#ifdef Q_OS_MAC
-//         in.setCodec(QTextCodec::codecForName(ENCODING));
-//#endif
-//         int rowCnt = 0, colCnt = 0;
-
-//         QString firstLine = in.readLine();
-//         emit firstRowColChanged( getFirst(firstLine));
-
-//         QStringList hHStrList = cutAndSplit(firstLine);
-//         colCnt = hHStrList.size();
-//         emit colCountChanged(colCnt);
-//         csvModel->setColumnCount(colCnt);
-
-//        for (int i = 0; i < colCnt; i++)
-//        {
-//            QString curHStr = hHStrList.at(i);
-//            QStandardItem *hHeaderItem = new QStandardItem(curHStr);
-//            hHeaderItem->setData(curHStr);
-//            hHeaderItem->setStatusTip(curHStr);
-//            hHeaderItem->setTextAlignment(Qt::AlignCenter);
-//            hHeaderItem->setEditable(false);
-//            hHeaderItem->setFont(QFont(hHeaderItem->font().family(), hHeaderItem->font().pointSize(), QFont::Bold));
-//           // hHeaderItem->setSizeHint(QSize(100, 30));
-//            hHeaderItem->setBackground(QBrush(QColor(Qt::gray)));
-//            csvModel->setHorizontalHeaderItem(i, hHeaderItem);
-
-//        }
-
-//         while (!in.atEnd())
-//         {
-//             QString line = in.readLine() ;
-//             emit rowCountChanged(rowCnt++);
-
-//             QString vHStr = getFirst(line);
-//             QStandardItem* vHItem = new QStandardItem(vHStr);
-//             vHItem->setData(vHStr, Qt::EditRole);
-//             vHItem->setData(cutOnset(vHStr), Qt::DisplayRole);
-//             vHItem->setData(Qt::Checked, Qt::CheckStateRole);
-//             vHItem->setWhatsThis(vHStr);
-//             vHItem->setStatusTip(vHStr);
-//             vHItem->setTextAlignment(Qt::AlignRight);
-//             vHItem->setTextAlignment(Qt::AlignVCenter);
-//             vHItem->setFont(QFont(vHItem->font().family(), vHItem->font().pointSize(), QFont::Bold));
-//             vHItem->setEditable(false);
-
-//             QStringList itemsStrList = cutAndSplit(line);
-//             QList<QStandardItem *> standardItemsList;
-
-//             for (QString itemStr : itemsStrList)
-//             {
-//                 QStandardItem *item = new QStandardItem(itemStr);
-
-//                 itemStr.replace(",", ".");
-//                 double numericValue = itemStr.toDouble();
-
-//                 item->setData(numericValue, Qt::EditRole);
-//                 item->setStatusTip(QString::number(numericValue));
-//                 item->setWhatsThis(itemStr);
-
-//                 item->setData(itemStr, Qt::DisplayRole);
-//                 item->setTextAlignment(Qt::AlignCenter);
-
-//                 standardItemsList.append(item);
-
-//             }
-//             csvModel->insertRow(csvModel->rowCount(), standardItemsList);
-//             csvModel->setVerticalHeaderItem(csvModel->rowCount() - 1, vHItem);
-
-//         }
-//         file.close();
-//         return csvModel;
-//    }
-//}

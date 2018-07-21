@@ -17,4 +17,12 @@
 #define DOESNT_EXIST "File not exists"
 #endif
 
+#ifndef MSG_TIME
+#define MSG_TIME 1500
+#endif
+
+#ifndef SYMB_MAXSIZE_W
+#define SYMB_MAXSIZE_W "W"
+#endif
+
 #endif // STATIC_H

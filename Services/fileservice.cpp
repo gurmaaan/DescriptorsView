@@ -17,20 +17,19 @@ QString FileService::initDialogAndGetOpenedFileName(QString title, FileType fTyp
 
 QString FileService::getTypeStringByCode(FileType fType)
 {
+    QString fileTypeStr = "*";
     switch (fType) {
     case FileType::Image:
-        return "Изображение PNG(*.png);;Изображение JPG(*.jpg);;Изображение BMP(*.bmp);;";
+        fileTypeStr = "Изображение PNG(*.png);;Изображение JPG(*.jpg);;Изображение BMP(*.bmp);;";
         break;
     case FileType::CSV:
-        return "Таблица CSV (*.csv)";
+        fileTypeStr = "Таблица CSV (*.csv)";
         break;
     case FileType::Excel:
-        return "Таблица Excel(*.xls*)";
-        break;
-    default:
-        return "*";
+        fileTypeStr = "Таблица Excel(*.xls*)";
         break;
     }
+    return fileTypeStr;
 }
 
 QString FileService::requiredPath(QDir currentDir, const QString &redirect)

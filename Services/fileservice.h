@@ -25,13 +25,9 @@ public:
     explicit FileService(QObject *parent = nullptr);
     QString initDialogAndGetOpenedFileName(QString title, FileType fType);
     static QString getTypeStringByCode(FileType fType);
-    QString getTextOfFile(QString path);
-
-public slots:
-
+    static QString getTextOfFile(QString path);
 private:
     static QString requiredPath(QDir currentDir, const QString &redirect);
-
 };
 
 #endif // FILESERVICE_H

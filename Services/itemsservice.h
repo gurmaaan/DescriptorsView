@@ -3,9 +3,12 @@
 
 #include <QObject>
 #include <QDebug>
-#include <QAbstractItemModel>
+#include <QStandardItemModel>
 #include <QStandardItem>
 #include <QColor>
+#include <QFontMetrics>
+
+#include "static.h"
 
 class ItemsService : public QObject
 {
@@ -14,13 +17,16 @@ public:
     explicit ItemsService(QObject *parent = nullptr);
 
     static void makeFontBold(QStandardItem *item);
-    static void alignText(QStandardItem *item, Qt::Alignment flag);
+
+    static QSize sizeOfOneSymb(QStandardItem *anyItem);
+    static void sizeCorrection(QStandardItem *item);
+    static void alignText(QStandardItem *item,  Qt::Alignment flag);
 
     static void changeTextColor(QStandardItem *item, QColor color);
-    static void changeTextColor(QStandardItem *item, int colorCode);
+    static void changeTextColor(QStandardItem *item, QRgb colorCode);
 
     static void changeBgColor(QStandardItem *item, QColor  color);
-    static void changeBgColor(QStandardItem *item, int colorCode);
+    static void changeBgColor(QStandardItem *item, QRgb colorCode);
 
     static void makeCheckable(QStandardItem  *item, bool state);
 
@@ -30,10 +36,11 @@ public:
 
     static void makeHHeader(QStandardItem *item);
 
-    void makeItemTextColor(QAbstractItemModel *model, int r, int c, int colorCode);
-    void makeAllItemsTextColor(QAbstractItemModel *model, int colorCode);
+    void makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode);
+    void makeAllItemsTextColor(QAbstractItemModel *model, QRgb colorCode);
 
 signals:
+    void sendStatusMessage(QString msgTxt);
 
 public slots:
 };
