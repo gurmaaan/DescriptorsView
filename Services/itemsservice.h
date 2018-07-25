@@ -35,6 +35,8 @@ public:
     static QString displayingStr(double data);
 
     static void makeHHeader(QStandardItem *item);
+    static void makeVHeader(QStandardItem *item);
+    static void makeHeader(QStandardItem *item, Qt::Orientation orientation);
 
     void makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode);
     void makeAllItemsTextColor(QAbstractItemModel *model, QRgb colorCode);

@@ -25,4 +25,8 @@
 #define SYMB_MAXSIZE_W "W"
 #endif
 
+#ifndef CHECKBOX_RECT
+#define CHECKBOX_RECT 1,3,20,20
+#endif
+
 #endif // STATIC_H

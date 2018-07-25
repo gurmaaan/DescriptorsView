@@ -5,6 +5,7 @@
 #include <QStandardItemModel>
 #include <QAbstractItemModel>
 #include <QObject>
+#include <QTime>
 #include <QDebug>
 
 #include "static.h"
@@ -16,6 +17,7 @@ public:
     explicit StringService(QObject *parent = nullptr);
 
     static QString getCornerString(QString fileText);
+    static QString getTimeMessage(QTime t1, QTime t2);
 
     static QString getFirstCol(QString str);
     static QString getFirstRow(QString str);

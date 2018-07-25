@@ -92,7 +92,27 @@ void ItemsService::makeHHeader(QStandardItem *item)
     alignText(item, Qt::AlignCenter);
     changeBgColor(item, Qt::lightGray);
     sizeCorrection(item);
-    //addDescription(item, item->text());
+}
+
+void ItemsService::makeVHeader(QStandardItem *item)
+{
+    makeFontBold(item);
+    makeCheckable(item, false);
+    alignText(item, Qt::AlignRight);
+    changeBgColor(item, Qt::gray);
+    sizeCorrection(item);
+}
+
+void ItemsService::makeHeader(QStandardItem *item, Qt::Orientation orientation)
+{
+    Qt::AlignmentFlag flag;
+    bool direction = (orientation == Qt::Vertical);
+    flag =  direction ? Qt::AlignRight : Qt::AlignCenter;
+    alignText(item, flag);
+    makeFontBold(item);
+    makeCheckable(item, direction);
+    changeBgColor(item, Qt::lightGray);
+    sizeCorrection(item);
 }
 
 void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode)

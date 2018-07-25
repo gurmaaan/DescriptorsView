@@ -10,6 +10,14 @@ QString StringService::getCornerString(QString fileText)
     return getFirstCol(getFirstRow(fileText));
 }
 
+QString StringService::getTimeMessage(QTime t1, QTime t2)
+{
+    int tms1 = t1.second() * 1000 + t1.msec();
+    int tms2 = t2.second() * 1000 + t2.msec();
+    QString msgTxt = tr("Block was finished in ") + QString::number(tms2 - tms1) + tr(" milisecond");
+    return msgTxt;
+}
+
 QString StringService::cutFilePath(QString longString)
 {
     QStringList partsList = longString.split("\\");

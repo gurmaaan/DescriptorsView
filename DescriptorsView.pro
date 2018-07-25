@@ -27,21 +27,23 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         DescriptorsWidget/descriptorswidget.cpp \
+    	DescriptorsWidget/checkboxheaderview.cpp \
         DescriptorsWidget/obj.cpp \
         DescriptorsWidget/descriptor.cpp \
         Services/fileservice.cpp \
         Services/itemsservice.cpp \
-        Services/stringservice.cpp
+        Services/stringservice.cpp 
 
 HEADERS += \
         mainwindow.h \
         static.h \
         DescriptorsWidget/descriptorswidget.h \
+    	DescriptorsWidget/checkboxheaderview.h \
         DescriptorsWidget/obj.h \
         DescriptorsWidget/descriptor.h \
         Services/fileservice.h \
         Services/itemsservice.h \
-        Services/stringservice.h
+        Services/stringservice.h 
 
 FORMS += \
         mainwindow.ui \

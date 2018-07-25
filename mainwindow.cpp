@@ -41,17 +41,22 @@ void MainWindow::connectAll()
 
     connect(ui->viewer, &DescriptorsWidget::sendStatusMessage,
             this, &MainWindow::messageResiver);
+    connect(ui->viewer, &DescriptorsWidget::selectedModelChanged,
+            ui->tableSelectionView, &QTableView::setModel);
 }
 
 void MainWindow::changeWindowProperties()
 {
     if (QGuiApplication::screens().count() > 1)
     {
-        QRect secndScrnGeom = QGuiApplication::screens().at(1)->geometry();
-        setGeometry(secndScrnGeom);
+        qDebug() <<"Screens count : " << QGuiApplication::screens().count();
+        setGeometry(QGuiApplication::screens().at(1)->geometry());
         showFullScreen();
     } else
+    {
+        setGeometry(QGuiApplication::screens().first()->geometry());
         showMaximized();
+    }
 }
 
 void MainWindow::on_openFileAction_triggered()

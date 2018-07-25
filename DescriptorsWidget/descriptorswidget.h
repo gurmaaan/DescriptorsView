@@ -10,6 +10,8 @@
 #include "Services/stringservice.h"
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
+
+#include "checkboxheaderview.h"
 #include "descriptor.h"
 #include "obj.h"
 
@@ -29,6 +31,7 @@ public:
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
+   // slot
 
 signals:
     void fileNameChanged(QString newFileName);
@@ -38,6 +41,10 @@ signals:
     void rowCountInModelChanged(int newRowCount);
     void rowCountInFileChanged(int newRowCount);
     void sendStatusMessage(QString messageText);
+    void selectedModelChanged(QStandardItemModel *m);
+
+private slots:
+    void on_tableView_clicked(const QModelIndex &index);
 
 private:
     Ui::DescriptorsWidget *ui;
@@ -49,6 +56,7 @@ private:
     QStandardItemModel *model_;
     QChart *chart_;
     QChartView *chartView_;
+    QTableView *t_;
 
     void initChart();
     void setupTableView();

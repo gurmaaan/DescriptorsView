@@ -21,7 +21,7 @@
    <bool>true</bool>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>937</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -68,9 +68,15 @@
     <number>8</number>
    </attribute>
    <widget class="QWidget" name="selectionContentWidget">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
      <item>
-      <widget class="QTextBrowser" name="textBrowser"/>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QTextBrowser" name="textBrowser"/>
+       <widget class="QTableView" name="tableSelectionView"/>
+      </widget>
      </item>
     </layout>
    </widget>

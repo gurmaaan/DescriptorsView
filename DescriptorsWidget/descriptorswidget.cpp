@@ -32,6 +32,7 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
         model->setHorizontalHeaderItem(curC, hHeaderItem);
         curC++;
     }
+
     for (Obj *ob : objectsVector)
     {
         model->appendRow(ob->modelRow());
@@ -80,12 +81,13 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
         }
     }
     QTime t2 = QTime::currentTime();
-    QString msgTxt = tr("Converting from file into Object Class model finished at ") + QString::number(t2.second() - t1.second()) + tr(" second");
-    emit sendStatusMessage(msgTxt);
+    emit sendStatusMessage(StringService::getTimeMessage(t1, t2));
+
+    QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
-
+    QTime t4 = QTime::currentTime();
+    emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
     ui->tableView->setModel(model_);
-
 }
 
 void DescriptorsWidget::initChart()
@@ -97,8 +99,6 @@ void DescriptorsWidget::initChart()
     ui->splitter->addWidget(chartView_);
     ui->splitter->setSizes( QList<int>({INT_MAX, INT_MAX}) );
 
-    //QLineSeries *ls = new QLineSeries();
-    //ls->append()
 }
 
 void DescriptorsWidget::setupTableView()
@@ -115,4 +115,28 @@ void DescriptorsWidget::setupTableView()
     vH->setSectionResizeMode(QHeaderView::Stretch);
 
 
+}
+
+void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
+{
+    int cN = index.column();
+    QAbstractItemModel *baseModel = ui->tableView->model();
+
+    QStandardItemModel *newModel = new QStandardItemModel();
+    newModel->setColumnCount(baseModel->rowCount());
+
+    QList<QStandardItem *> itemsAtSelectedC;
+    for(int i = 0; i < baseModel->rowCount(); i++)
+    {
+        itemsAtSelectedC << new QStandardItem(baseModel->data(baseModel->index(i, cN)).toString());
+        QStandardItem *hHAtI = new QStandardItem(baseModel->headerData(i, Qt::Vertical).toString());
+        ItemsService::makeHeader(hHAtI, Qt::Horizontal);
+        newModel->setHorizontalHeaderItem(i, hHAtI);
+    }
+
+    QStandardItem *newVertHeader = new QStandardItem( baseModel->headerData(cN, Qt::Horizontal).toString());
+    ItemsService::makeHeader(newVertHeader, Qt::Vertical);
+    newModel->insertRow(0, itemsAtSelectedC);
+    newModel->setVerticalHeaderItem(0, newVertHeader);
+    emit selectedModelChanged(newModel);
 }
