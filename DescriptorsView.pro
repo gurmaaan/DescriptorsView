@@ -26,24 +26,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-        DescriptorsWidget/descriptorswidget.cpp \
-    	DescriptorsWidget/checkboxheaderview.cpp \
-        DescriptorsWidget/obj.cpp \
-        DescriptorsWidget/descriptor.cpp \
         Services/fileservice.cpp \
         Services/itemsservice.cpp \
-        Services/stringservice.cpp 
+        Services/stringservice.cpp\
+        DescriptorsWidget/descriptorswidget.cpp \
+        DescriptorsWidget/checkboxheaderview.cpp \
+        DescriptorsModel/dscrtablemodel.cpp \
+        DescriptorsModel/descriptor.cpp \
+        DescriptorsModel/obj.cpp 
 
 HEADERS += \
         mainwindow.h \
         static.h \
-        DescriptorsWidget/descriptorswidget.h \
-    	DescriptorsWidget/checkboxheaderview.h \
-        DescriptorsWidget/obj.h \
-        DescriptorsWidget/descriptor.h \
         Services/fileservice.h \
         Services/itemsservice.h \
-        Services/stringservice.h 
+        Services/stringservice.h \ 
+        DescriptorsWidget/descriptorswidget.h \
+        DescriptorsWidget/checkboxheaderview.h \
+        DescriptorsModel/dscrtablemodel.h \
+        DescriptorsModel/descriptor.h \
+        DescriptorsModel/obj.h 
 
 FORMS += \
         mainwindow.ui \

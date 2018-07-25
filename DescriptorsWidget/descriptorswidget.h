@@ -12,8 +12,8 @@
 #include "Services/itemsservice.h"
 
 #include "checkboxheaderview.h"
-#include "descriptor.h"
-#include "obj.h"
+#include "DescriptorsModel/descriptor.h"
+#include "DescriptorsModel/obj.h"
 
 namespace Ui {
     class DescriptorsWidget;
