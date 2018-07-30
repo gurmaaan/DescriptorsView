@@ -10,8 +10,10 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
     ss_ = new StringService();
     is_ = new ItemsService();
 
+    model_ = new QStandardItemModel();
     setupTableView();
     initChart();
+    initAisWidgets();
 }
 
 DescriptorsWidget::~DescriptorsWidget()
@@ -28,7 +30,7 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
     for (QString& descrNameStr : descrNameList_) {
         QStandardItem *hHeaderItem = new QStandardItem(StringService::multipleLine(descrNameStr));
         ItemsService::addDescription(hHeaderItem, descrNameStr);
-        ItemsService::makeHHeader(hHeaderItem);
+        ItemsService::makeHeader(hHeaderItem, Qt::Horizontal);
         model->setHorizontalHeaderItem(curC, hHeaderItem);
         curC++;
     }
@@ -38,12 +40,12 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
         model->appendRow(ob->modelRow());
         model->setVerticalHeaderItem(model->rowCount() - 1, ob->rowVerticalHeader());
     }
+
     return model;
 }
 
-void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
+QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
 {
-    emit fileNameChanged(filePath);
     QString wholeFileText = fs_->getTextOfFile(filePath);
     emit colCountInFileChanged( ss_->splitAndRemoveFirstColOfFirstRow(wholeFileText).count() + 1 );
     emit cornerRowChanged(StringService::getCornerString(wholeFileText));
@@ -60,7 +62,6 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     int rowsInFCnt = rowsList.count();
     emit rowCountInFileChanged(rowsInFCnt);
 
-    QTime t1 = QTime::currentTime();
     QVector<Obj*> objInFileVector;
     for(int r = 0; r < rowsInFCnt; r++)
     {
@@ -80,14 +81,38 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
             objInFileVector << objAtRowR;
         }
     }
+    return objInFileVector;
+}
+
+void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
+{
+    emit fileNameChanged(filePath);
+
+    QTime t1 = QTime::currentTime();
+    QVector<Obj*> objInFileVector = convertFileIntoObjectsVector(filePath);
     QTime t2 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t1, t2));
 
     QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
+
     QTime t4 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
+
+    QTime t5 = QTime::currentTime();
     ui->tableView->setModel(model_);
+
+    QLineSeries *series = new QLineSeries;
+    series->setName("Test col");
+    QVXYModelMapper *mapper = new QVXYModelMapper(this);
+    mapper->setXColumn(0);
+    mapper->setYColumn(1);
+    mapper->setSeries(series);
+    mapper->setModel(model_);
+    chart_->addSeries(series);
+
+    QTime t6 = QTime::currentTime();
+    emit sendStatusMessage(StringService::getTimeMessage(t5, t6));
 }
 
 void DescriptorsWidget::initChart()
@@ -96,9 +121,33 @@ void DescriptorsWidget::initChart()
     chart_->setAnimationOptions(QChart::AllAnimations);
     chartView_ = new QChartView(chart_);
 
-    ui->splitter->addWidget(chartView_);
-    ui->splitter->setSizes( QList<int>({INT_MAX, INT_MAX}) );
+    ui->splitterTable->addWidget(chartView_);
+    ui->splitterTable->setSizes( QList<int>({INT_MAX, INT_MAX}) );
 
+    chart_->createDefaultAxes();
+    chartView_->setRenderHint(QPainter::Antialiasing);
+    chartView_->setChart(chart_);
+}
+
+void DescriptorsWidget::initAisWidgets()
+{
+    QGridLayout *gr = ui->gridLayout;
+
+    aswX_ = new AxisSettingsWidget();
+    aswX_->setType(AxisType::AxisX);
+    aswY_ = new AxisSettingsWidget();
+    aswY_->setType(AxisType::AxisY);
+    asEX_ = new AxisSettingsWidget();
+    asEX_->setType(AxisType::ErrorX);
+    asEY_ = new AxisSettingsWidget();
+    asEY_->setType(AxisType::ErrorY);
+
+    gr->addWidget(aswX_, 0, 0);
+    gr->addWidget(aswY_, 0, 1);
+    gr->addWidget(asEX_, 1, 0);
+    gr->addWidget(asEY_, 1, 1);
+    gr->setColumnStretch(1, 1);
+    gr->setColumnStretch(0, 0);
 }
 
 void DescriptorsWidget::setupTableView()
@@ -113,8 +162,6 @@ void DescriptorsWidget::setupTableView()
     QHeaderView *vH = ui->tableView->verticalHeader();
     vH->setAlternatingRowColors(true);
     vH->setSectionResizeMode(QHeaderView::Stretch);
-
-
 }
 
 void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)

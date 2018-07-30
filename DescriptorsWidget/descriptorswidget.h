@@ -6,14 +6,17 @@
 #include <QStandardItemModel>
 #include <QtCharts/QtCharts>
 #include <QtCharts/QChartView>
+#include <QXYModelMapper>
 
 #include "Services/stringservice.h"
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
 
-#include "checkboxheaderview.h"
 #include "DescriptorsModel/descriptor.h"
 #include "DescriptorsModel/obj.h"
+
+#include "axissettingswidget.h"
+//#include "DescriptorsModel/dscrtablemodel.h"
 
 namespace Ui {
     class DescriptorsWidget;
@@ -28,6 +31,7 @@ public:
     ~DescriptorsWidget();
 
     QStandardItemModel *convertintoStandardModel(QVector<Obj*> objectsVector);
+    QVector<Obj*> convertFileIntoObjectsVector(QString filePath);
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
@@ -51,15 +55,23 @@ private:
     StringService *ss_;
     FileService *fs_;
     ItemsService *is_;
+
     QStringList descrNameList_;
+
     QVector<Obj*> *dm_;
     QStandardItemModel *model_;
+    //DscrTableModel *model_;
     QChart *chart_;
     QChartView *chartView_;
-    QTableView *t_;
+
+    AxisSettingsWidget *aswX_;
+    AxisSettingsWidget *aswY_;
+    AxisSettingsWidget *asEX_;
+    AxisSettingsWidget *asEY_;
 
     void initChart();
-    void setupTableView();
+    void initAisWidgets()
+;   void setupTableView();
 };
 
 #endif // DESCRIPTORSWIDGET_H

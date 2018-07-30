@@ -81,16 +81,17 @@ QString StringService::getFirstRow(QString str)
 QString StringService::multipleLine(QString str)
 {
     int midUnderScore = str.count("_") / 2 + 1;
+    int lastUnderScore = str.count("_");
     int underScoreCounter = 0;
-    int midPosition = 0;
     for(int i = 0; i < str.length(); i++)
     {
         if(str.at(i) == "_")
         {
             underScoreCounter++;
-            if(underScoreCounter == midUnderScore)
-                midPosition = i;
+            if(underScoreCounter == midUnderScore || underScoreCounter == lastUnderScore)
+                str.replace(i, 1, "\n");
+
         }
     }
-    return str.replace(midPosition, 1, "\n");
+    return str;
 }

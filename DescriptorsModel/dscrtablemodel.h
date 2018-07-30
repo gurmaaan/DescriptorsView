@@ -1,37 +1,51 @@
-#ifndef DSCRTABLEMODEL_H
-#define DSCRTABLEMODEL_H
+//#ifndef DSCRTABLEMODEL_H
+//#define DSCRTABLEMODEL_H
 
-#include <QAbstractTableModel>
+//#include <QAbstractTableModel>
+//#include <QVariant>
 
-class DscrTableModel : public QAbstractTableModel
-{
-    Q_OBJECT
+//#include "obj.h"
+//#include "descriptor.h"
+//#include "Services/stringservice.h"
+//#include "Services/itemsservice.h"
 
-public:
-    explicit DscrTableModel(QObject *parent = nullptr);
+//class DscrTableModel : public QAbstractTableModel
+//{
+//    Q_OBJECT
 
-    // Header:
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
+//public:
+//    explicit DscrTableModel(QObject *parent = nullptr);
+//    // Header:
+//    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole);
+//    QVariant choseCase(int orientation, const QVariant &horizontalCase, const QVariant &verticalcase);
 
-    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
+//    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole) override;
 
-    // Basic functionality:
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+//    // Basic functionality:
+//    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+//    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 
-    // Editable:
-    bool setData(const QModelIndex &index, const QVariant &value,
-                 int role = Qt::EditRole) override;
+//    // Editable:
+//    bool setData(const QModelIndex &index, const QVariant &value,
+//                 int role = Qt::EditRole) override;
 
-    Qt::ItemFlags flags(const QModelIndex& index) const override;
+//    bool loadData(const QVector<Obj*> &objetsVector);
 
-    // Add data:
-    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
-    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
+//    Qt::ItemFlags flags(const QModelIndex& index) const override;
 
-private:
-};
+//    // Add data:
+//    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex()) override;
+//    bool insertColumns(int column, int count, const QModelIndex &parent = QModelIndex()) override;
 
-#endif // DSCRTABLEMODEL_H
+//    // Load from objects vector or static file;
+
+//  //  bool loadFromFile(const QString &fileName, const QChar &delim = 0);
+//    bool loadFromVector(const QVector<Obj*> &data, const QString &format);
+
+//private:
+//    QVector<Obj*> m_data;
+//};
+
+//#endif // DSCRTABLEMODEL_H

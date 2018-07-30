@@ -29,7 +29,7 @@ QSize ItemsService::sizeOfOneSymb(QStandardItem *anyItem)
 QSize ItemsService::sizeCorrection(QStandardItem *item)
 {
     QSize newSize = sizeOfOneSymb(item);
-    newSize.setWidth( newSize.width() * (item->text().length()/2) );
+    newSize.setWidth( newSize.width() * static_cast<int>(item->text().length() * 0.75) );
     newSize.setHeight( newSize.height() * 4) ;
     item->setSizeHint(newSize);
     return newSize;
@@ -109,8 +109,9 @@ void ItemsService::makeHeader(QStandardItem *item, Qt::Orientation orientation)
     bool direction = (orientation == Qt::Vertical);
     flag =  direction ? Qt::AlignRight : Qt::AlignCenter;
     alignText(item, flag);
+    item->setFlags(Qt::ItemIsUserCheckable);
     makeFontBold(item);
-    makeCheckable(item, direction);
+    makeCheckable(item, !direction);
     changeBgColor(item, Qt::lightGray);
     sizeCorrection(item);
 }

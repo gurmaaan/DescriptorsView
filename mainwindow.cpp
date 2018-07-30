@@ -41,8 +41,8 @@ void MainWindow::connectAll()
 
     connect(ui->viewer, &DescriptorsWidget::sendStatusMessage,
             this, &MainWindow::messageResiver);
-    connect(ui->viewer, &DescriptorsWidget::selectedModelChanged,
-            ui->tableSelectionView, &QTableView::setModel);
+//    connect(ui->viewer, &DescriptorsWidget::selectedModelChanged,
+//            ui->tableSelectionView, &QTableView::setModel);
 }
 
 void MainWindow::changeWindowProperties()
@@ -51,7 +51,7 @@ void MainWindow::changeWindowProperties()
     {
         qDebug() <<"Screens count : " << QGuiApplication::screens().count();
         setGeometry(QGuiApplication::screens().at(1)->geometry());
-        showFullScreen();
+        showMaximized();
     } else
     {
         setGeometry(QGuiApplication::screens().first()->geometry());
@@ -74,11 +74,22 @@ void MainWindow::on_originalTextAction_triggered()
 {
     QFileInfo fi(ui->pathLineEdit->text());
     if( fi.exists() && fi.isFile() )
-        ui->textBrowser->setText(FileService::getTextOfFile( ui->pathLineEdit->text() ) );
+        QDesktopServices::openUrl(ui->pathLineEdit->text());
+       // ui->textBrowser->setText(FileService::getTextOfFile( ui->pathLineEdit->text() ) );
 }
 
 void MainWindow::messageResiver(QString message)
 {
     qDebug() << message;
     ui->statusBar->showMessage(message, MSG_TIME);
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+    QCoreApplication::quit();
+}
+
+void MainWindow::on_closeFileAction_triggered()
+{
+    //TODO: очистка интерфейса и закрытие файла
 }

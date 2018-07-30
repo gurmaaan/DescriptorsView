@@ -2,21 +2,20 @@
 
 Obj::Obj(QObject *parent) : QObject(parent)
 {
-
 }
 
-Obj::Obj(const Obj &other)
+Obj::Obj(const Obj &o)
 {
-    if ( (this->id() == other.id()) && (descriptors_.count() == other.descriptors().count()) )
+    if ( (this->id() == o.id()) && (descriptors_.count() == o.descriptors().count()) )
     {
-        this->setName( other.name() );
-        this->setFullName( other.fullName() );
+        this->setName( o.name() );
+        this->setFullName( o.fullName() );
         for(int i = 0; i < descriptors_.count(); i++)
         {
-            descriptors_.at(i)->setObjId(other.descriptors().at(i)->objId());
-            descriptors_.at(i)->setId(other.descriptors().at(i)->id());
-            descriptors_.at(i)->setName(other.descriptors().at(i)->name());
-            descriptors_.at(i)->setData(other.descriptors().at(i)->data());
+            descriptors_.at(i)->setObjId(o.descriptors().at(i)->objId());
+            descriptors_.at(i)->setId(o.descriptors().at(i)->id());
+            descriptors_.at(i)->setName(o.descriptors().at(i)->name());
+            descriptors_.at(i)->setData(o.descriptors().at(i)->data());
         }
     }
 }
@@ -91,6 +90,7 @@ void Obj::setDescriptors(const QVector<Descriptor *> &descriptors)
 void Obj::apendDescriptor(Descriptor *descriptor)
 {
     this->descriptors_.push_back(descriptor);
+
 }
 
 QList<QStandardItem *> Obj::modelRow()

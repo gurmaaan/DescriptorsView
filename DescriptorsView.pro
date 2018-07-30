@@ -30,10 +30,10 @@ SOURCES += \
         Services/itemsservice.cpp \
         Services/stringservice.cpp\
         DescriptorsWidget/descriptorswidget.cpp \
-        DescriptorsWidget/checkboxheaderview.cpp \
         DescriptorsModel/dscrtablemodel.cpp \
         DescriptorsModel/descriptor.cpp \
-        DescriptorsModel/obj.cpp 
+        DescriptorsModel/obj.cpp \ 
+    DescriptorsWidget/axissettingswidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,14 +42,15 @@ HEADERS += \
         Services/itemsservice.h \
         Services/stringservice.h \ 
         DescriptorsWidget/descriptorswidget.h \
-        DescriptorsWidget/checkboxheaderview.h \
         DescriptorsModel/dscrtablemodel.h \
         DescriptorsModel/descriptor.h \
-        DescriptorsModel/obj.h 
+        DescriptorsModel/obj.h \ 
+    DescriptorsWidget/axissettingswidget.h
 
 FORMS += \
         mainwindow.ui \
-        DescriptorsWidget/descriptorswidget.ui
+        DescriptorsWidget/descriptorswidget.ui \
+    DescriptorsWidget/axissettingswidget.ui
 
 RESOURCES += \
     sources.qrc

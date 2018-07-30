@@ -19,6 +19,8 @@ public:
     static QString getCornerString(QString fileText);
     static QString getTimeMessage(QTime t1, QTime t2);
 
+    //static int lenInPix(QString)
+
     static QString getFirstCol(QString str);
     static QString getFirstRow(QString str);
     static QString multipleLine(QString str);

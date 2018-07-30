@@ -29,6 +29,11 @@ public slots:
     void on_originalTextAction_triggered();
     void messageResiver(QString message);
 
+private slots:
+    void on_actionQuit_triggered();
+
+    void on_closeFileAction_triggered();
+
 private:
     Ui::MainWindow *ui;
     FileService *fs_;

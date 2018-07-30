@@ -14,7 +14,7 @@ class Obj : public QObject
     Q_OBJECT
 public:
     explicit Obj(QObject *parent = nullptr);
-    Obj(const Obj &other);
+    Obj(const Obj &o);
     Obj(int id, QString fullName);
     Obj(int id, QString fullName, QVector<Descriptor *> &descriptors);
 

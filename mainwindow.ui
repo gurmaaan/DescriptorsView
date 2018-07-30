@@ -14,7 +14,7 @@
    <string>Графики признаков объектов</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="sources.qrc">
     <normaloff>:/icons/icons/favicon.png</normaloff>:/icons/icons/favicon.png</iconset>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
@@ -41,7 +41,7 @@
      <x>0</x>
      <y>0</y>
      <width>536</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -50,37 +50,14 @@
     </property>
     <addaction name="openFileAction"/>
     <addaction name="originalTextAction"/>
+    <addaction name="separator"/>
+    <addaction name="closeFileAction"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
    </widget>
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="selectionDockWidget">
-   <property name="floating">
-    <bool>false</bool>
-   </property>
-   <property name="allowedAreas">
-    <set>Qt::BottomDockWidgetArea|Qt::TopDockWidgetArea</set>
-   </property>
-   <property name="windowTitle">
-    <string>Selected column (transposed)</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>8</number>
-   </attribute>
-   <widget class="QWidget" name="selectionContentWidget">
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <item>
-      <widget class="QSplitter" name="splitter">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <widget class="QTextBrowser" name="textBrowser"/>
-       <widget class="QTableView" name="tableSelectionView"/>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-  </widget>
   <widget class="QDockWidget" name="metaDockWidget">
    <property name="minimumSize">
     <size>
@@ -88,8 +65,11 @@
      <height>480</height>
     </size>
    </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
    <property name="features">
-    <set>QDockWidget::NoDockWidgetFeatures</set>
+    <set>QDockWidget::DockWidgetMovable</set>
    </property>
    <property name="allowedAreas">
     <set>Qt::LeftDockWidgetArea</set>
@@ -360,10 +340,14 @@
    </attribute>
    <addaction name="openFileAction"/>
    <addaction name="originalTextAction"/>
+   <addaction name="separator"/>
+   <addaction name="closeFileAction"/>
+   <addaction name="separator"/>
+   <addaction name="actionQuit"/>
   </widget>
   <action name="openFileAction">
    <property name="icon">
-    <iconset>
+    <iconset resource="sources.qrc">
      <normaloff>:/icons/icons/tableA.png</normaloff>:/icons/icons/tableA.png</iconset>
    </property>
    <property name="text">
@@ -378,8 +362,8 @@
   </action>
   <action name="originalTextAction">
    <property name="icon">
-    <iconset>
-     <normaloff>:/icons/icons/fileB.png</normaloff>:/icons/icons/fileB.png</iconset>
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/fileA.png</normaloff>:/icons/icons/fileA.png</iconset>
    </property>
    <property name="text">
     <string>Load text file</string>
@@ -389,6 +373,36 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+O</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/quit.png</normaloff>:/icons/icons/quit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="toolTip">
+    <string>Close app without saving</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="closeFileAction">
+   <property name="icon">
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/closeFile.png</normaloff>:/icons/icons/closeFile.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="toolTip">
+    <string>Close file and clear tables and graphs</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
  </widget>
