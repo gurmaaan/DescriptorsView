@@ -6,28 +6,26 @@ AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
     ui(new Ui::AxisSettingsWidget)
 {
     ui->setupUi(this);
+    max_ = 0;
+    min_ = 0;
 }
 
 AxisSettingsWidget::AxisSettingsWidget(AxisType t)
 {
     switch (t) {
     case AxisType::AxisX:
-        setTittle("Axis X");
-        setCheckableState(false);
+        setTittle("Axis X", false);
         setChecked(false);
         break;
     case AxisType::AxisY:
-        setTittle("Axis Y");
-        setCheckableState(false);
+        setTittle("Axis Y", false);
         setChecked(false);
         break;
     case AxisType::ErrorX:
-        setTittle("X error ");
-        setCheckableState(true);
+        setTittle("X error ", true);
         break;
     case AxisType::ErrorY:
-        setTittle("Y error");
-        setCheckableState(true);
+        setTittle("Y error", true);
         break;
     }
 }
@@ -39,97 +37,85 @@ AxisSettingsWidget::~AxisSettingsWidget()
 
 void AxisSettingsWidget::on_valCB_currentIndexChanged(int index)
 {
-    if(index != selectedIndex())
-        setSelectedIndex(index);
+    setSelectedIndex(index);
 }
 
 void AxisSettingsWidget::setCnt(int cnt)
 {
     if (cnt_ != cnt)
+    {
         cnt_ = cnt;
+        ui->cntSB->setValue(cnt);
+    }
 }
 
 void AxisSettingsWidget::setMin(double min)
 {
     if ( !FloatService::equal(min_, min) )
+    {
         min_ = min;
+        ui->minLE->setText(QString::number(min));
+    }
 }
 
 void AxisSettingsWidget::setMax(double max)
 {
     if( !FloatService::equal(max_, max) )
+    {
         max_ = max;
+        ui->maxLE->setText(QString::number(max));
+    }
 }
 
 void AxisSettingsWidget::setAvr(double avr)
 {
     if( !FloatService::equal(avr_, avr) )
+    {
         avr_ = avr;
+        ui->avrLE->setText(QString::number(avr));
+    }
 }
 
 void AxisSettingsWidget::setColor(const QColor &clr)
 {
-    if( clr != color() )
+    if( color_ != clr )
     {
         color_ = clr;
-        QString prevStyleSheet = ui->colorBtn->styleSheet();
-        QString styleString = "border: 1px solid black; background-color: " + clr.name() + ";";
-        ui->colorBtn->setStyleSheet(styleString);
-        qDebug() << "Previous :" << prevStyleSheet << endl << "New :" << styleString;
+        //WARNING : testing needed, but not important function
+        QString newStyleSheetStr = StringService::replaceBGC(ui->colorBtn->styleSheet(), clr, "background-color");
+        ui->colorBtn->setStyleSheet(newStyleSheetStr);
         emit colorChenged(clr);
+    }
+}
+
+void AxisSettingsWidget::setTittle(const QString &t, bool checkBoxExist)
+{
+    if(tittle_ != t)
+    {
+        tittle_ = t;
+        ui->groupBox->setTitle(tittle_);
+        ui->groupBox->setCheckable(checkBoxExist);
     }
 }
 
 void AxisSettingsWidget::setSelectedIndex(int selectedIndex)
 {
-    if(selectedIndex != selectedIndex_)
+    min_ = 0;
+    max_ = 0;
+    avr_ = 0;
+    if( selectedIndex_ != selectedIndex )
     {
-        selectedIndex_ = selectedIndex;
-        for(auto desc : objects_.at(selectedIndex)->descriptors())
-            values_ << desc->data();
+        ui->rangeCurrentSB->setValue(selectedIndex);
 
-        calcMin(values_);
-        calcMax(values_);
-        calcAv(values_);
+        valuesOfCurentInd_.clear();
+        for(int r = 0; r < model_->rowCount(); r++)
+            valuesOfCurentInd_ << model_->data(model_->index(r, selectedIndex)).toDouble();
+
+        setCnt( valuesOfCurentInd_.count() );
+        setMax( FloatService::max(valuesOfCurentInd_) );
+        setMin( FloatService::min(valuesOfCurentInd_) );
+        setAvr( FloatService::avr(valuesOfCurentInd_) );
         emit selectedIndexCHenged(selectedIndex);
-    }
-}
-
-void AxisSettingsWidget::setObjectsVector(const QVector<Obj *> &objctsVctr)
-{
-    int objctsCnt = objctsVctr.count();
-
-    ui->rangeMaxSB->setMaximum(objctsCnt);
-    ui->rangeMaxSB->setValue(objctsCnt);
-
-    if( objctsCnt !=0)
-    {
-        objects_ = objctsVctr;
-        for ( auto dscr : objctsVctr[0]->descriptors() )
-            descrNamesList_ << dscr->name();
-
-        setRangeMax( descrNamesList_.count() );
-        ui->valCB->addItems(descrNamesList_);
-
-    }
-}
-
-void AxisSettingsWidget::setTittle(const QString &t)
-{
-    if(t != tittle())
-    {
-        tittle_ = t;
-        emit tittleChenged(t);
-    }
-}
-
-void AxisSettingsWidget::setCheckableState(bool cState)
-{
-    if (cState != checkableState())
-    {
-        checkableState_ = cState;
-        ui->groupBox->setEnabled(true);
-        emit checkableStateChenged(cState);
     }
 }
 
@@ -140,57 +126,43 @@ void AxisSettingsWidget::on_colorBtn_clicked()
         setColor(axisColor);
 }
 
-double AxisSettingsWidget::calcMax(QVector<double> v)
+void AxisSettingsWidget::setRangeMax(int colCnt)
 {
-    max_ = 0;
-    for(double item : v)
+    if ((rangeMax_ != colCnt) && (colCnt != 0) )
     {
-        if (item > max_)
-            max_ = item;
-    }
-    emit maxChenged(max_);
-    return max_;
-}
-
-double AxisSettingsWidget::calcMin(QVector<double> v)
-{
-    min_ = 0;
-    for(double item : v)
-    {
-        if (item < min_)
-            min_ = item;
-    }
-    emit minChenged(min_);
-    return min_;
-}
-
-double AxisSettingsWidget::calcAv(QVector<double> v)
-{
-    avr_ = (min_ + max_) / 2;
-    emit avrChenged(avr_);
-    return avr_;
-}
-
-void AxisSettingsWidget::setRangeMax(int rangeMax)
-{
-    if (rangeMax_ != rangeMax)
-    {
-        rangeMax_ = rangeMax;
-        emit rangeMaxChenged(rangeMax);
+        rangeMax_ = colCnt;
     }
 }
 
 void AxisSettingsWidget::setModel(QAbstractItemModel *model)
 {
+    if ( (model->rowCount() != 0) && (model->columnCount() != 0) )
+    {
+        model_ = model;
+        ui->groupBox->setEnabled( !ui->groupBox->isCheckable() );
 
+        dscrNamesListForCB_.clear();
+        ui->valCB->clear();
+
+        for(int i = 0; i < model_->columnCount(); i++)
+            dscrNamesListForCB_ << model_->headerData(i, Qt::Horizontal).toString();
+
+        ui->valCB->addItems(dscrNamesListForCB_);
+        ui->rangeMaxSB->setMaximum( dscrNamesListForCB_.count()*2 );
+        ui->rangeCurrentSB->setMaximum(dscrNamesListForCB_.count() * 2);
+        ui->rangeMaxSB->setValue(dscrNamesListForCB_.count());
+    }
 }
 
 void AxisSettingsWidget::setChecked(bool chSt)
 {
-    if(chSt != checked_)
+    if( (model_->rowCount() != 0) && (model_->columnCount() != 0) )
     {
-        checked_ = chSt;
-        ui->groupBox->setEnabled(true);
-        emit checkedChenged(chSt);
+        if( ui->groupBox->isCheckable() )
+        {
+            ui->groupBox->setChecked(chSt);
+            ui->groupBox->setEnabled(chSt);
+        }
+
     }
 }

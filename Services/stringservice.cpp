@@ -18,6 +18,28 @@ QString StringService::getTimeMessage(QTime t1, QTime t2)
     return msgTxt;
 }
 
+QString StringService::replaceBGC(QString WS, QColor NC, QString BGCS)
+{
+    //LO=lenghtOf,IO=IindexOf,S=String,W=Word,BGC=background-color,CN=ColorName
+    int LOWS = WS.length();
+    qInfo() << "Current StyleSheet string: " << WS << " : " << LOWS;
+    int IOBGCS = WS.indexOf(BGCS);
+    int LOBGCS = BGCS.length();
+    QString nCNS = NC.name();
+    qInfo() << BGCS << "position " << IOBGCS << "(" << LOBGCS << " symbols)";
+    WS.replace(" ", "");
+    QString startS = WS.left(IOBGCS);
+    QString endWithCN = WS.right(LOWS - IOBGCS - LOBGCS - 1);
+    //o=Old, n=New
+    QString oCNS = endWithCN.split(';').first();
+    int LOoCNS = oCNS.length();
+    QString end = WS.right(LOWS - IOBGCS - 1 - LOoCNS - 1);
+    qInfo() << "Old colorName" << oCNS << "(" << LOoCNS << " symbols)";
+    qInfo() << "End :" << end;
+    QString nWS = startS + BGCS + QString(":") + nCNS + QString(";") + end;
+    return nWS;
+}
+
 QString StringService::cutFilePath(QString longString)
 {
     QStringList partsList = longString.split("\\");

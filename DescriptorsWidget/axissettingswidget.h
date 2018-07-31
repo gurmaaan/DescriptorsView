@@ -3,6 +3,9 @@
 
 #include <QWidget>
 #include <QColorDialog>
+#include <QAbstractItemModel>
+#include <QGroupBox>
+#include <QVector>
 
 #include "DescriptorsModel/obj.h"
 #include "Services/floatservice.h"
@@ -27,7 +30,6 @@ public:
     AxisSettingsWidget(AxisType t);
     ~AxisSettingsWidget();
 
-    inline bool checkableState() const { return checkableState_; }
     inline bool checked() const { return checked_; }
     inline QString tittle() const { return tittle_; }
     inline QColor color() const { return color_; }
@@ -38,8 +40,7 @@ public:
     inline double max() const { return max_; }
     inline double avr() const { return avr_; }
 
-    void setCheckableState(bool cState);
-    void setTittle(const QString &tittle);
+    void setTittle(const QString &tittle, bool checkBoxExist);
     void setObjectsVector(const QVector<Obj *> &objctsVctr);
     void setSelectedIndex(int selectedIndex);
     void setColor(const QColor &color);
@@ -48,10 +49,9 @@ public:
     void setMax(double max);
     void setAvr(double avr);
     void setChecked(bool chSt);
-    void setRangeMax(int rangeMax);
+    void setRangeMax(int colCnt);
 
 signals:
-    void checkableStateChenged(bool state);
     void checkedChenged(bool state);
     void tittleChenged(QString newTittle);
     void vectorLoaded(QVector<Obj*> newVector);
@@ -72,15 +72,12 @@ private slots:
 
 private:
     Ui::AxisSettingsWidget *ui;
-    bool checkableState_;
     bool checked_;
     QString tittle_;
-
-    QVector<Obj *> objects_;
-    QStringList descrNamesList_;
+    QAbstractItemModel *model_;
+    QStringList dscrNamesListForCB_;
     int selectedIndex_;
-    QVector<double> values_;
-
+    QVector<double> valuesOfCurentInd_;
     int rangeMax_;
 
     QColor color_;
@@ -88,10 +85,6 @@ private:
     double min_;
     double max_;
     double avr_;
-
-    double calcMax(QVector<double> v);
-    double calcMin(QVector<double> v);
-    double calcAv(QVector<double> v);
 };
 
 #endif // AXISSETTINGSWIDGET_H

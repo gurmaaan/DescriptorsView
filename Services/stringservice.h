@@ -18,8 +18,7 @@ public:
 
     static QString getCornerString(QString fileText);
     static QString getTimeMessage(QTime t1, QTime t2);
-
-    //static int lenInPix(QString)
+    static QString replaceBGC(QString WS, QColor NC, QString BGCS = "background-color");
 
     static QString getFirstCol(QString str);
     static QString getFirstRow(QString str);
@@ -28,6 +27,7 @@ public:
     QStringList splitAndRemoveFirstColOfFirstRow(QString fileText);
     QStringList splitAndRemoveFirstRow(QString fileText);
     QStringList splitBySemicolon(QString str);
+
     static QString cutFilePath(QString longString);
 
     static QString replaceForDouble(QString &strWithComme);
