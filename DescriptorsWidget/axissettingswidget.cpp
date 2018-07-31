@@ -5,13 +5,31 @@ AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AxisSettingsWidget)
 {
-    checkableState_ = false;
-    checked_ = false;
-   //////// ui->groupBox->setEnabled(false);
-//    tittle_ = "";
-
-    applyConnection();
     ui->setupUi(this);
+}
+
+AxisSettingsWidget::AxisSettingsWidget(AxisType t)
+{
+    switch (t) {
+    case AxisType::AxisX:
+        setTittle("Axis X");
+        setCheckableState(false);
+        setChecked(false);
+        break;
+    case AxisType::AxisY:
+        setTittle("Axis Y");
+        setCheckableState(false);
+        setChecked(false);
+        break;
+    case AxisType::ErrorX:
+        setTittle("X error ");
+        setCheckableState(true);
+        break;
+    case AxisType::ErrorY:
+        setTittle("Y error");
+        setCheckableState(true);
+        break;
+    }
 }
 
 AxisSettingsWidget::~AxisSettingsWidget()
@@ -27,28 +45,26 @@ void AxisSettingsWidget::on_valCB_currentIndexChanged(int index)
 
 void AxisSettingsWidget::setCnt(int cnt)
 {
-    if (cnt != cnt_)
-    {
+    if (cnt_ != cnt)
         cnt_ = cnt;
-        emit cntChenged(cnt);
-    }
 }
 
 void AxisSettingsWidget::setMin(double min)
 {
-    emit minChenged(min);
-    min_ = min;
+    if ( !FloatService::equal(min_, min) )
+        min_ = min;
 }
 
 void AxisSettingsWidget::setMax(double max)
 {
-    emit maxChenged(max);
-    max_ = max;
+    if( !FloatService::equal(max_, max) )
+        max_ = max;
 }
 
 void AxisSettingsWidget::setAvr(double avr)
 {
-    avr_ = avr;
+    if( !FloatService::equal(avr_, avr) )
+        avr_ = avr;
 }
 
 void AxisSettingsWidget::setColor(const QColor &clr)
@@ -56,10 +72,10 @@ void AxisSettingsWidget::setColor(const QColor &clr)
     if( clr != color() )
     {
         color_ = clr;
-        //QString prevStyleSheet = ui->colorBtn->styleSheet();
+        QString prevStyleSheet = ui->colorBtn->styleSheet();
         QString styleString = "border: 1px solid black; background-color: " + clr.name() + ";";
         ui->colorBtn->setStyleSheet(styleString);
-        qDebug() << styleString;
+        qDebug() << "Previous :" << prevStyleSheet << endl << "New :" << styleString;
         emit colorChenged(clr);
     }
 }
@@ -70,9 +86,7 @@ void AxisSettingsWidget::setSelectedIndex(int selectedIndex)
     {
         selectedIndex_ = selectedIndex;
         for(auto desc : objects_.at(selectedIndex)->descriptors())
-        {
             values_ << desc->data();
-        }
 
         calcMin(values_);
         calcMax(values_);
@@ -166,33 +180,6 @@ void AxisSettingsWidget::setRangeMax(int rangeMax)
     }
 }
 
-void AxisSettingsWidget::setType(AxisType t)
-{
-    switch (t) {
-    case AxisType::AxisX:
-        setTittle("Axis X");
-        setCheckableState(false);
-        setChecked(false);
-        break;
-    case AxisType::AxisY:
-        setTittle("Axis Y");
-        setCheckableState(false);
-        setChecked(false);
-        break;
-    case AxisType::ErrorX:
-        setTittle("X error ");
-        setCheckableState(true);
-        break;
-    case AxisType::ErrorY:
-        setTittle("Y error");
-        setCheckableState(true);
-        break;
-    default:
-        setTittle("");
-        break;
-    }
-}
-
 void AxisSettingsWidget::setModel(QAbstractItemModel *model)
 {
 
@@ -206,40 +193,4 @@ void AxisSettingsWidget::setChecked(bool chSt)
         ui->groupBox->setEnabled(true);
         emit checkedChenged(chSt);
     }
-}
-
-void AxisSettingsWidget::applyConnection()
-{
-    connect(this, &AxisSettingsWidget::checkableStateChenged,
-            ui->groupBox, &QGroupBox::setCheckable);
-    connect(this, &AxisSettingsWidget::checkedChenged,
-            ui->groupBox, &QGroupBox::setChecked);
-    connect(this, &AxisSettingsWidget::tittleChenged,
-            ui->groupBox, &QGroupBox::setTitle);
-
-//    connect(this, &AxisSettingsWidget::cntChenged,
-//            ui->cntSB, &QSpinBox::setMaximum);
-//    connect(this, &AxisSettingsWidget::cntChenged,
-//            ui->cntSB, &QSpinBox::setValue);
-//    connect(this, &AxisSettingsWidget::maxChenged,
-//            ui->maxLE, &QLineEdit::setText);
-//    connect(this, &AxisSettingsWidget::maxChenged,
-//            ui->maxLE, &QLineEdit::setValue);
-//    connect(this, &AxisSettingsWidget::minChenged,
-//            ui->minLE, &QLineEdit::setText);
-//    connect(this, &AxisSettingsWidget::minChenged,
-//            ui->minLE, &QLineEdit::setValue);
-//    connect(this, &AxisSettingsWidget::avrChenged,
-//            ui->avrLE, &QLineEdit::setText);
-//    connect(this, &AxisSettingsWidget::avrChenged,
-//            ui->avrLbl, &QLineEdit::setValue);
-
-//    connect(this, &AxisSettingsWidget::rangeMaxChenged,
-//            ui->rangeMaxSB, &QSpinBox::setMaximum);
-//    connect(this, &AxisSettingsWidget::rangeMaxChenged,
-//            ui->rangeMaxSB, &QSpinBox::setValue);
-//    connect(this, &AxisSettingsWidget::rangeMaxChenged,
-//            ui->rangeCurrentSB, &QSpinBox::setMaximum);
-//    connect(this, &AxisSettingsWidget::selectedIndexCHenged,
-//            ui->rangeCurrentSB, &QSpinBox::setValue);
 }

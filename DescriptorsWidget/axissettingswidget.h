@@ -3,7 +3,9 @@
 
 #include <QWidget>
 #include <QColorDialog>
+
 #include "DescriptorsModel/obj.h"
+#include "Services/floatservice.h"
 
 namespace Ui {
 class AxisSettingsWidget;
@@ -22,70 +24,31 @@ class AxisSettingsWidget : public QWidget
 
 public:
     explicit AxisSettingsWidget(QWidget *parent = nullptr);
+    AxisSettingsWidget(AxisType t);
     ~AxisSettingsWidget();
 
-    bool checkableState() const
-    {
-        return checkableState_;
-    }
+    inline bool checkableState() const { return checkableState_; }
+    inline bool checked() const { return checked_; }
+    inline QString tittle() const { return tittle_; }
+    inline QColor color() const { return color_; }
+    inline int rangeMax() const { return rangeMax_; }
+    inline int cnt() const { return cnt_; }
+    inline int selectedIndex() const { return selectedIndex_; }
+    inline double min() const { return min_; }
+    inline double max() const { return max_; }
+    inline double avr() const { return avr_; }
+
     void setCheckableState(bool cState);
-
-    QString tittle() const
-    {
-        return tittle_;
-    }
     void setTittle(const QString &tittle);
-
     void setObjectsVector(const QVector<Obj *> &objctsVctr);
-
-    int selectedIndex() const
-    {
-        return selectedIndex_;
-    }
     void setSelectedIndex(int selectedIndex);
-
-    QColor color() const
-    {
-        return color_;
-    }
     void setColor(const QColor &color);
-
-    int cnt() const
-    {
-        return cnt_;
-    }
     void setCnt(int cnt);
-
-    double min() const
-    {
-        return min_;
-    }
     void setMin(double min);
-
-    double max() const
-    {
-        return max_;
-    }
     void setMax(double max);
-
-    double avr() const
-    {
-        return avr_;
-    }
     void setAvr(double avr);
-
-    bool checked() const
-    {
-        return checked_;
-    }
     void setChecked(bool chSt);
-
-    int rangeMax() const
-    {
-        return rangeMax_;
-    }
     void setRangeMax(int rangeMax);
-    void setType(AxisType t);
 
 signals:
     void checkableStateChenged(bool state);
@@ -129,8 +92,6 @@ private:
     double calcMax(QVector<double> v);
     double calcMin(QVector<double> v);
     double calcAv(QVector<double> v);
-
-    void applyConnection();
 };
 
 #endif // AXISSETTINGSWIDGET_H

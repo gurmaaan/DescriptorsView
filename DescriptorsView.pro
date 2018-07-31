@@ -29,11 +29,12 @@ SOURCES += \
         Services/fileservice.cpp \
         Services/itemsservice.cpp \
         Services/stringservice.cpp\
+        Services/floatservice.cpp \
         DescriptorsWidget/descriptorswidget.cpp \
+        DescriptorsWidget/axissettingswidget.cpp \
         DescriptorsModel/dscrtablemodel.cpp \
         DescriptorsModel/descriptor.cpp \
-        DescriptorsModel/obj.cpp \ 
-    DescriptorsWidget/axissettingswidget.cpp
+        DescriptorsModel/obj.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,11 +42,12 @@ HEADERS += \
         Services/fileservice.h \
         Services/itemsservice.h \
         Services/stringservice.h \ 
+        Services/floatservice.h \
         DescriptorsWidget/descriptorswidget.h \
+        DescriptorsWidget/axissettingswidget.h \
         DescriptorsModel/dscrtablemodel.h \
         DescriptorsModel/descriptor.h \
-        DescriptorsModel/obj.h \ 
-    DescriptorsWidget/axissettingswidget.h
+        DescriptorsModel/obj.h
 
 FORMS += \
         mainwindow.ui \
