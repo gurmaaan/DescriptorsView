@@ -70,8 +70,8 @@ private:
     AxisSettingsWidget *asEY_;
 
     void initChart();
-    void initAisWidgets()
-;   void setupTableView();
+    void initAisWidgets();
+    void initTable();
 };
 
 #endif // DESCRIPTORSWIDGET_H

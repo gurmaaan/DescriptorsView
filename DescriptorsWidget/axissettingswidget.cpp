@@ -1,33 +1,15 @@
 #include "axissettingswidget.h"
 #include "ui_axissettingswidget.h"
 
-AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
+AxisSettingsWidget::AxisSettingsWidget(AxisType t, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AxisSettingsWidget)
 {
     ui->setupUi(this);
+    setType(t);
+    model_ = new QStandardItemModel;
     max_ = 0;
     min_ = 0;
-}
-
-AxisSettingsWidget::AxisSettingsWidget(AxisType t)
-{
-    switch (t) {
-    case AxisType::AxisX:
-        setTittle("Axis X", false);
-        setChecked(false);
-        break;
-    case AxisType::AxisY:
-        setTittle("Axis Y", false);
-        setChecked(false);
-        break;
-    case AxisType::ErrorX:
-        setTittle("X error ", true);
-        break;
-    case AxisType::ErrorY:
-        setTittle("Y error", true);
-        break;
-    }
 }
 
 AxisSettingsWidget::~AxisSettingsWidget()
@@ -134,11 +116,32 @@ void AxisSettingsWidget::setRangeMax(int colCnt)
     }
 }
 
+void AxisSettingsWidget::setType(AxisType t)
+{
+    switch (t) {
+    case AxisType::AxisX:
+        setTittle("Axis X", false);
+        break;
+    case AxisType::AxisY:
+        setTittle("Axis Y", false);
+        break;
+    case AxisType::ErrorX:
+        setTittle("X error ", true);
+        setChecked(false);
+        break;
+    case AxisType::ErrorY:
+        setTittle("Y error", true);
+        setChecked(false);
+        break;
+    }
+}
+
 void AxisSettingsWidget::setModel(QAbstractItemModel *model)
 {
     if ( (model->rowCount() != 0) && (model->columnCount() != 0) )
     {
         model_ = model;
+        //WARNING : хз проверить
         ui->groupBox->setEnabled( !ui->groupBox->isCheckable() );
 
         dscrNamesListForCB_.clear();
@@ -156,13 +159,9 @@ void AxisSettingsWidget::setModel(QAbstractItemModel *model)
 
 void AxisSettingsWidget::setChecked(bool chSt)
 {
-    if( (model_->rowCount() != 0) && (model_->columnCount() != 0) )
+    if( ui->groupBox->isCheckable() )
     {
-        if( ui->groupBox->isCheckable() )
-        {
-            ui->groupBox->setChecked(chSt);
-            ui->groupBox->setEnabled(chSt);
-        }
-
+        ui->groupBox->setChecked(chSt);
+        ui->groupBox->setEnabled(chSt);
     }
 }

@@ -29,7 +29,8 @@ QSize ItemsService::sizeOfOneSymb(QStandardItem *anyItem)
 QSize ItemsService::sizeCorrection(QStandardItem *item)
 {
     QSize newSize = sizeOfOneSymb(item);
-    newSize.setWidth( newSize.width() * static_cast<int>(item->text().length() * 0.75) );
+    //BUG: колхозненькое определение необходимой ширины, переделать чтобы красиво было
+    newSize.setWidth( newSize.width() * static_cast<int>(item->text().length() * 0.50) );
     newSize.setHeight( newSize.height() * 4) ;
     item->setSizeHint(newSize);
     return newSize;

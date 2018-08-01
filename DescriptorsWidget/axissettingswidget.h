@@ -26,8 +26,7 @@ class AxisSettingsWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit AxisSettingsWidget(QWidget *parent = nullptr);
-    AxisSettingsWidget(AxisType t);
+    explicit AxisSettingsWidget(AxisType t, QWidget *parent = nullptr);
     ~AxisSettingsWidget();
 
     inline bool checked() const { return checked_; }
@@ -40,16 +39,13 @@ public:
     inline double max() const { return max_; }
     inline double avr() const { return avr_; }
 
-    void setTittle(const QString &tittle, bool checkBoxExist);
     void setObjectsVector(const QVector<Obj *> &objctsVctr);
     void setSelectedIndex(int selectedIndex);
     void setColor(const QColor &color);
-    void setCnt(int cnt);
-    void setMin(double min);
-    void setMax(double max);
-    void setAvr(double avr);
     void setChecked(bool chSt);
     void setRangeMax(int colCnt);
+
+    void setType(AxisType t);
 
 signals:
     void checkedChenged(bool state);
@@ -85,6 +81,12 @@ private:
     double min_;
     double max_;
     double avr_;
+
+    void setTittle(const QString &tittle, bool checkBoxExist);
+    void setCnt(int cnt);
+    void setMin(double min);
+    void setMax(double max);
+    void setAvr(double avr);
 };
 
 #endif // AXISSETTINGSWIDGET_H

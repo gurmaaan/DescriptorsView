@@ -9,18 +9,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>129</height>
+    <width>495</width>
+    <height>157</height>
    </rect>
   </property>
-  <property name="maximumSize">
-   <size>
-    <width>400</width>
-    <height>150</height>
-   </size>
-  </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Axis</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_3">
    <item>

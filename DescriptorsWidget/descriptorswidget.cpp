@@ -11,7 +11,7 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
     is_ = new ItemsService();
 
     model_ = new QStandardItemModel();
-    setupTableView();
+    initTable();
     initChart();
     initAisWidgets();
 }
@@ -95,6 +95,10 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 
     QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
+//    aswX_->setModel(model_);
+//    aswY_->setModel(model_);
+//    asEX_->setModel(model_);
+//    asEY_->setModel(model_);
 
     QTime t4 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
@@ -121,36 +125,35 @@ void DescriptorsWidget::initChart()
     chart_->setAnimationOptions(QChart::AllAnimations);
     chartView_ = new QChartView(chart_);
 
-    ui->splitterTable->addWidget(chartView_);
+    ui->splitterTable->insertWidget(1,chartView_);
     ui->splitterTable->setSizes( QList<int>({INT_MAX, INT_MAX}) );
 
     chart_->createDefaultAxes();
     chartView_->setRenderHint(QPainter::Antialiasing);
     chartView_->setChart(chart_);
+
+    //FIXME : chartView почему то меньше по высоте и выровнен по центру относительно таблицы
 }
 
 void DescriptorsWidget::initAisWidgets()
 {
     QGridLayout *gr = ui->gridLayout;
 
-    aswX_ = new AxisSettingsWidget();
-    aswX_->setType(AxisType::AxisX);
-    aswY_ = new AxisSettingsWidget();
-    aswY_->setType(AxisType::AxisY);
-    asEX_ = new AxisSettingsWidget();
-    asEX_->setType(AxisType::ErrorX);
-    asEY_ = new AxisSettingsWidget();
-    asEY_->setType(AxisType::ErrorY);
+    aswX_ = new AxisSettingsWidget(AxisType::AxisX);
+    aswY_ = new AxisSettingsWidget(AxisType::AxisY);
+    asEX_ = new AxisSettingsWidget(AxisType::ErrorX);
+    asEY_ = new AxisSettingsWidget(AxisType::ErrorY);
 
-    gr->addWidget(aswX_, 0, 0);
-    gr->addWidget(aswY_, 0, 1);
-    gr->addWidget(asEX_, 1, 0);
-    gr->addWidget(asEY_, 1, 1);
+    gr->addWidget(aswX_, 0, 0, Qt::AlignLeft);
+    gr->addWidget(aswY_, 0, 1, Qt::AlignLeft);
+
+    gr->addWidget(asEX_, 1, 0, Qt::AlignLeft);
+    gr->addWidget(asEY_, 1, 1, Qt::AlignLeft);
     gr->setColumnStretch(1, 1);
     gr->setColumnStretch(0, 0);
 }
 
-void DescriptorsWidget::setupTableView()
+void DescriptorsWidget::initTable()
 {
     QHeaderView *hH = ui->tableView->horizontalHeader();
     hH->resetDefaultSectionSize();
@@ -162,6 +165,7 @@ void DescriptorsWidget::setupTableView()
     QHeaderView *vH = ui->tableView->verticalHeader();
     vH->setAlternatingRowColors(true);
     vH->setSectionResizeMode(QHeaderView::Stretch);
+    vH->setSectionResizeMode(QHeaderView::Interactive);
 }
 
 void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
