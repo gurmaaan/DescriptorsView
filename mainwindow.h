@@ -8,6 +8,7 @@
 #include "static.h"
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
+#include "DescriptorsWidget/axissettingswidget.h"
 
 namespace Ui {
 class MainWindow;

@@ -264,25 +264,18 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="colorBtn">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QToolButton" name="clrBtn">
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>0</height>
+           </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">border: 1px solid black;
-background-color: rgb(100, 100, 100);</string>
+           <string notr="true">border: 1px solid black; background-color: rgb(100, 100, 100);</string>
           </property>
           <property name="text">
            <string/>
-          </property>
-          <property name="flat">
-           <bool>true</bool>
           </property>
          </widget>
         </item>

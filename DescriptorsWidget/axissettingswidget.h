@@ -53,7 +53,8 @@ signals:
     void vectorLoaded(QVector<Obj*> newVector);
     void colorChenged(QColor newColor);
     void rangeMaxChenged(int newMax);
-    void selectedIndexCHenged(int newIndex);
+    void selectedIndexChenged(int newIndex);
+    void sendStatusMessage(QString msg);
     void cntChenged(int newCnt);
     void minChenged(double newMin);
     void maxChenged(double newMax);
@@ -64,7 +65,7 @@ public slots:
 
 private slots:
     void on_valCB_currentIndexChanged(int index);
-    void on_colorBtn_clicked();
+    void on_clrBtn_clicked();
 
 private:
     Ui::AxisSettingsWidget *ui;

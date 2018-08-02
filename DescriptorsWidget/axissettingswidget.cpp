@@ -7,6 +7,7 @@ AxisSettingsWidget::AxisSettingsWidget(AxisType t, QWidget *parent) :
 {
     ui->setupUi(this);
     setType(t);
+    ui->clrBtn->setEnabled(true);
     model_ = new QStandardItemModel;
     max_ = 0;
     min_ = 0;
@@ -20,6 +21,25 @@ AxisSettingsWidget::~AxisSettingsWidget()
 void AxisSettingsWidget::on_valCB_currentIndexChanged(int index)
 {
     setSelectedIndex(index);
+}
+
+void AxisSettingsWidget::setSelectedIndex(int si)
+{
+    min_ = 0;
+    max_ = 0;
+    avr_ = 0;
+    ui->rangeCurrentSB->setValue(si + 1);
+
+    valuesOfCurentInd_.clear();
+    for(int r = 0; r < model_->rowCount(); r++)
+        valuesOfCurentInd_ << model_->data(model_->index(r, si)).toDouble();
+
+    setCnt( valuesOfCurentInd_.count() );
+    setMax( FloatService::max(valuesOfCurentInd_) );
+    setMin( FloatService::min(valuesOfCurentInd_) );
+    setAvr( FloatService::avr(valuesOfCurentInd_) );
+
+    emit selectedIndexChenged(si);
 }
 
 void AxisSettingsWidget::setCnt(int cnt)
@@ -58,14 +78,20 @@ void AxisSettingsWidget::setAvr(double avr)
     }
 }
 
+void AxisSettingsWidget::on_clrBtn_clicked()
+{
+    QColor axisColor = QColorDialog::getColor(color_, this);
+    setColor(axisColor);
+}
+
 void AxisSettingsWidget::setColor(const QColor &clr)
 {
     if( color_ != clr )
     {
         color_ = clr;
         //WARNING : testing needed, but not important function
-        QString newStyleSheetStr = StringService::replaceBGC(ui->colorBtn->styleSheet(), clr, "background-color");
-        ui->colorBtn->setStyleSheet(newStyleSheetStr);
+        QString newStyleSheetStr = StringService::replaceBGC(ui->clrBtn->styleSheet(), clr, "background-color");
+        ui->clrBtn->setStyleSheet(newStyleSheetStr);
         emit colorChenged(clr);
     }
 }
@@ -80,33 +106,7 @@ void AxisSettingsWidget::setTittle(const QString &t, bool checkBoxExist)
     }
 }
 
-void AxisSettingsWidget::setSelectedIndex(int selectedIndex)
-{
-    min_ = 0;
-    max_ = 0;
-    avr_ = 0;
-    if( selectedIndex_ != selectedIndex )
-    {
-        ui->rangeCurrentSB->setValue(selectedIndex);
 
-        valuesOfCurentInd_.clear();
-        for(int r = 0; r < model_->rowCount(); r++)
-            valuesOfCurentInd_ << model_->data(model_->index(r, selectedIndex)).toDouble();
-
-        setCnt( valuesOfCurentInd_.count() );
-        setMax( FloatService::max(valuesOfCurentInd_) );
-        setMin( FloatService::min(valuesOfCurentInd_) );
-        setAvr( FloatService::avr(valuesOfCurentInd_) );
-        emit selectedIndexCHenged(selectedIndex);
-    }
-}
-
-void AxisSettingsWidget::on_colorBtn_clicked()
-{
-    QColor axisColor = QColorDialog::getColor(color_, parentWidget());
-    if(axisColor != color_ )
-        setColor(axisColor);
-}
 
 void AxisSettingsWidget::setRangeMax(int colCnt)
 {
@@ -121,9 +121,11 @@ void AxisSettingsWidget::setType(AxisType t)
     switch (t) {
     case AxisType::AxisX:
         setTittle("Axis X", false);
+        setChecked(true);
         break;
     case AxisType::AxisY:
         setTittle("Axis Y", false);
+        setChecked(true);
         break;
     case AxisType::ErrorX:
         setTittle("X error ", true);

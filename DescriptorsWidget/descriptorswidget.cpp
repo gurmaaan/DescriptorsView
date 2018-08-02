@@ -101,7 +101,6 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     aswY_->setModel(model_);
     asEX_->setModel(model_);
     asEY_->setModel(model_);
-
     QTime t4 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
 
