@@ -22,7 +22,9 @@ public:
 
     static QString getFirstCol(QString str);
     static QString getFirstRow(QString str);
+
     static QString multipleLine(QString str);
+    static QString singleLine(QString str);
 
     QStringList splitAndRemoveFirstColOfFirstRow(QString fileText);
     QStringList splitAndRemoveFirstRow(QString fileText);

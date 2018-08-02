@@ -141,14 +141,16 @@ void AxisSettingsWidget::setModel(QAbstractItemModel *model)
     if ( (model->rowCount() != 0) && (model->columnCount() != 0) )
     {
         model_ = model;
-        //WARNING : хз проверить
-        ui->groupBox->setEnabled( !ui->groupBox->isCheckable() );
+        ui->groupBox->setEnabled(true);
+
+        if(ui->groupBox->isCheckable())
+            ui->groupBox->setChecked(false);
 
         dscrNamesListForCB_.clear();
         ui->valCB->clear();
-
+        ui->valCB->setMinimumWidth( ui->valCB->width() * 2);
         for(int i = 0; i < model_->columnCount(); i++)
-            dscrNamesListForCB_ << model_->headerData(i, Qt::Horizontal).toString();
+            dscrNamesListForCB_ << model_->headerData(i, Qt::Horizontal, Qt::StatusTipRole).toString();
 
         ui->valCB->addItems(dscrNamesListForCB_);
         ui->rangeMaxSB->setMaximum( dscrNamesListForCB_.count()*2 );
@@ -162,6 +164,6 @@ void AxisSettingsWidget::setChecked(bool chSt)
     if( ui->groupBox->isCheckable() )
     {
         ui->groupBox->setChecked(chSt);
-        ui->groupBox->setEnabled(chSt);
+        ui->groupBox->setEnabled(!chSt);
     }
 }

@@ -117,3 +117,14 @@ QString StringService::multipleLine(QString str)
     }
     return str;
 }
+
+QString StringService::singleLine(QString str)
+{
+    for(int i = 0; i < str.length(); i++)
+    {
+        if(str.at(i) == "\n")
+            str.replace(i, 1, " ");
+    }
+
+    return str;
+}

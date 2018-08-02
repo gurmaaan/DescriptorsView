@@ -28,7 +28,9 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
 
     int curC = 0;
     for (QString& descrNameStr : descrNameList_) {
-        QStandardItem *hHeaderItem = new QStandardItem(StringService::multipleLine(descrNameStr));
+        QStandardItem *hHeaderItem = new QStandardItem();
+        hHeaderItem->setData(descrNameStr, Qt::EditRole);
+        hHeaderItem->setData(StringService::multipleLine(descrNameStr), Qt::DisplayRole);
         ItemsService::addDescription(hHeaderItem, descrNameStr);
         ItemsService::makeHeader(hHeaderItem, Qt::Horizontal);
         model->setHorizontalHeaderItem(curC, hHeaderItem);
@@ -95,10 +97,10 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 
     QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
-//    aswX_->setModel(model_);
-//    aswY_->setModel(model_);
-//    asEX_->setModel(model_);
-//    asEY_->setModel(model_);
+    aswX_->setModel(model_);
+    aswY_->setModel(model_);
+    asEX_->setModel(model_);
+    asEY_->setModel(model_);
 
     QTime t4 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
@@ -145,12 +147,12 @@ void DescriptorsWidget::initAisWidgets()
     asEY_ = new AxisSettingsWidget(AxisType::ErrorY);
 
     gr->addWidget(aswX_, 0, 0, Qt::AlignLeft);
-    gr->addWidget(aswY_, 0, 1, Qt::AlignLeft);
-
+    gr->addWidget(aswY_, 0, 1, Qt::AlignRight);
     gr->addWidget(asEX_, 1, 0, Qt::AlignLeft);
-    gr->addWidget(asEY_, 1, 1, Qt::AlignLeft);
-    gr->setColumnStretch(1, 1);
+    gr->addWidget(asEY_, 1, 1, Qt::AlignRight);
+
     gr->setColumnStretch(0, 0);
+    gr->setColumnStretch(1, 1);
 }
 
 void DescriptorsWidget::initTable()

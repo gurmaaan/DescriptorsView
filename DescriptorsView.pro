@@ -52,7 +52,7 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
         DescriptorsWidget/descriptorswidget.ui \
-    DescriptorsWidget/axissettingswidget.ui
+        DescriptorsWidget/axissettingswidget.ui
 
 RESOURCES += \
     sources.qrc

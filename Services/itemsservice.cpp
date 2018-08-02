@@ -77,6 +77,7 @@ void ItemsService::addDescription(QStandardItem *item, QString text)
 {
     item->setWhatsThis(text);
     item->setStatusTip(text);
+    item->setToolTip(text);
 }
 
 QString ItemsService::displayingStr(double data)
