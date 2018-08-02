@@ -11,5 +11,8 @@
         <file>icons/shortcuts.png</file>
         <file>icons/quit.png</file>
         <file>icons/closeFile.png</file>
+        <file>icons/points.png</file>
+        <file>icons/chart.png</file>
+        <file>icons/full_screen_ic.png</file>
     </qresource>
 </RCC>

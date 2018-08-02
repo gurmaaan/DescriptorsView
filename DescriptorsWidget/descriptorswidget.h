@@ -50,6 +50,12 @@ signals:
 private slots:
     void on_tableView_clicked(const QModelIndex &index);
 
+    void on_pointsBtn_clicked();
+
+    void on_buildBtn_clicked();
+
+    void on_maximizeGraphBtn_clicked();
+
 private:
     Ui::DescriptorsWidget *ui;
     StringService *ss_;

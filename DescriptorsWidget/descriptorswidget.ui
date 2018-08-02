@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
-    <height>503</height>
+    <width>1236</width>
+    <height>628</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QSplitter" name="splitterTable">
      <property name="autoFillBackground">
@@ -22,9 +22,15 @@
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
-     <widget class="QTableView" name="tableView">
+     <property name="opaqueResize">
+      <bool>false</bool>
+     </property>
+     <property name="handleWidth">
+      <number>10</number>
+     </property>
+     <widget class="QTableView" name="tableViewObjects">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -60,12 +66,139 @@
        <bool>false</bool>
       </property>
      </widget>
+     <widget class="QWidget" name="layoutWidget">
+      <layout class="QVBoxLayout" name="graphLayout">
+       <item>
+        <layout class="QHBoxLayout" name="graphToolsLayout">
+         <item>
+          <spacer name="graphToolsSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QToolButton" name="maximizeGraphBtn">
+           <property name="toolTip">
+            <string>Maximize the graph to full screen in new window</string>
+           </property>
+           <property name="statusTip">
+            <string>Maximize the graph to full screen in new window</string>
+           </property>
+           <property name="whatsThis">
+            <string>Maximize the graph to full screen in new window</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../sources.qrc">
+             <normaloff>:/icons/icons/full_screen_ic.png</normaloff>:/icons/icons/full_screen_ic.png</iconset>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QGraphicsView" name="graph">
+         <property name="minimumSize">
+          <size>
+           <width>400</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
+    <layout class="QHBoxLayout" name="axisHLayout">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetMinimumSize</enum>
+     </property>
      <item>
-      <layout class="QGridLayout" name="gridLayout"/>
+      <layout class="QGridLayout" name="gridLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinimumSize</enum>
+       </property>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="commandsVLayout">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetMinimumSize</enum>
+       </property>
+       <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QCommandLinkButton" name="pointsBtn">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>View Points</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../sources.qrc">
+           <normaloff>:/icons/icons/points.png</normaloff>:/icons/icons/points.png</iconset>
+         </property>
+         <property name="description">
+          <string>Show selected columns as table with X and Y values</string>
+         </property>
+        </widget>
+       </item>
+       <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
+        <widget class="QCommandLinkButton" name="buildBtn">
+         <property name="maximumSize">
+          <size>
+           <width>200</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Build</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../sources.qrc">
+           <normaloff>:/icons/icons/graph.png</normaloff>:/icons/icons/graph.png</iconset>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+         <property name="description">
+          <string>Visualize your data as line chart</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -80,10 +213,22 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QTableView" name="tableViewPoints">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../sources.qrc"/>
+ </resources>
  <connections/>
 </ui>

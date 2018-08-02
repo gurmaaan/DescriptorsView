@@ -105,7 +105,7 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
 
     QTime t5 = QTime::currentTime();
-    ui->tableView->setModel(model_);
+    ui->tableViewObjects->setModel(model_);
 
     QLineSeries *series = new QLineSeries;
     series->setName("Test col");
@@ -126,9 +126,10 @@ void DescriptorsWidget::initChart()
     chart_->setAnimationOptions(QChart::AllAnimations);
     chartView_ = new QChartView(chart_);
 
-    ui->splitterTable->insertWidget(1,chartView_);
-    ui->splitterTable->setSizes( QList<int>({INT_MAX, INT_MAX}) );
+    //ui->splitterTable->insertWidget(1,chartView_);
+    //ui->splitterTable->setSizes( QList<int>({INT_MAX, INT_MAX}) );
 
+   // ui->gr
     chart_->createDefaultAxes();
     chartView_->setRenderHint(QPainter::Antialiasing);
     chartView_->setChart(chart_);
@@ -138,32 +139,32 @@ void DescriptorsWidget::initChart()
 
 void DescriptorsWidget::initAisWidgets()
 {
-    QGridLayout *gr = ui->gridLayout;
+    QGridLayout *grid = ui->gridLayout;
 
     aswX_ = new AxisSettingsWidget(AxisType::AxisX);
     aswY_ = new AxisSettingsWidget(AxisType::AxisY);
     asEX_ = new AxisSettingsWidget(AxisType::ErrorX);
     asEY_ = new AxisSettingsWidget(AxisType::ErrorY);
 
-    gr->addWidget(aswX_, 0, 0, Qt::AlignLeft);
-    gr->addWidget(aswY_, 0, 1, Qt::AlignRight);
-    gr->addWidget(asEX_, 1, 0, Qt::AlignLeft);
-    gr->addWidget(asEY_, 1, 1, Qt::AlignRight);
+    grid->addWidget(aswX_, 0, 0, Qt::AlignLeft);
+    grid->addWidget(aswY_, 0, 1, Qt::AlignRight);
+    grid->addWidget(asEX_, 1, 0, Qt::AlignLeft);
+    grid->addWidget(asEY_, 1, 1, Qt::AlignRight);
 
-    gr->setColumnStretch(0, 0);
-    gr->setColumnStretch(1, 1);
+    grid->setColumnStretch(0, 0);
+    grid->setColumnStretch(1, 1);
 }
 
 void DescriptorsWidget::initTable()
 {
-    QHeaderView *hH = ui->tableView->horizontalHeader();
+    QHeaderView *hH = ui->tableViewObjects->horizontalHeader();
     hH->resetDefaultSectionSize();
     hH->setTextElideMode(Qt::ElideNone);
     hH->resizeSections(QHeaderView::ResizeToContents);
     hH->setSectionResizeMode(QHeaderView::Interactive);
     hH->setSortIndicatorShown(false);
 
-    QHeaderView *vH = ui->tableView->verticalHeader();
+    QHeaderView *vH = ui->tableViewObjects->verticalHeader();
     vH->setAlternatingRowColors(true);
     vH->setSectionResizeMode(QHeaderView::Stretch);
     vH->setSectionResizeMode(QHeaderView::Interactive);
@@ -172,7 +173,7 @@ void DescriptorsWidget::initTable()
 void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
 {
     int cN = index.column();
-    QAbstractItemModel *baseModel = ui->tableView->model();
+    QAbstractItemModel *baseModel = ui->tableViewObjects->model();
 
     QStandardItemModel *newModel = new QStandardItemModel();
     newModel->setColumnCount(baseModel->rowCount());
@@ -191,4 +192,19 @@ void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
     newModel->insertRow(0, itemsAtSelectedC);
     newModel->setVerticalHeaderItem(0, newVertHeader);
     emit selectedModelChanged(newModel);
+}
+
+void DescriptorsWidget::on_pointsBtn_clicked()
+{
+
+}
+
+void DescriptorsWidget::on_buildBtn_clicked()
+{
+
+}
+
+void DescriptorsWidget::on_maximizeGraphBtn_clicked()
+{
+
 }
