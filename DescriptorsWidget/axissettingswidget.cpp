@@ -89,8 +89,8 @@ void AxisSettingsWidget::setColor(const QColor &clr)
     if( color_ != clr )
     {
         color_ = clr;
-        //WARNING : testing needed, but not important function
-        QString newStyleSheetStr = StringService::replaceBGC(ui->clrBtn->styleSheet(), clr, "background-color");
+        //KOSTYL : конкретный стиль кнопки, т. к.  функция автоматической генерации строки стиля из стрингсервиса не работает
+        QString newStyleSheetStr = "border: 1px solid black; background-color: " + clr.name() + ";";
         ui->clrBtn->setStyleSheet(newStyleSheetStr);
         emit colorChenged(clr);
     }

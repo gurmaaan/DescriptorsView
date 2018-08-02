@@ -18,25 +18,27 @@ QString StringService::getTimeMessage(QTime t1, QTime t2)
     return msgTxt;
 }
 
+//FIXME : некорректный парсинг строки стиля
 QString StringService::replaceBGC(QString WS, QColor NC, QString BGCS)
 {
     //LO=lenghtOf,IO=IindexOf,S=String,W=Word,BGC=background-color,CN=ColorName
     int LOWS = WS.length();
-    qInfo() << "Current StyleSheet string: " << WS << " : " << LOWS;
+    qInfo() << "Current StyleSheet string: " << WS << "(" << LOWS << " symbols)";
     int IOBGCS = WS.indexOf(BGCS);
     int LOBGCS = BGCS.length();
     QString nCNS = NC.name();
     qInfo() << BGCS << "position " << IOBGCS << "(" << LOBGCS << " symbols)";
-    WS.replace(" ", "");
+    //WS.replace(" ", "");
     QString startS = WS.left(IOBGCS);
-    QString endWithCN = WS.right(LOWS - IOBGCS - LOBGCS - 1);
+    QString endWithCN = WS.right(LOWS - IOBGCS - LOBGCS);
     //o=Old, n=New
     QString oCNS = endWithCN.split(';').first();
     int LOoCNS = oCNS.length();
-    QString end = WS.right(LOWS - IOBGCS - 1 - LOoCNS - 1);
+    QString end = WS.right(LOWS - IOBGCS - LOoCNS);
     qInfo() << "Old colorName" << oCNS << "(" << LOoCNS << " symbols)";
     qInfo() << "End :" << end;
     QString nWS = startS + BGCS + QString(":") + nCNS + QString(";") + end;
+    qInfo() << "New StyleSheet string: "<< nWS;
     return nWS;
 }
 
