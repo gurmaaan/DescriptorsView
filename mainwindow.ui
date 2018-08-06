@@ -112,6 +112,12 @@
          <layout class="QHBoxLayout" name="typeLayout">
           <item>
            <widget class="QLabel" name="typeLabel">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
              <string>Type</string>
             </property>

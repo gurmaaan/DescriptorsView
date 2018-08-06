@@ -15,7 +15,7 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="QSplitter" name="splitter_3">
+    <widget class="QSplitter" name="splitterV">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
        <horstretch>0</horstretch>
@@ -28,7 +28,7 @@
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
-     <widget class="QSplitter" name="splitter">
+     <widget class="QSplitter" name="splitterVT">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -91,7 +91,7 @@
        </property>
       </widget>
      </widget>
-     <widget class="QSplitter" name="splitter_2">
+     <widget class="QSplitter" name="splitterHB">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -101,8 +101,8 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
-       <layout class="QHBoxLayout" name="horizontalLayout">
+      <widget class="QWidget" name="layoutWidget">
+       <layout class="QHBoxLayout" name="axisHLayout">
         <property name="sizeConstraint">
          <enum>QLayout::SetMaximumSize</enum>
         </property>

@@ -26,14 +26,16 @@ public slots:
     void on_openFileButton_clicked();
     void on_openFileAction_triggered();
 
-    void on_originalTextButton_clicked();
     void on_originalTextAction_triggered();
     void messageResiver(QString message);
 
 private slots:
     void on_actionQuit_triggered();
-
     void on_closeFileAction_triggered();
+    void on_appendFileBtn_clicked();
+    void on_pathLineEdit_textChanged(const QString &arg1);
+    void on_pointsBtn_clicked();
+    void on_buildBtn_clicked();
 
 private:
     Ui::MainWindow *ui;

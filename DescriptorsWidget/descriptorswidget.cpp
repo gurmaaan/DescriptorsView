@@ -140,19 +140,22 @@ void DescriptorsWidget::initChart()
 void DescriptorsWidget::initAisWidgets()
 {
     QGridLayout *grid = ui->gridLayout;
+    aswX_ = ui->xWid;
+    aswX_->setType(AxisType::AxisX);
 
-//    aswX_ = new AxisSettingsWidget(AxisType::AxisX);
-//    aswY_ = new AxisSettingsWidget(AxisType::AxisY);
-//    asEX_ = new AxisSettingsWidget(AxisType::ErrorX);
-//    asEY_ = new AxisSettingsWidget(AxisType::ErrorY);
+    asEX_ = ui->xErrorWid;
+    asEX_->setType(AxisType::ErrorX);
 
-//    grid->addWidget(aswX_, 0, 0, Qt::AlignLeft);
-//    grid->addWidget(aswY_, 0, 1, Qt::AlignRight);
-//    grid->addWidget(asEX_, 1, 0, Qt::AlignLeft);
-//    grid->addWidget(asEY_, 1, 1, Qt::AlignRight);
+    aswY_ = ui->yWid;
+    aswY_->setType(AxisType::AxisY);
+
+    asEY_ = ui->yErrorWid;
+    asEY_->setType(AxisType::ErrorY);
 
     grid->setColumnStretch(0, 0);
     grid->setColumnStretch(1, 1);
+
+    ui->splitterHB->setSizes( QList<int>({INT_MAX, INT_MAX / 2}) );
 }
 
 void DescriptorsWidget::initTable()
@@ -170,41 +173,26 @@ void DescriptorsWidget::initTable()
     vH->setSectionResizeMode(QHeaderView::Interactive);
 }
 
-void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
-{
-    int cN = index.column();
-    QAbstractItemModel *baseModel = ui->tableViewObjects->model();
+//void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
+//{
+//    int cN = index.column();
+//    QAbstractItemModel *baseModel = ui->tableViewObjects->model();
 
-    QStandardItemModel *newModel = new QStandardItemModel();
-    newModel->setColumnCount(baseModel->rowCount());
+//    QStandardItemModel *newModel = new QStandardItemModel();
+//    newModel->setColumnCount(baseModel->rowCount());
 
-    QList<QStandardItem *> itemsAtSelectedC;
-    for(int i = 0; i < baseModel->rowCount(); i++)
-    {
-        itemsAtSelectedC << new QStandardItem(baseModel->data(baseModel->index(i, cN)).toString());
-        QStandardItem *hHAtI = new QStandardItem(baseModel->headerData(i, Qt::Vertical).toString());
-        ItemsService::makeHeader(hHAtI, Qt::Horizontal);
-        newModel->setHorizontalHeaderItem(i, hHAtI);
-    }
+//    QList<QStandardItem *> itemsAtSelectedC;
+//    for(int i = 0; i < baseModel->rowCount(); i++)
+//    {
+//        itemsAtSelectedC << new QStandardItem(baseModel->data(baseModel->index(i, cN)).toString());
+//        QStandardItem *hHAtI = new QStandardItem(baseModel->headerData(i, Qt::Vertical).toString());
+//        ItemsService::makeHeader(hHAtI, Qt::Horizontal);
+//        newModel->setHorizontalHeaderItem(i, hHAtI);
+//    }
 
-    QStandardItem *newVertHeader = new QStandardItem( baseModel->headerData(cN, Qt::Horizontal).toString());
-    ItemsService::makeHeader(newVertHeader, Qt::Vertical);
-    newModel->insertRow(0, itemsAtSelectedC);
-    newModel->setVerticalHeaderItem(0, newVertHeader);
-    emit selectedModelChanged(newModel);
-}
-
-void DescriptorsWidget::on_pointsBtn_clicked()
-{
-
-}
-
-void DescriptorsWidget::on_buildBtn_clicked()
-{
-
-}
-
-void DescriptorsWidget::on_maximizeGraphBtn_clicked()
-{
-
-}
+//    QStandardItem *newVertHeader = new QStandardItem( baseModel->headerData(cN, Qt::Horizontal).toString());
+//    ItemsService::makeHeader(newVertHeader, Qt::Vertical);
+//    newModel->insertRow(0, itemsAtSelectedC);
+//    newModel->setVerticalHeaderItem(0, newVertHeader);
+//    emit selectedModelChanged(newModel);
+//}

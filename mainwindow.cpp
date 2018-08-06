@@ -65,11 +65,6 @@ void MainWindow::on_openFileAction_triggered()
     ui->viewer->loadModelFromCSVFile(path);
 }
 
-void MainWindow::on_originalTextButton_clicked()
-{
-    ui->originalTextAction->trigger();
-}
-
 void MainWindow::on_originalTextAction_triggered()
 {
     QFileInfo fi(ui->pathLineEdit->text());
@@ -92,4 +87,27 @@ void MainWindow::on_actionQuit_triggered()
 void MainWindow::on_closeFileAction_triggered()
 {
     //TODO: очистка интерфейса и закрытие файла
+}
+
+void MainWindow::on_appendFileBtn_clicked()
+{
+    //TODO: механизм сравнения 2 файлов
+}
+
+void MainWindow::on_pathLineEdit_textChanged(const QString &arg1)
+{
+    QString fileExtenssion = arg1.split(".").last();
+    if(fileExtenssion == "csv") {
+        ui->typeCB->addItem("Comma Separatred table *.CSV");
+    }
+}
+
+void MainWindow::on_pointsBtn_clicked()
+{
+    //TODO: генерация таблицы координат
+}
+
+void MainWindow::on_buildBtn_clicked()
+{
+    //TODO: триггер действия построения графика
 }
