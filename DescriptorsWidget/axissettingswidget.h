@@ -19,14 +19,16 @@ enum class AxisType
     AxisX,
     AxisY,
     ErrorX,
-    ErrorY
+    ErrorY,
+    Default
 };
 class AxisSettingsWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AxisSettingsWidget(AxisType t, QWidget *parent = nullptr);
+    explicit AxisSettingsWidget(QWidget *parent = nullptr);
+    AxisSettingsWidget(AxisType t, QWidget *parent = nullptr);
     ~AxisSettingsWidget();
 
     inline bool checked() const { return checked_; }

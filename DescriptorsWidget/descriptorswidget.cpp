@@ -141,15 +141,15 @@ void DescriptorsWidget::initAisWidgets()
 {
     QGridLayout *grid = ui->gridLayout;
 
-    aswX_ = new AxisSettingsWidget(AxisType::AxisX);
-    aswY_ = new AxisSettingsWidget(AxisType::AxisY);
-    asEX_ = new AxisSettingsWidget(AxisType::ErrorX);
-    asEY_ = new AxisSettingsWidget(AxisType::ErrorY);
+//    aswX_ = new AxisSettingsWidget(AxisType::AxisX);
+//    aswY_ = new AxisSettingsWidget(AxisType::AxisY);
+//    asEX_ = new AxisSettingsWidget(AxisType::ErrorX);
+//    asEY_ = new AxisSettingsWidget(AxisType::ErrorY);
 
-    grid->addWidget(aswX_, 0, 0, Qt::AlignLeft);
-    grid->addWidget(aswY_, 0, 1, Qt::AlignRight);
-    grid->addWidget(asEX_, 1, 0, Qt::AlignLeft);
-    grid->addWidget(asEY_, 1, 1, Qt::AlignRight);
+//    grid->addWidget(aswX_, 0, 0, Qt::AlignLeft);
+//    grid->addWidget(aswY_, 0, 1, Qt::AlignRight);
+//    grid->addWidget(asEX_, 1, 0, Qt::AlignLeft);
+//    grid->addWidget(asEY_, 1, 1, Qt::AlignRight);
 
     grid->setColumnStretch(0, 0);
     grid->setColumnStretch(1, 1);

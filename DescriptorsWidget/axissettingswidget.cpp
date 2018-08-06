@@ -128,12 +128,16 @@ void AxisSettingsWidget::setType(AxisType t)
         setChecked(true);
         break;
     case AxisType::ErrorX:
-        setTittle("X error ", true);
+        setTittle("X error", true);
         setChecked(false);
         break;
     case AxisType::ErrorY:
         setTittle("Y error", true);
         setChecked(false);
+        break;
+    case AxisType::Default:
+        setTittle("Axis", false);
+        setChecked(true);
         break;
     }
 }
@@ -168,4 +172,16 @@ void AxisSettingsWidget::setChecked(bool chSt)
         ui->groupBox->setChecked(chSt);
         ui->groupBox->setEnabled(!chSt);
     }
+}
+
+AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::AxisSettingsWidget)
+{
+    ui->setupUi(this);
+    setType(AxisType::Default);
+    ui->clrBtn->setEnabled(true);
+    model_ = new QStandardItemModel;
+    max_ = 0;
+    min_ = 0;
 }
