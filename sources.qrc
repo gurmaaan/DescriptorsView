@@ -14,5 +14,9 @@
         <file>icons/points.png</file>
         <file>icons/chart.png</file>
         <file>icons/full_screen_ic.png</file>
+        <file>icons/add.png</file>
+        <file>icons/build.png</file>
+        <file>icons/calc.png</file>
+        <file>icons/github.png</file>
     </qresource>
 </RCC>

@@ -86,6 +86,40 @@ QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
     return objInFileVector;
 }
 
+int DescriptorsWidget::getAxisColumnID(AxisType t)
+{
+    int result = 0;
+    switch (t)
+    {
+        case AxisType::AxisX:
+            result = ui->xWid->selectedIndex();
+        break;
+        case AxisType::AxisY:
+            result = ui->yWid->selectedIndex();
+        break;
+        case AxisType::ErrorX:
+            result = ui->xErrorWid->selectedIndex();
+        break;
+        case AxisType::ErrorY:
+            result = ui->yErrorWid->selectedIndex();
+        break;
+        case AxisType::Default:
+            result = -1;
+        break;
+    }
+
+    return result;
+}
+
+void DescriptorsWidget::setPointsModel(QStandardItemModel *points)
+{
+    if(!(points->columnCount() == 0))
+    {
+        pointsModel_ = points;
+        ui->tableViewPoints->setModel(points);
+    }
+}
+
 void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 {
     emit fileNameChanged(filePath);
@@ -118,6 +152,34 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 
     QTime t6 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t5, t6));
+}
+
+void DescriptorsWidget::scrollTo(Qt::Orientation o, int selectedInd)
+{
+    swi
+}
+
+QAbstractTableModel *DescriptorsWidget::getModel() const
+{
+ //   return ui->tableViewObjects->model();
+}
+
+QVector<QStandardItem *> DescriptorsWidget::getItemsByColumnID() const
+{
+
+}
+
+int DescriptorsWidget::getDescColCnt() const
+{
+    return  model_->columnCount();
+}
+
+QVector<QString> DescriptorsWidget::getObjNameList() const
+{
+    QVector<QString> objNamesVector;
+    for(int i = 0; i < model_->rowCount(); i++)
+        objNamesVector << model_->headerData(i, Qt::Horizontal).toString();
+    return objNamesVector;
 }
 
 void DescriptorsWidget::initChart()
@@ -172,27 +234,3 @@ void DescriptorsWidget::initTable()
     vH->setSectionResizeMode(QHeaderView::Stretch);
     vH->setSectionResizeMode(QHeaderView::Interactive);
 }
-
-//void DescriptorsWidget::on_tableView_clicked(const QModelIndex &index)
-//{
-//    int cN = index.column();
-//    QAbstractItemModel *baseModel = ui->tableViewObjects->model();
-
-//    QStandardItemModel *newModel = new QStandardItemModel();
-//    newModel->setColumnCount(baseModel->rowCount());
-
-//    QList<QStandardItem *> itemsAtSelectedC;
-//    for(int i = 0; i < baseModel->rowCount(); i++)
-//    {
-//        itemsAtSelectedC << new QStandardItem(baseModel->data(baseModel->index(i, cN)).toString());
-//        QStandardItem *hHAtI = new QStandardItem(baseModel->headerData(i, Qt::Vertical).toString());
-//        ItemsService::makeHeader(hHAtI, Qt::Horizontal);
-//        newModel->setHorizontalHeaderItem(i, hHAtI);
-//    }
-
-//    QStandardItem *newVertHeader = new QStandardItem( baseModel->headerData(cN, Qt::Horizontal).toString());
-//    ItemsService::makeHeader(newVertHeader, Qt::Vertical);
-//    newModel->insertRow(0, itemsAtSelectedC);
-//    newModel->setVerticalHeaderItem(0, newVertHeader);
-//    emit selectedModelChanged(newModel);
-//}

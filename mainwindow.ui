@@ -45,13 +45,30 @@
      <string>File</string>
     </property>
     <addaction name="openFileAction"/>
-    <addaction name="originalTextAction"/>
-    <addaction name="separator"/>
+    <addaction name="addFileAct"/>
     <addaction name="closeFileAction"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
+   <widget class="QMenu" name="menuModel">
+    <property name="title">
+     <string>Model</string>
+    </property>
+    <addaction name="chartBuildAct"/>
+    <addaction name="pointsAct"/>
+    <addaction name="separator"/>
+    <addaction name="actionLayout_1"/>
+    <addaction name="actionLayout_2"/>
+   </widget>
+   <widget class="QMenu" name="menuInfo">
+    <property name="title">
+     <string>Info</string>
+    </property>
+    <addaction name="githubAct"/>
+   </widget>
    <addaction name="menu"/>
+   <addaction name="menuModel"/>
+   <addaction name="menuInfo"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="fileDockWidget">
@@ -244,7 +261,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="appendFileBtn">
+           <widget class="QPushButton" name="addFileBtn">
             <property name="minimumSize">
              <size>
               <width>75</width>
@@ -286,24 +303,6 @@
      </item>
     </layout>
    </widget>
-  </widget>
-  <widget class="QToolBar" name="toolBar">
-   <property name="windowTitle">
-    <string>toolBar</string>
-   </property>
-   <property name="toolButtonStyle">
-    <enum>Qt::ToolButtonTextUnderIcon</enum>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-   <addaction name="openFileAction"/>
-   <addaction name="separator"/>
-   <addaction name="separator"/>
-   <addaction name="actionQuit"/>
   </widget>
   <widget class="QDockWidget" name="modelDockWidget">
    <property name="features">
@@ -431,6 +430,18 @@
       <layout class="QHBoxLayout" name="layoutHLayout">
        <item>
         <widget class="QRadioButton" name="layout1RB">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>Not implemented yet</string>
+         </property>
+         <property name="statusTip">
+          <string>Not implemented yet</string>
+         </property>
+         <property name="whatsThis">
+          <string>Not implemented yet</string>
+         </property>
          <property name="text">
           <string>Layout 1</string>
          </property>
@@ -442,6 +453,18 @@
        </item>
        <item>
         <widget class="QRadioButton" name="layout2RB">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="toolTip">
+          <string>Not implemented yet</string>
+         </property>
+         <property name="statusTip">
+          <string>Not implemented yet</string>
+         </property>
+         <property name="whatsThis">
+          <string>Not implemented yet</string>
+         </property>
          <property name="text">
           <string>Layout 2</string>
          </property>
@@ -513,6 +536,76 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="addFileAct">
+   <property name="icon">
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/add.png</normaloff>:/icons/icons/add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Add</string>
+   </property>
+   <property name="toolTip">
+    <string>Add the 2nd file for calculation</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="pointsAct">
+   <property name="icon">
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/calc.png</normaloff>:/icons/icons/calc.png</iconset>
+   </property>
+   <property name="text">
+    <string>Build points table</string>
+   </property>
+   <property name="toolTip">
+    <string>Generate the table with points of chart and put it into bottom table</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="chartBuildAct">
+   <property name="icon">
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/chart.png</normaloff>:/icons/icons/chart.png</iconset>
+   </property>
+   <property name="text">
+    <string>View on chart</string>
+   </property>
+   <property name="toolTip">
+    <string>Put user's set to the chart </string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="githubAct">
+   <property name="icon">
+    <iconset resource="sources.qrc">
+     <normaloff>:/icons/icons/github.png</normaloff>:/icons/icons/github.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open GitHub</string>
+   </property>
+   <property name="toolTip">
+    <string>Virew a development proccess in the gIThUB</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Alt+G, Ctrl+Alt+H</string>
+   </property>
+  </action>
+  <action name="actionLayout_1">
+   <property name="text">
+    <string>Layout 1</string>
+   </property>
+  </action>
+  <action name="actionLayout_2">
+   <property name="text">
+    <string>Layout 2</string>
    </property>
   </action>
  </widget>

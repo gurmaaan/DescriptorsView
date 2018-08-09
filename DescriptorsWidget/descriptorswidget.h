@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QDebug>
 #include <QStandardItemModel>
+#include <QStringList>
 #include <QtCharts/QtCharts>
 #include <QtCharts/QChartView>
 #include <QXYModelMapper>
@@ -32,10 +33,15 @@ public:
 
     QStandardItemModel *convertintoStandardModel(QVector<Obj*> objectsVector);
     QVector<Obj*> convertFileIntoObjectsVector(QString filePath);
+    int getAxisColumnID(AxisType t);
+    void setPointsModel(QStandardItemModel *points);
+    QVector<QString> getObjNameList() const;
+    QVector<QStandardItem *> getItemsByColumnID() const;
+
+    QAbstractTableModel *getModel() const;
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
-   // slot
 
 signals:
     void fileNameChanged(QString newFileName);
@@ -57,6 +63,7 @@ private:
 
     QVector<Obj*> *dm_;
     QStandardItemModel *model_;
+    QStandardItemModel *pointsModel_;
     //DscrTableModel *model_;
     QChart *chart_;
     QChartView *chartView_;

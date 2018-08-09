@@ -29,4 +29,7 @@
 #define CHECKBOX_RECT 1,3,20,20
 #endif
 
+#ifndef GURMAAAN
+#define GURMAAAN "https://github.com/gurmaaan/DescriptorsView"
+#endif
 #endif // STATIC_H
