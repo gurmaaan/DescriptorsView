@@ -78,9 +78,14 @@ void MainWindow::messageResiver(QString message)
     ui->statusBar->showMessage(message, MSG_TIME);
 }
 
-void MainWindow::scrollSelect(int colNum)
+void MainWindow::scrollSelect(int colInd)
 {
+    int colCnt = ui->viewer->getDescColCnt();
+    if (colInd < colCnt)
+    {
+        ui->viewer->scrollToCol(colInd);
 
+    }
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -123,15 +128,19 @@ void MainWindow::on_chartBuildAct_triggered()
 
 void MainWindow::on_pointsAct_triggered()
 {
+    // 1. получаю номера выбранных в комбобоксах колонок
+    // 2. посылкаю их тавбличке, она возвращает модель выбранных точек
+    // 3. отправляю полученную модель маленькой табличке
+    // 4. настраиваю заголовки и всю ээту дрочь
+    // 5. коннект слота нажатия кнопки
         int cNx = ui->viewer->getAxisColumnID(AxisType::AxisX);
         int cNy = ui->viewer->getAxisColumnID(AxisType::AxisY);
-        QAbstractItemModel *baseModel = ui->viewer->getModel();
 
-    //    QStandardItemModel *newModel = new QStandardItemModel();
-    //    newModel->setColumvnCount(baseModel->rowCount());
+        QStandardItemModel *pointsModel = new QStandardItemModel();
+        pointsModel = ui->viewer->getModel(cNx, cNy);
 
     //    QList<QStandardItem *> itemsAtSelectedC;
-    //    for(int i = 0; i < baseModel->rowCount(); i++)
+    //    for(int i = 0; i < baseModel->(); i++)
     //    {
     //        itemsAtSelectedC << new QStandardItem(baseModel->data(baseModel->index(i, cN)).toString());
     //        QStandardItem *hHAtI = new QStandardItem(baseModel->headerData(i, Qt::Vertical).toString());
@@ -144,6 +153,7 @@ void MainWindow::on_pointsAct_triggered()
     //    newModel->insertRow(0, itemsAtSelectedC);
     //    newModel->setVerticalHeaderItem(0, newVertHeader);
     //    emit selectedModelChanged(newModel);
+        ui->viewer->setPointsModel(pointsModel);
 }
 
 void MainWindow::on_addFileAct_triggered()

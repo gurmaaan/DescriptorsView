@@ -1,4 +1,4 @@
-#include "descriptorswidget.h"
+ #include "descriptorswidget.h"
 #include "ui_descriptorswidget.h"
 
 DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
@@ -14,6 +14,8 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
     initTable();
     initChart();
     initAisWidgets();
+//    connect(ui->xWid, &AxisSettingsWidget::selectedIndexChenged,
+//            this, &DescriptorsWidget::scrollToCol );
 }
 
 DescriptorsWidget::~DescriptorsWidget()
@@ -56,6 +58,13 @@ QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
     {
         if( StringService::notEmpty(hHItemText) )
             descrNameList_.append(hHItemText);
+        else
+        {
+            int ret = QMessageBox::information(this, tr("Warning"),
+                                           tr("The document contains empty cells.\n"
+                                              "Would you like to continue?"),
+                                           QMessageBox::Ok| QMessageBox::Cancel);
+        }
     }
     int descrCnt = descrNameList_.count();
     emit colCountinModelChanged(descrCnt);
@@ -154,19 +163,35 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     emit sendStatusMessage(StringService::getTimeMessage(t5, t6));
 }
 
-void DescriptorsWidget::scrollTo(Qt::Orientation o, int selectedInd)
-{
-    swi
+void DescriptorsWidget::scrollToCol(int selectedInd)
+{      
+    ui->tableViewObjects->scrollTo(ui->tableViewObjects->model()->index(0, selectedInd));
 }
 
-QAbstractTableModel *DescriptorsWidget::getModel() const
+QAbstractItemModel *DescriptorsWidget::getModel() const
 {
- //   return ui->tableViewObjects->model();
+    return ui->tableViewObjects->model();
 }
 
-QVector<QStandardItem *> DescriptorsWidget::getItemsByColumnID() const
+QStandardItemModel *DescriptorsWidget::getModel(int colX, int colY) const
 {
+    QList<QStandardItem*> xColList, yColList;
+    for(int r = 0; r < ui->tableViewObjects->model()->rowCount(); r++)
+    {
+        QStandardItem *xItem = new QStandardItem();
+        xItem = model_->item(r, colX);
+        QStandardItem *yItem = new QStandardItem();
+        yItem = model_->item(r, colY);
 
+        xColList << xItem;
+        yColList << yItem;
+    }
+
+    QStandardItemModel *model = new QStandardItemModel();
+    model->appendColumn(xColList);
+    model->appendColumn(yColList);
+
+    return model;
 }
 
 int DescriptorsWidget::getDescColCnt() const

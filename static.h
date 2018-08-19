@@ -2,7 +2,7 @@
 #define STATIC_H
 
 #ifndef DATA_PATH
-#define DATA_PATH "TableMapper/data"
+#define DATA_PATH "DescriptorsView/data"
 #endif
 
 #ifndef ENCODING

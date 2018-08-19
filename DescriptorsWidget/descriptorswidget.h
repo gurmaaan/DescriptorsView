@@ -8,7 +8,7 @@
 #include <QtCharts/QtCharts>
 #include <QtCharts/QChartView>
 #include <QXYModelMapper>
-
+#include <QMessageBox>
 #include "Services/stringservice.h"
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
@@ -34,14 +34,16 @@ public:
     QStandardItemModel *convertintoStandardModel(QVector<Obj*> objectsVector);
     QVector<Obj*> convertFileIntoObjectsVector(QString filePath);
     int getAxisColumnID(AxisType t);
-    void setPointsModel(QStandardItemModel *points);
-    QVector<QString> getObjNameList() const;
-    QVector<QStandardItem *> getItemsByColumnID() const;
 
-    QAbstractTableModel *getModel() const;
+    QVector<QString> getObjNameList() const;
+    int getDescColCnt() const;
+    QAbstractItemModel *getModel() const;
+    QStandardItemModel *getModel(int colX, int colY) const;
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
+    void scrollToCol(int selectedInd);
+    void setPointsModel(QStandardItemModel *points);
 
 signals:
     void fileNameChanged(QString newFileName);
