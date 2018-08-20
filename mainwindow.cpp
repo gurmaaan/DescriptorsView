@@ -74,7 +74,7 @@ void MainWindow::on_originalTextAction_triggered()
 
 void MainWindow::messageResiver(QString message)
 {
-    qDebug() << message;
+    qDebug().noquote() << message;
     ui->statusBar->showMessage(message, MSG_TIME);
 }
 
@@ -137,23 +137,7 @@ void MainWindow::on_pointsAct_triggered()
         int cNy = ui->viewer->getAxisColumnID(AxisType::AxisY);
 
         QStandardItemModel *pointsModel = new QStandardItemModel();
-        pointsModel = ui->viewer->getModel(cNx, cNy);
-
-    //    QList<QStandardItem *> itemsAtSelectedC;
-    //    for(int i = 0; i < baseModel->(); i++)
-    //    {
-    //        itemsAtSelectedC << new QStandardItem(baseModel->data(baseModel->index(i, cN)).toString());
-    //        QStandardItem *hHAtI = new QStandardItem(baseModel->headerData(i, Qt::Vertical).toString());
-    //        ItemsService::makeHeader(hHAtI, Qt::Horizontal);
-    //        newModel->setHorizontalHeaderItem(i, hHAtI);
-    //    }
-
-    //    QStandardItem *newVertHeader = new QStandardItem( baseModel->headerData(cN, Qt::Horizontal).toString());
-    //    ItemsService::makeHeader(newVertHeader, Qt::Vertical);
-    //    newModel->insertRow(0, itemsAtSelectedC);
-    //    newModel->setVerticalHeaderItem(0, newVertHeader);
-    //    emit selectedModelChanged(newModel);
-        ui->viewer->setPointsModel(pointsModel);
+        pointsModel = ui->viewer->getAndPushToViewModel(cNx, cNy);
 }
 
 void MainWindow::on_addFileAct_triggered()

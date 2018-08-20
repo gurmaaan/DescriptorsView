@@ -11,6 +11,7 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
     is_ = new ItemsService();
 
     model_ = new QStandardItemModel();
+    pointsModel_ = new QStandardItemModel();
     initTable();
     initChart();
     initAisWidgets();
@@ -61,9 +62,15 @@ QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
         else
         {
             int ret = QMessageBox::information(this, tr("Warning"),
-                                           tr("The document contains empty cells.\n"
-                                              "Would you like to continue?"),
-                                           QMessageBox::Ok| QMessageBox::Cancel);
+                                                     tr(EMPTY_CELLS_MSG),
+                                                     QMessageBox::Ok | QMessageBox::Cancel);
+            if(ret == static_cast<int>(QMessageBox::Ok))
+                break;
+            else
+            {
+                qDebug() << ret;
+                //TODO::Действие закрытия файла
+            }
         }
     }
     int descrCnt = descrNameList_.count();
@@ -80,7 +87,9 @@ QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
         if( StringService::notEmpty(rowString) )
         {
             emit rowCountInModelChanged(r);
-            Obj* objAtRowR = new Obj( r, ss_->getFirstCol(rowString) );
+            QString objectName = ss_->getFirstCol(rowString);
+            objNameList_ << objectName;
+            Obj* objAtRowR = new Obj( r,  objectName);
             QStringList itemsOfRowStringList = ss_->splitAndRemoveFirstColOfFirstRow(rowString);
             for(int c = 0; c < descrCnt; c++)
             {
@@ -136,7 +145,7 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     QTime t1 = QTime::currentTime();
     QVector<Obj*> objInFileVector = convertFileIntoObjectsVector(filePath);
     QTime t2 = QTime::currentTime();
-    emit sendStatusMessage(StringService::getTimeMessage(t1, t2));
+    emit sendStatusMessage(StringService::getTimeMessage(t1, t2, "convertFileIntoObjectsVector"));
 
     QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
@@ -145,11 +154,12 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     asEX_->setModel(model_);
     asEY_->setModel(model_);
     QTime t4 = QTime::currentTime();
-    emit sendStatusMessage(StringService::getTimeMessage(t3, t4));
+    emit sendStatusMessage(StringService::getTimeMessage(t3, t4, "convertintoStandardModel"));
 
     QTime t5 = QTime::currentTime();
     ui->tableViewObjects->setModel(model_);
 
+    //TODO::вынести в метод nitSeries
     QLineSeries *series = new QLineSeries;
     series->setName("Test col");
     QVXYModelMapper *mapper = new QVXYModelMapper(this);
@@ -173,25 +183,38 @@ QAbstractItemModel *DescriptorsWidget::getModel() const
     return ui->tableViewObjects->model();
 }
 
-QStandardItemModel *DescriptorsWidget::getModel(int colX, int colY) const
+QStandardItemModel *DescriptorsWidget::getAndPushToViewModel(int colX, int colY) const
 {
     QList<QStandardItem*> xColList, yColList;
     for(int r = 0; r < ui->tableViewObjects->model()->rowCount(); r++)
     {
-        QStandardItem *xItem = new QStandardItem();
-        xItem = model_->item(r, colX);
-        QStandardItem *yItem = new QStandardItem();
-        yItem = model_->item(r, colY);
+        QStandardItem *xItem = new QStandardItem(model_->item(r, colX)->data(Qt::EditRole).toString());
+        QStandardItem *yItem = new QStandardItem(model_->item(r, colY)->data(Qt::EditRole).toString());
 
         xColList << xItem;
         yColList << yItem;
     }
 
-    QStandardItemModel *model = new QStandardItemModel();
-    model->appendColumn(xColList);
-    model->appendColumn(yColList);
+    pointsModel_->clear();
 
-    return model;
+    pointsModel_->appendColumn(xColList);
+    pointsModel_->appendColumn(yColList);
+
+    for(int r = 0; r < pointsModel_->rowCount(); r++)
+    {
+        pointsModel_->setHeaderData( r, Qt::Vertical, StringService::cutFilePath(objNameList_.at(r)) );
+        ItemsService::makeVHeader(pointsModel_->verticalHeaderItem(r));
+    }
+
+    pointsModel_->setHeaderData(0, Qt::Horizontal, AxisSettingsWidget::axisTittle(AxisType::AxisX));
+    ItemsService::addDescription(pointsModel_->horizontalHeaderItem(0), descrNameList_.at(colX));
+    ItemsService::makeHHeader(pointsModel_->horizontalHeaderItem(0));
+    pointsModel_->setHeaderData(1, Qt::Horizontal, AxisSettingsWidget::axisTittle(AxisType::AxisY));
+    ItemsService::addDescription(pointsModel_->horizontalHeaderItem(1), descrNameList_.at(colY));
+    ItemsService::makeHHeader(pointsModel_->horizontalHeaderItem(1));
+    ui->tableViewPoints->setModel(pointsModel_);
+
+    return pointsModel_;
 }
 
 int DescriptorsWidget::getDescColCnt() const
@@ -199,7 +222,7 @@ int DescriptorsWidget::getDescColCnt() const
     return  model_->columnCount();
 }
 
-QVector<QString> DescriptorsWidget::getObjNameList() const
+QVector<QString> DescriptorsWidget::getObjNameVector() const
 {
     QVector<QString> objNamesVector;
     for(int i = 0; i < model_->rowCount(); i++)

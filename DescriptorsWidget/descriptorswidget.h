@@ -9,13 +9,13 @@
 #include <QtCharts/QChartView>
 #include <QXYModelMapper>
 #include <QMessageBox>
+
 #include "Services/stringservice.h"
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
-
 #include "DescriptorsModel/descriptor.h"
 #include "DescriptorsModel/obj.h"
-
+#include "static.h"
 #include "axissettingswidget.h"
 //#include "DescriptorsModel/dscrtablemodel.h"
 
@@ -35,10 +35,12 @@ public:
     QVector<Obj*> convertFileIntoObjectsVector(QString filePath);
     int getAxisColumnID(AxisType t);
 
-    QVector<QString> getObjNameList() const;
+    QVector<QString> getObjNameVector() const;
+    inline QStringList getObjNameList() const { return objNameList_; }
+
     int getDescColCnt() const;
     QAbstractItemModel *getModel() const;
-    QStandardItemModel *getModel(int colX, int colY) const;
+    QStandardItemModel *getAndPushToViewModel(int colX, int colY) const;
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
@@ -62,6 +64,7 @@ private:
     ItemsService *is_;
 
     QStringList descrNameList_;
+    QStringList objNameList_;
 
     QVector<Obj*> *dm_;
     QStandardItemModel *model_;

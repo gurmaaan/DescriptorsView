@@ -17,7 +17,7 @@ public:
     explicit StringService(QObject *parent = nullptr);
 
     static QString getCornerString(QString fileText);
-    static QString getTimeMessage(QTime t1, QTime t2);
+    static QString getTimeMessage(QTime t1, QTime t2, QString blockName = "");
     static QString replaceBGC(QString WS, QColor NC, QString BGCS = "background-color");
 
     static QString getFirstCol(QString str);

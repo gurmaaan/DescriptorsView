@@ -5,6 +5,10 @@
 #define DATA_PATH "DescriptorsView/data"
 #endif
 
+#ifndef EMPTY_CELLS_MSG
+#define EMPTY_CELLS_MSG "The document contains empty cells.\nWould you like to continue?"
+#endif
+
 #ifndef ENCODING
 #define ENCODING "Windows-1251"
 #endif

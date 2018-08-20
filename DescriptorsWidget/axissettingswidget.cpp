@@ -18,6 +18,29 @@ AxisSettingsWidget::~AxisSettingsWidget()
     delete ui;
 }
 
+QString AxisSettingsWidget::axisTittle(AxisType t)
+{
+    QString title = "";
+    switch (t) {
+    case AxisType::AxisX:
+        title = "Axis X";
+        break;
+    case AxisType::AxisY:
+        title = "Axis Y";
+        break;
+    case AxisType::ErrorX:
+        title = "Axis error X";
+        break;
+    case AxisType::ErrorY:
+        title = "Axis error Y";
+        break;
+    case AxisType::Default:
+        title = "Axis";
+        break;
+    }
+    return title;
+}
+
 void AxisSettingsWidget::on_valCB_currentIndexChanged(int index)
 {
     setSelectedIndex(index);
@@ -29,6 +52,7 @@ void AxisSettingsWidget::setSelectedIndex(int si)
     max_ = 0;
     avr_ = 0;
     ui->rangeCurrentSB->setValue(si + 1);
+    selectedIndex_ = si;
 
     valuesOfCurentInd_.clear();
     for(int r = 0; r < model_->rowCount(); r++)

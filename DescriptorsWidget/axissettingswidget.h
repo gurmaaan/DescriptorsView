@@ -41,6 +41,7 @@ public:
     inline double max() const { return max_; }
     inline double avr() const { return avr_; }
 
+    static QString axisTittle(AxisType t);
     void setObjectsVector(const QVector<Obj *> &objctsVctr);
     void setSelectedIndex(int selectedIndex);
     void setColor(const QColor &color);
