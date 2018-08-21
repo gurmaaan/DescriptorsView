@@ -42,10 +42,16 @@ public:
     QAbstractItemModel *getModel() const;
     QStandardItemModel *getAndPushToViewModel(int colX, int colY) const;
 
+    inline AxisSettingsWidget *getXWid() const { return aswX_; }
+    inline AxisSettingsWidget *getYWid() const { return aswY_; }
+    inline AxisSettingsWidget *getErXWid() const { return asEX_; }
+    inline AxisSettingsWidget *getErYWid() const { return asEY_; }
+
 public slots:
     void loadModelFromCSVFile(QString filePath);
-    void scrollToCol(int selectedInd);
     void setPointsModel(QStandardItemModel *points);
+    void scrollToCol(int colNum);
+    void setColumnColor(int colNum, QColor colColor);
 
 signals:
     void fileNameChanged(QString newFileName);

@@ -40,15 +40,21 @@ void MainWindow::connectAll()
 
     connect(ui->viewer, &DescriptorsWidget::sendStatusMessage,
             this, &MainWindow::messageResiver);
-//    connect(ui->viewer, &DescriptorsWidget::selectedModelChanged,
-//            ui->tableSelectionView, &QTableView::setModel);
+
+    connect(ui->viewer->getXWid(), &AxisSettingsWidget::selectedIndexChenged,
+            ui->viewer, &DescriptorsWidget::scrollToCol);
+    connect(ui->viewer->getYWid(), &AxisSettingsWidget::selectedIndexChenged,
+            ui->viewer, &DescriptorsWidget::scrollToCol);
+    connect(ui->viewer->getErXWid(), &AxisSettingsWidget::selectedIndexChenged,
+            ui->viewer, &DescriptorsWidget::scrollToCol);
+    connect(ui->viewer->getErYWid(), &AxisSettingsWidget::selectedIndexChenged,
+            ui->viewer, &DescriptorsWidget::scrollToCol);
 }
 
 void MainWindow::changeWindowProperties()
 {
     if (QGuiApplication::screens().count() > 1)
     {
-        qDebug() <<"Screens count : " << QGuiApplication::screens().count();
         setGeometry(QGuiApplication::screens().at(1)->geometry());
         showMaximized();
     } else
@@ -76,16 +82,6 @@ void MainWindow::messageResiver(QString message)
 {
     qDebug().noquote() << message;
     ui->statusBar->showMessage(message, MSG_TIME);
-}
-
-void MainWindow::scrollSelect(int colInd)
-{
-    int colCnt = ui->viewer->getDescColCnt();
-    if (colInd < colCnt)
-    {
-        ui->viewer->scrollToCol(colInd);
-
-    }
 }
 
 void MainWindow::on_actionQuit_triggered()
@@ -128,16 +124,12 @@ void MainWindow::on_chartBuildAct_triggered()
 
 void MainWindow::on_pointsAct_triggered()
 {
-    // 1. получаю номера выбранных в комбобоксах колонок
-    // 2. посылкаю их тавбличке, она возвращает модель выбранных точек
-    // 3. отправляю полученную модель маленькой табличке
-    // 4. настраиваю заголовки и всю ээту дрочь
-    // 5. коннект слота нажатия кнопки
-        int cNx = ui->viewer->getAxisColumnID(AxisType::AxisX);
-        int cNy = ui->viewer->getAxisColumnID(AxisType::AxisY);
+    int cNx = ui->viewer->getAxisColumnID(AxisType::AxisX);
+    int cNy = ui->viewer->getAxisColumnID(AxisType::AxisY);
 
-        QStandardItemModel *pointsModel = new QStandardItemModel();
-        pointsModel = ui->viewer->getAndPushToViewModel(cNx, cNy);
+    QStandardItemModel *pointsModel = new QStandardItemModel();
+    pointsModel = ui->viewer->getAndPushToViewModel(cNx, cNy);
+    ui->viewer->setPointsModel(pointsModel);
 }
 
 void MainWindow::on_addFileAct_triggered()

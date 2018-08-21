@@ -12,6 +12,21 @@ void ItemsService::makeAllItemsTextColor(QAbstractItemModel *model, QRgb colorCo
             model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
 }
 
+void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode)
+{
+    model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
+}
+
+void ItemsService::makeItemBGColor(QStandardItem *item, QColor color)
+{
+    item->setData(QBrush(color, Qt::SolidPattern), Qt::ForegroundRole);
+}
+
+void ItemsService::makeItemBGColor(QStandardItem *item, QRgb colorCode)
+{
+    item->setData(QBrush(QColor(colorCode), Qt::SolidPattern), Qt::ForegroundRole);
+}
+
 void ItemsService::makeFontBold(QStandardItem *item)
 {
     item->setFont(QFont(item->font().family(), item->font().pointSize(), QFont::Bold));
@@ -40,16 +55,6 @@ void ItemsService::alignText(QStandardItem *item, Qt::AlignmentFlag flag)
 {
     item->setTextAlignment(Qt::Alignment(flag));
     item->setData(flag, Qt::TextAlignmentRole);
-}
-
-void ItemsService::changeTextColor(QStandardItem *item, QColor color)
-{
-    item->setData(QBrush(color, Qt::SolidPattern), Qt::ForegroundRole);
-}
-
-void ItemsService::changeTextColor(QStandardItem *item, QRgb colorCode)
-{
-    item->setData(QBrush(QColor(colorCode), Qt::SolidPattern), Qt::ForegroundRole);
 }
 
 void ItemsService::changeBgColor(QStandardItem *item, QColor color)
@@ -115,10 +120,5 @@ void ItemsService::makeHeader(QStandardItem *item, Qt::Orientation orientation)
     makeFontBold(item);
     makeCheckable(item, !direction);
     changeBgColor(item, Qt::lightGray);
-    sizeCorrection(item);
-}
-
-void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode)
-{
-    model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
+    //sizeCorrection(item);
 }

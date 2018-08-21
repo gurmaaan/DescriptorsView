@@ -26,7 +26,6 @@ public slots:
     void on_openFileButton_clicked();
     void on_openFileAction_triggered();
     void messageResiver(QString message);
-    void scrollSelect(int colInd);
 
 private slots:
     void on_pointsBtn_clicked();

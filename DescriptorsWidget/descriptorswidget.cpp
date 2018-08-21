@@ -26,6 +26,7 @@ DescriptorsWidget::~DescriptorsWidget()
 
 QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> objectsVector)
 {
+    //FIXME:: блок работает очень долго
     QStandardItemModel *model = new QStandardItemModel();
     model->setColumnCount( descrNameList_.count() );
 
@@ -138,6 +139,11 @@ void DescriptorsWidget::setPointsModel(QStandardItemModel *points)
     }
 }
 
+void DescriptorsWidget::setColumnColor(int colNum, QColor colColor)
+{
+
+}
+
 void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 {
     emit fileNameChanged(filePath);
@@ -175,7 +181,7 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 
 void DescriptorsWidget::scrollToCol(int selectedInd)
 {      
-    ui->tableViewObjects->scrollTo(ui->tableViewObjects->model()->index(0, selectedInd));
+    ui->tableViewObjects->scrollTo(model_->index(0, selectedInd));
 }
 
 QAbstractItemModel *DescriptorsWidget::getModel() const
@@ -195,26 +201,26 @@ QStandardItemModel *DescriptorsWidget::getAndPushToViewModel(int colX, int colY)
         yColList << yItem;
     }
 
-    pointsModel_->clear();
+    QStandardItemModel *pointsModel = new QStandardItemModel();
+    pointsModel->clear();
 
-    pointsModel_->appendColumn(xColList);
-    pointsModel_->appendColumn(yColList);
+    pointsModel->appendColumn(xColList);
+    pointsModel->appendColumn(yColList);
 
-    for(int r = 0; r < pointsModel_->rowCount(); r++)
+    for(int r = 0; r < pointsModel->rowCount(); r++)
     {
-        pointsModel_->setHeaderData( r, Qt::Vertical, StringService::cutFilePath(objNameList_.at(r)) );
-        ItemsService::makeVHeader(pointsModel_->verticalHeaderItem(r));
+        pointsModel->setHeaderData( r, Qt::Vertical, StringService::cutFilePath(objNameList_.at(r)) );
+        ItemsService::makeVHeader(pointsModel->verticalHeaderItem(r));
     }
 
-    pointsModel_->setHeaderData(0, Qt::Horizontal, AxisSettingsWidget::axisTittle(AxisType::AxisX));
-    ItemsService::addDescription(pointsModel_->horizontalHeaderItem(0), descrNameList_.at(colX));
-    ItemsService::makeHHeader(pointsModel_->horizontalHeaderItem(0));
-    pointsModel_->setHeaderData(1, Qt::Horizontal, AxisSettingsWidget::axisTittle(AxisType::AxisY));
-    ItemsService::addDescription(pointsModel_->horizontalHeaderItem(1), descrNameList_.at(colY));
-    ItemsService::makeHHeader(pointsModel_->horizontalHeaderItem(1));
-    ui->tableViewPoints->setModel(pointsModel_);
+    pointsModel->setHeaderData(0, Qt::Horizontal, AxisSettingsWidget::axisTittle(AxisType::AxisX));
+    ItemsService::addDescription(pointsModel->horizontalHeaderItem(0), descrNameList_.at(colX));
+    ItemsService::makeHHeader(pointsModel->horizontalHeaderItem(0));
+    pointsModel->setHeaderData(1, Qt::Horizontal, AxisSettingsWidget::axisTittle(AxisType::AxisY));
+    ItemsService::addDescription(pointsModel->horizontalHeaderItem(1), descrNameList_.at(colY));
+    ItemsService::makeHHeader(pointsModel->horizontalHeaderItem(1));
 
-    return pointsModel_;
+    return pointsModel;
 }
 
 int DescriptorsWidget::getDescColCnt() const

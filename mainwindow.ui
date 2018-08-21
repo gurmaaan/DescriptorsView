@@ -75,7 +75,7 @@
    <property name="minimumSize">
     <size>
      <width>194</width>
-     <height>378</height>
+     <height>384</height>
     </size>
    </property>
    <property name="autoFillBackground">
@@ -241,6 +241,12 @@
      </item>
      <item>
       <widget class="QGroupBox" name="fileEmptyGB">
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(202, 203, 204)</string>
+       </property>
        <property name="title">
         <string>Add file</string>
        </property>
