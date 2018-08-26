@@ -13,6 +13,10 @@
 #define ENCODING "Windows-1251"
 #endif
 
+#ifndef CSSBGCLR
+#define CSSBGCLR "background-color"
+#endif
+
 #ifndef OPEN_FD_TITTLE
 #define OPEN_FD_TITTLE "Выберите файл с таблицей значений признаков"
 #endif
@@ -23,6 +27,10 @@
 
 #ifndef MSG_TIME
 #define MSG_TIME 4500
+#endif
+
+#ifndef CSVTYPE
+#define CSVTYPE "Comma Separatred table *.CSV"
 #endif
 
 #ifndef SYMB_MAXSIZE_W

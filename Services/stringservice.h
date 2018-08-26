@@ -18,8 +18,10 @@ public:
 
     static QString getCornerString(QString fileText);
     static QString getTimeMessage(QTime t1, QTime t2, QString blockName = "");
-    static QString replaceBGC(QString WS, QColor NC, QString BGCS = "background-color");
 
+    static QString changeCSSClrProp(QString stylesheetStr, QRgb newPropVal, QString cssPropName = CSSBGCLR);
+    static QRgb getCSSClrProp(QString stylesheetStr, QString cssPropName);
+    
     static QString getFirstCol(QString str);
     static QString getFirstRow(QString str);
 

@@ -7,7 +7,7 @@
 #include <QStandardItem>
 #include <QColor>
 #include <QFontMetrics>
-
+#include <QPalette>
 #include "static.h"
 
 class ItemsService : public QObject
@@ -19,19 +19,21 @@ public:
     static void makeFontBold(QStandardItem *item);
     static void alignText(QStandardItem *item,  Qt::AlignmentFlag flag);
 
+    static QStandardItem *fullCopy(QStandardItem* original);
     static QSize sizeOfOneSymb(QStandardItem *anyItem);
     static QSize sizeCorrection(QStandardItem *item);
 
-    static void makeItemBGColor(QStandardItem *item, QColor color);
     static void makeItemBGColor(QStandardItem *item, QRgb colorCode);
-    void makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode);
-    void makeAllItemsTextColor(QAbstractItemModel *model, QRgb colorCode);
+    static void makeAllItemBGColor(QStandardItemModel *model, QRgb colorCode);
+    static void makeAllItemBGColorDefault(QStandardItemModel *model);
+    \
+    void makeItemTextColor(QStandardItem *item, QRgb colorCode);
+    void makeAllItemsTextColor(QStandardItemModel *model, QRgb colorCode);
 
     static void changeBgColor(QStandardItem *item, QColor  color);
     static void changeBgColor(QStandardItem *item, QRgb colorCode);
 
     static void makeCheckable(QStandardItem  *item, bool state);
-
     static void addDescription(QStandardItem *item, QString text);
 
     static QString displayingStr(double data);

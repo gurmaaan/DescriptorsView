@@ -6,7 +6,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    v_= ui->viewer;
     fs_ = new FileService();
+    axWidgets_ = v_->getAxWidgets();
     connectAll();
     changeWindowProperties();
 }
@@ -23,32 +25,39 @@ void MainWindow::on_openFileButton_clicked()
 
 void MainWindow::connectAll()
 {
-    connect(ui->viewer, &DescriptorsWidget::fileNameChanged,
+    connect(v_, &DescriptorsWidget::fileNameChanged,
             ui->pathLineEdit, &QLineEdit::setText);
-    connect(ui->viewer, &DescriptorsWidget::cornerRowChanged,
+    connect(v_, &DescriptorsWidget::fileNameChanged,
+            this, &MainWindow::setWindowFilePath);
+    connect(v_, &DescriptorsWidget::cornerRowChanged,
             ui->firstRowCOlLineEdit, &QLineEdit::setText);
 
-    connect(ui->viewer, &DescriptorsWidget::colCountInFileChanged,
+    connect(v_, &DescriptorsWidget::colCountInFileChanged,
             ui->fileColSpin, &QSpinBox::setValue);
-    connect(ui->viewer, &DescriptorsWidget::colCountinModelChanged,
+    connect(v_, &DescriptorsWidget::colCountinModelChanged,
             ui->modelColSpin, &QSpinBox::setValue);
 
-    connect(ui->viewer, &DescriptorsWidget::rowCountInModelChanged,
+    connect(v_, &DescriptorsWidget::rowCountInModelChanged,
             ui->modelRowSpin, &QSpinBox::setValue);
-    connect(ui->viewer, &DescriptorsWidget::rowCountInFileChanged,
+    connect(v_, &DescriptorsWidget::rowCountInModelChanged,
+            this, &MainWindow::setupProgressBar);
+    connect(v_, &DescriptorsWidget::rowCountInFileChanged,
             ui->fileRowSpin, &QSpinBox::setValue);
+    connect(v_, &DescriptorsWidget::objectProccessed,
+            ui->fileProgressBar, &QProgressBar::setValue);
 
-    connect(ui->viewer, &DescriptorsWidget::sendStatusMessage,
+    connect(v_, &DescriptorsWidget::sendStatusMessage,
             this, &MainWindow::messageResiver);
 
-    connect(ui->viewer->getXWid(), &AxisSettingsWidget::selectedIndexChenged,
-            ui->viewer, &DescriptorsWidget::scrollToCol);
-    connect(ui->viewer->getYWid(), &AxisSettingsWidget::selectedIndexChenged,
-            ui->viewer, &DescriptorsWidget::scrollToCol);
-    connect(ui->viewer->getErXWid(), &AxisSettingsWidget::selectedIndexChenged,
-            ui->viewer, &DescriptorsWidget::scrollToCol);
-    connect(ui->viewer->getErYWid(), &AxisSettingsWidget::selectedIndexChenged,
-            ui->viewer, &DescriptorsWidget::scrollToCol);
+    for(auto a : axWidgets_)
+    {
+        connect( a, &AxisSettingsWidget::selectedIndexChanged,
+                 v_, &DescriptorsWidget::scrollToCol);
+        connect( a, &AxisSettingsWidget::colorChanged,
+                 v_, &DescriptorsWidget::setObjColClr);
+        connect( a, &AxisSettingsWidget::checkedChanged,
+                 v_, &DescriptorsWidget::updatePointsTable);
+    }
 }
 
 void MainWindow::changeWindowProperties()
@@ -67,7 +76,7 @@ void MainWindow::changeWindowProperties()
 void MainWindow::on_openFileAction_triggered()
 {
     QString path = fs_->initDialogAndGetOpenedFileName(QString(OPEN_FD_TITTLE), FileType::CSV);
-    ui->viewer->loadModelFromCSVFile(path);
+    v_->loadModelFromCSVFile(path);
 }
 
 void MainWindow::on_originalTextAction_triggered()
@@ -84,6 +93,11 @@ void MainWindow::messageResiver(QString message)
     ui->statusBar->showMessage(message, MSG_TIME);
 }
 
+void MainWindow::setupProgressBar(int objCnt)
+{
+    ui->fileProgressBar->setMaximum(objCnt * 2);
+}
+
 void MainWindow::on_actionQuit_triggered()
 {
     QCoreApplication::quit();
@@ -93,7 +107,7 @@ void MainWindow::on_pathLineEdit_textChanged(const QString &arg1)
 {
     QString fileExtenssion = arg1.split(".").last();
     if(fileExtenssion == "csv") {
-        ui->typeCB->addItem("Comma Separatred table *.CSV");
+        ui->typeCB->addItem(CSVTYPE);
     }
 }
 
@@ -119,17 +133,12 @@ void MainWindow::on_githubAct_triggered()
 
 void MainWindow::on_chartBuildAct_triggered()
 {
-     //TODO: триггер действия построения графика
+
 }
 
 void MainWindow::on_pointsAct_triggered()
 {
-    int cNx = ui->viewer->getAxisColumnID(AxisType::AxisX);
-    int cNy = ui->viewer->getAxisColumnID(AxisType::AxisY);
-
-    QStandardItemModel *pointsModel = new QStandardItemModel();
-    pointsModel = ui->viewer->getAndPushToViewModel(cNx, cNy);
-    ui->viewer->setPointsModel(pointsModel);
+    v_->createPointsModel(false);
 }
 
 void MainWindow::on_addFileAct_triggered()

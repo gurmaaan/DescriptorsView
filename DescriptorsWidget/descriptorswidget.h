@@ -16,7 +16,7 @@
 #include "DescriptorsModel/descriptor.h"
 #include "DescriptorsModel/obj.h"
 #include "static.h"
-#include "axissettingswidget.h"
+#include "DescriptorsWidget/axissettingswidget.h"
 //#include "DescriptorsModel/dscrtablemodel.h"
 
 namespace Ui {
@@ -33,25 +33,27 @@ public:
 
     QStandardItemModel *convertintoStandardModel(QVector<Obj*> objectsVector);
     QVector<Obj*> convertFileIntoObjectsVector(QString filePath);
-    int getAxisColumnID(AxisType t);
 
-    QVector<QString> getObjNameVector() const;
+    QStringList getObjNamesList() const;
     inline QStringList getObjNameList() const { return objNameList_; }
-
-    int getDescColCnt() const;
+    inline int getDescColCnt() const { return  model_->columnCount(); }
     QAbstractItemModel *getModel() const;
-    QStandardItemModel *getAndPushToViewModel(int colX, int colY) const;
-
-    inline AxisSettingsWidget *getXWid() const { return aswX_; }
-    inline AxisSettingsWidget *getYWid() const { return aswY_; }
-    inline AxisSettingsWidget *getErXWid() const { return asEX_; }
-    inline AxisSettingsWidget *getErYWid() const { return asEY_; }
+    QAbstractItemModel *createPointsModel(bool fourColms = false);
+    AxisSettingsWidget *getAxisWidget(AxisType t) const;
+    QList<AxisType> getAxTypes() const;
+    QList<AxisSettingsWidget *> getAxWidgets() const;
 
 public slots:
     void loadModelFromCSVFile(QString filePath);
     void setPointsModel(QStandardItemModel *points);
     void scrollToCol(int colNum);
-    void setColumnColor(int colNum, QColor colColor);
+     int getColNum(AxisType t);
+     int getPointsColNum(AxisType t);
+    void setObjColClr(int colNum, QRgb colorCode);
+    void setColBgClr(QList<QStandardItem*> colList, QRgb colorCode);
+    void updatePointsTable(AxisType t, bool state);
+    QList<QStandardItem *> getColItemsList(int col);
+    QList<QStandardItem *> getColItemsList(AxisType t);
 
 signals:
     void fileNameChanged(QString newFileName);
@@ -60,6 +62,7 @@ signals:
     void colCountInFileChanged(int newColCount);
     void rowCountInModelChanged(int newRowCount);
     void rowCountInFileChanged(int newRowCount);
+    void objectProccessed(int curObjNum);
     void sendStatusMessage(QString messageText);
     void selectedModelChanged(QStandardItemModel *m);
 
@@ -69,23 +72,22 @@ private:
     FileService *fs_;
     ItemsService *is_;
 
+    QList<AxisSettingsWidget *> axWidgets_;
+    QList<AxisType> axTypes_;
+
     QStringList descrNameList_;
     QStringList objNameList_;
-
     QVector<Obj*> *dm_;
+
     QStandardItemModel *model_;
     QStandardItemModel *pointsModel_;
     //DscrTableModel *model_;
+
     QChart *chart_;
     QChartView *chartView_;
 
-    AxisSettingsWidget *aswX_;
-    AxisSettingsWidget *aswY_;
-    AxisSettingsWidget *asEX_;
-    AxisSettingsWidget *asEY_;
-
     void initChart();
-    void initAisWidgets();
+    void initAxisWidgets();
     void initTable();
 };
 

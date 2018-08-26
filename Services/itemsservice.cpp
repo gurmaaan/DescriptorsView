@@ -5,26 +5,41 @@ ItemsService::ItemsService(QObject *parent) : QObject(parent)
 
 }
 
-void ItemsService::makeAllItemsTextColor(QAbstractItemModel *model, QRgb colorCode)
+void ItemsService::makeAllItemsTextColor(QStandardItemModel *model, QRgb colorCode)
 {
     for(int c = 0; c < model->columnCount(); c++)
         for(int r = 0; r < model->rowCount(); r++)
-            model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
+            makeItemTextColor(model->item(r,c), colorCode);
 }
 
-void ItemsService::makeItemTextColor(QAbstractItemModel *model, int r, int c, QRgb colorCode)
+void ItemsService::makeItemTextColor(QStandardItem *item, QRgb colorCode)
 {
-    model->setData(model->index(r, c), QColor(colorCode), Qt::TextColorRole);
-}
-
-void ItemsService::makeItemBGColor(QStandardItem *item, QColor color)
-{
-    item->setData(QBrush(color, Qt::SolidPattern), Qt::ForegroundRole);
+    item->setData(QColor(colorCode), Qt::TextColorRole);
 }
 
 void ItemsService::makeItemBGColor(QStandardItem *item, QRgb colorCode)
 {
-    item->setData(QBrush(QColor(colorCode), Qt::SolidPattern), Qt::ForegroundRole);
+    item->setData(QBrush(QColor(colorCode), Qt::SolidPattern), Qt::BackgroundColorRole);
+}
+
+void ItemsService::makeAllItemBGColor(QStandardItemModel *model, QRgb colorCode)
+{
+    for(int c = 0; c < model->columnCount(); c++)
+        for(int r = 0; r < model->rowCount(); r++)
+            makeItemBGColor(model->item(r, c), colorCode);
+}
+
+void ItemsService::makeAllItemBGColorDefault(QStandardItemModel *model)
+{
+    for(int r = 0; r < model->rowCount(); r++)
+    {
+        QColor bgClr = (r%2 == 0) ? QColor(QPalette::Base) : QColor(QPalette::AlternateBase);
+        for(int c = 0; c < model->columnCount(); c++)
+        {
+            if(model->item(r,c)->background().color() != bgClr)
+                makeItemBGColor(model->item(r,c), bgClr.rgb());
+        }
+    }
 }
 
 void ItemsService::makeFontBold(QStandardItem *item)
@@ -55,6 +70,17 @@ void ItemsService::alignText(QStandardItem *item, Qt::AlignmentFlag flag)
 {
     item->setTextAlignment(Qt::Alignment(flag));
     item->setData(flag, Qt::TextAlignmentRole);
+}
+
+QStandardItem *ItemsService::fullCopy(QStandardItem *original)
+{
+    QStandardItem *item = new QStandardItem(original->data(Qt::EditRole).toString());
+    item->setData( original->data(Qt::BackgroundRole) );
+    item->setData( original->data(Qt::TextAlignmentRole));
+    item->setData( original->data(Qt::TextColorRole));
+    item->setData( original->data(Qt::DisplayPropertyRole));
+    item->setData( original->data(Qt::DisplayRole));
+    return item;
 }
 
 void ItemsService::changeBgColor(QStandardItem *item, QColor color)

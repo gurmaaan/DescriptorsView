@@ -11,11 +11,62 @@ AxisSettingsWidget::AxisSettingsWidget(AxisType t, QWidget *parent) :
     model_ = new QStandardItemModel;
     max_ = 0;
     min_ = 0;
+    selectedIndex_ = -1;
+    colorCode_ = QColor(Qt::white).rgb();
+    //colorCode_ = StringService::getCSSClrProp(ui->clrBtn->styleSheet(), CSSBGCLR);
+}
+
+AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::AxisSettingsWidget)
+{
+    ui->setupUi(this);
+    setType(AxisType::Default);
+    ui->clrBtn->setEnabled(true);
+    model_ = new QStandardItemModel;
+    max_ = 0;
+    min_ = 0;
 }
 
 AxisSettingsWidget::~AxisSettingsWidget()
 {
     delete ui;
+}
+
+
+
+void AxisSettingsWidget::on_clrBtn_clicked()
+{
+    QColor axisColor = QColorDialog::getColor(QColor(colorCode_), this);
+    setColor(axisColor.rgb());
+}
+
+
+
+void AxisSettingsWidget::setColor(const QRgb &colorCode)
+{
+    if( colorCode_ != colorCode )
+    {
+        colorCode_ = colorCode;
+        qDebug() << ui->clrBtn->styleSheet();
+        //KOSTYL : конкретный стиль кнопки, т. к.
+        //функция автоматической генерации строки стиля из стрингсервиса не работает
+//        QString newStyleSheetStr = "border: 1px solid black; background-color: "
+//                                 + QColor(colorCode).name()
+//                                 + ";";
+        ui->clrBtn->setStyleSheet(StringService::changeCSSClrProp( ui->clrBtn->styleSheet(), colorCode, CSSBGCLR));
+        emit colorChanged(selectedIndex_, colorCode);
+        qDebug() << StringService::changeCSSClrProp( ui->clrBtn->styleSheet(), colorCode, CSSBGCLR);
+    }
+}
+
+
+int AxisSettingsWidget::selectedIndex() const
+{
+    if(this->checked())
+        return selectedIndex_;
+    else
+        return -1;
 }
 
 QString AxisSettingsWidget::axisTittle(AxisType t)
@@ -48,22 +99,27 @@ void AxisSettingsWidget::on_valCB_currentIndexChanged(int index)
 
 void AxisSettingsWidget::setSelectedIndex(int si)
 {
-    min_ = 0;
-    max_ = 0;
-    avr_ = 0;
-    ui->rangeCurrentSB->setValue(si + 1);
-    selectedIndex_ = si;
+    if (checked())
+    {
+        min_ = 0;
+        max_ = 0;
+        avr_ = 0;
+        ui->rangeCurrentSB->setValue(si + 1);
+        selectedIndex_ = si;
 
-    valuesOfCurentInd_.clear();
-    for(int r = 0; r < model_->rowCount(); r++)
-        valuesOfCurentInd_ << model_->data(model_->index(r, si)).toDouble();
+        valuesOfCurentInd_.clear();
+        for(int r = 0; r < model_->rowCount(); r++)
+            valuesOfCurentInd_ << model_->data(model_->index(r, si)).toDouble();
 
-    setCnt( valuesOfCurentInd_.count() );
-    setMax( FloatService::max(valuesOfCurentInd_) );
-    setMin( FloatService::min(valuesOfCurentInd_) );
-    setAvr( FloatService::avr(valuesOfCurentInd_) );
+        setCnt( valuesOfCurentInd_.count() );
+        setMax( FloatService::max(valuesOfCurentInd_) );
+        setMin( FloatService::min(valuesOfCurentInd_) );
+        setAvr( FloatService::avr(valuesOfCurentInd_) );
+        emit colorChanged(selectedIndex_, getColor());
+    } else
+        selectedIndex_ = -1;
+    emit selectedIndexChanged(si);
 
-    emit selectedIndexChenged(si);
 }
 
 void AxisSettingsWidget::setCnt(int cnt)
@@ -102,24 +158,6 @@ void AxisSettingsWidget::setAvr(double avr)
     }
 }
 
-void AxisSettingsWidget::on_clrBtn_clicked()
-{
-    QColor axisColor = QColorDialog::getColor(color_, this);
-    setColor(axisColor);
-}
-
-void AxisSettingsWidget::setColor(const QColor &clr)
-{
-    if( color_ != clr )
-    {
-        color_ = clr;
-        //KOSTYL : конкретный стиль кнопки, т. к.  функция автоматической генерации строки стиля из стрингсервиса не работает
-        QString newStyleSheetStr = "border: 1px solid black; background-color: " + clr.name() + ";";
-        ui->clrBtn->setStyleSheet(newStyleSheetStr);
-        emit colorChenged(clr);
-    }
-}
-
 void AxisSettingsWidget::setTittle(const QString &t, bool checkBoxExist)
 {
     if(tittle_ != t)
@@ -140,30 +178,31 @@ void AxisSettingsWidget::setRangeMax(int colCnt)
     }
 }
 
-void AxisSettingsWidget::setType(AxisType t)
+void AxisSettingsWidget::setType(const AxisType &t)
 {
     switch (t) {
     case AxisType::AxisX:
         setTittle("Axis X", false);
-        setChecked(true);
+        setChecked(t, true);
         break;
     case AxisType::AxisY:
         setTittle("Axis Y", false);
-        setChecked(true);
+        setChecked(t, true);
         break;
     case AxisType::ErrorX:
         setTittle("X error", true);
-        setChecked(false);
+        setChecked(t, false);
         break;
     case AxisType::ErrorY:
         setTittle("Y error", true);
-        setChecked(false);
+        setChecked(t, false);
         break;
     case AxisType::Default:
         setTittle("Axis", false);
-        setChecked(true);
+        setChecked(t, true);
         break;
     }
+    type_ = t;
 }
 
 void AxisSettingsWidget::setModel(QAbstractItemModel *model)
@@ -189,23 +228,21 @@ void AxisSettingsWidget::setModel(QAbstractItemModel *model)
     }
 }
 
-void AxisSettingsWidget::setChecked(bool chSt)
+void AxisSettingsWidget::setChecked(AxisType t, bool chSt)
 {
+    qDebug() << chSt;
     if( ui->groupBox->isCheckable() )
     {
-        ui->groupBox->setChecked(chSt);
-        ui->groupBox->setEnabled(!chSt);
+        if(checked_ != chSt)
+        {
+            checked_ = chSt;
+            ui->groupBox->setChecked(chSt);
+            ui->colHLayout->setEnabled(chSt);
+            ui->paramsHLayout->setEnabled(chSt);
+            ui->clrHLayout->setEnabled(chSt);
+            emit checkedChanged(t, chSt);
+        }
     }
 }
 
-AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::AxisSettingsWidget)
-{
-    ui->setupUi(this);
-    setType(AxisType::Default);
-    ui->clrBtn->setEnabled(true);
-    model_ = new QStandardItemModel;
-    max_ = 0;
-    min_ = 0;
-}
+

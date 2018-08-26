@@ -33,38 +33,45 @@ public:
 
     inline bool checked() const { return checked_; }
     inline QString tittle() const { return tittle_; }
-    inline QColor color() const { return color_; }
-    inline int rangeMax() const { return rangeMax_; }
-    inline int cnt() const { return cnt_; }
-    inline int selectedIndex() const { return selectedIndex_; }
-    inline double min() const { return min_; }
-    inline double max() const { return max_; }
-    inline double avr() const { return avr_; }
+    QRgb getColor() const
+    {
+        return colorCode_;
+    }
+    inline    int rangeMax()    const { return rangeMax_; }
+    inline    int cnt()         const { return cnt_; }
+    inline double min()         const { return min_; }
+    inline double max()         const { return max_; }
+    inline double avr()         const { return avr_; }
 
     static QString axisTittle(AxisType t);
     void setObjectsVector(const QVector<Obj *> &objctsVctr);
     void setSelectedIndex(int selectedIndex);
-    void setColor(const QColor &color);
-    void setChecked(bool chSt);
+    void setColor(const QRgb &color);
+    void setChecked(AxisType t, bool chSt);
     void setRangeMax(int colCnt);
-
-    void setType(AxisType t);
+    int selectedIndex() const;
+    void setType(const AxisType &t);
+    AxisType getType() const
+    {
+        return type_;
+    }
 
 signals:
-    void checkedChenged(bool state);
-    void tittleChenged(QString newTittle);
+    void checkedChanged(AxisType t, bool state);
+    void tittleChanged(QString newTittle);
     void vectorLoaded(QVector<Obj*> newVector);
-    void colorChenged(QColor newColor);
-    void rangeMaxChenged(int newMax);
-    void selectedIndexChenged(int newIndex);
+    void colorChanged(int selectedInd, QRgb newColor);
+    void rangeMaxChanged(int newMax);
+    void selectedIndexChanged(int newIndex);
     void sendStatusMessage(QString msg);
-    void cntChenged(int newCnt);
-    void minChenged(double newMin);
-    void maxChenged(double newMax);
-    void avrChenged(double newAvr);
+    void cntChanged(int newCnt);
+    void minChanged(double newMin);
+    void maxChanged(double newMax);
+    void avrChanged(double newAvr);
 
 public slots:
     void setModel(QAbstractItemModel *model);
+
 
 private slots:
     void on_valCB_currentIndexChanged(int index);
@@ -79,8 +86,8 @@ private:
     int selectedIndex_;
     QVector<double> valuesOfCurentInd_;
     int rangeMax_;
-
-    QColor color_;
+    AxisType type_;
+    QRgb colorCode_;
     int cnt_;
     double min_;
     double max_;

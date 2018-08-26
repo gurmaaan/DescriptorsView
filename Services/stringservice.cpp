@@ -18,28 +18,41 @@ QString StringService::getTimeMessage(QTime t1, QTime t2, QString blockName)
     return msgTxt;
 }
 
-//FIXME : некорректный парсинг строки стиля
-QString StringService::replaceBGC(QString WS, QColor NC, QString BGCS)
+QString StringService::changeCSSClrProp(QString stylesheetStr, QRgb newPropVal, QString cssPropName)
 {
-    //LO=lenghtOf,IO=IindexOf,S=String,W=Word,BGC=background-color,CN=ColorName
-    int LOWS = WS.length();
-    qInfo() << "Current StyleSheet string: " << WS << "(" << LOWS << " symbols)";
-    int IOBGCS = WS.indexOf(BGCS);
-    int LOBGCS = BGCS.length();
-    QString nCNS = NC.name();
-    qInfo() << BGCS << "position " << IOBGCS << "(" << LOBGCS << " symbols)";
-    //WS.replace(" ", "");
-    QString startS = WS.left(IOBGCS);
-    QString endWithCN = WS.right(LOWS - IOBGCS - LOBGCS);
-    //o=Old, n=New
-    QString oCNS = endWithCN.split(';').first();
-    int LOoCNS = oCNS.length();
-    QString end = WS.right(LOWS - IOBGCS - LOoCNS);
-    qInfo() << "Old colorName" << oCNS << "(" << LOoCNS << " symbols)";
-    qInfo() << "End :" << end;
-    QString nWS = startS + BGCS + QString(":") + nCNS + QString(";") + end;
-    qInfo() << "New StyleSheet string: "<< nWS;
-    return nWS;
+    QString newCSSStr = "";
+    QStringList cssPropList = stylesheetStr.split(";");
+    foreach (QString prop, cssPropList)
+    {
+        QStringList propNameValList = prop.split(":");
+        QString propName = propNameValList.first().replace(" ", "");
+        QString propVal = (propName == cssPropName) ?
+                          QColor(newPropVal).name() :
+                          propNameValList.last().replace(" ", "");
+        newCSSStr += (propName + ":" + propVal + ";");
+        qDebug() << newCSSStr;
+    }
+    return newCSSStr;
+}
+
+QRgb StringService::getCSSClrProp(QString stylesheetStr, QString cssPropName)
+{
+    QRgb clrCode = QColor(255,255,255).rgb();
+    QStringList stylePartdsList = stylesheetStr.split(";");
+    for(QString clrPart : stylePartdsList)
+    {
+        QStringList paramWithVal = clrPart.split(":");
+        if(paramWithVal.first() == cssPropName)
+        {
+            QString btnClrStr = paramWithVal.last();
+            btnClrStr.replace(" ", "");
+            if( QColor::isValidColor(btnClrStr) )
+                clrCode = QColor(btnClrStr).rgb();
+            else
+                clrCode = QColor(Qt::red).rgb();
+        }
+    }
+    return clrCode;
 }
 
 QString StringService::cutFilePath(QString longString)

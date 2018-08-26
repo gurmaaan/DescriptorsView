@@ -9,6 +9,7 @@
 #include "Services/fileservice.h"
 #include "Services/itemsservice.h"
 #include "DescriptorsWidget/axissettingswidget.h"
+#include "DescriptorsWidget/descriptorswidget.h"
 
 namespace Ui {
 class MainWindow;
@@ -23,11 +24,12 @@ public:
     ~MainWindow();
 
 public slots:
-    void on_openFileButton_clicked();
-    void on_openFileAction_triggered();
     void messageResiver(QString message);
+    void setupProgressBar(int objCnt);
 
 private slots:
+    void on_openFileButton_clicked();
+    void on_openFileAction_triggered();
     void on_pointsBtn_clicked();
     void on_buildBtn_clicked();
     void on_addFileBtn_clicked();
@@ -47,6 +49,9 @@ private:
     FileService *fs_;
     void connectAll();
     void changeWindowProperties();
+
+    DescriptorsWidget *v_;
+    QList<AxisSettingsWidget*> axWidgets_;
 };
 
 #endif // MAINWINDOW_H

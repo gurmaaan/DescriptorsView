@@ -125,10 +125,10 @@
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="AxisSettingsWidget" name="xErrorWid" native="true"/>
+           <widget class="AxisSettingsWidget" name="xErWid" native="true"/>
           </item>
           <item row="1" column="1">
-           <widget class="AxisSettingsWidget" name="yErrorWid" native="true">
+           <widget class="AxisSettingsWidget" name="yErWid" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
               <horstretch>0</horstretch>
