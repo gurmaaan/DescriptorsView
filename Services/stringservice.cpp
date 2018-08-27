@@ -42,12 +42,29 @@ QRgb StringService::getCSSClrProp(QString stylesheetStr, QString cssPropName)
     for(QString clrPart : stylePartdsList)
     {
         QStringList paramWithVal = clrPart.split(":");
-        if(paramWithVal.first() == cssPropName)
+        if(paramWithVal.first().replace(" ", "") == cssPropName)
         {
-            QString btnClrStr = paramWithVal.last();
-            btnClrStr.replace(" ", "");
-            if( QColor::isValidColor(btnClrStr) )
-                clrCode = QColor(btnClrStr).rgb();
+            QString btnClrStr = paramWithVal.last(); // rgb(100, 100, 100)
+            btnClrStr.replace(" ", ""); //rgb(100,100,100)
+            btnClrStr.replace("rgb(", ""); //100,100,100)
+            btnClrStr.replace(")", ""); //100,100,100
+
+            int clrCompnts[3];
+            QStringList components = btnClrStr.split(",");
+            bool compInt = false;
+
+            if(components.count() == 3)
+            {
+                for(int i = 0; i < components.count() ; i++)
+                    clrCompnts[i] = components.at(i).toInt(&compInt);
+            }
+            QColor btnClr = QColor(clrCompnts[0], clrCompnts[1], clrCompnts[2]).isValid();
+            if(compInt && (components.count() == 3) && btnClr.isValid())
+            {
+                clrCode = btnClr.rgb();
+                break;
+            }
+
             else
                 clrCode = QColor(Qt::red).rgb();
         }
@@ -115,14 +132,14 @@ QString StringService::getFirstRow(QString str)
     return str.split("\n").first();
 }
 
-QString StringService::multipleLine(QString str)
+QString StringService::multipleLine(QString str, QChar delimetr)
 {
-    int midUnderScore = str.count("_") / 2 + 1;
-    int lastUnderScore = str.count("_");
+    int midUnderScore = str.count(delimetr) / 2 + 1;
+    int lastUnderScore = str.count(delimetr );
     int underScoreCounter = 0;
     for(int i = 0; i < str.length(); i++)
     {
-        if(str.at(i) == "_")
+        if(str.at(i) == delimetr)
         {
             underScoreCounter++;
             if(underScoreCounter == midUnderScore || underScoreCounter == lastUnderScore)

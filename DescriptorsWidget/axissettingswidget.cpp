@@ -8,12 +8,15 @@ AxisSettingsWidget::AxisSettingsWidget(AxisType t, QWidget *parent) :
     ui->setupUi(this);
     setType(t);
     ui->clrBtn->setEnabled(true);
+
     model_ = new QStandardItemModel;
+    QStandardItem *emptyItem = new QStandardItem(SELECT_MSG);
+    model_->insertRow(0, emptyItem->index());
+    ui->valCB->setModel(model_);
     max_ = 0;
     min_ = 0;
     selectedIndex_ = -1;
-    colorCode_ = QColor(Qt::white).rgb();
-    //colorCode_ = StringService::getCSSClrProp(ui->clrBtn->styleSheet(), CSSBGCLR);
+    colorCode_ = StringService::getCSSClrProp(ui->clrBtn->styleSheet(), CSSBGCLR);
 }
 
 AxisSettingsWidget::AxisSettingsWidget(QWidget *parent) :
@@ -105,7 +108,10 @@ void AxisSettingsWidget::setSelectedIndex(int si)
         max_ = 0;
         avr_ = 0;
         ui->rangeCurrentSB->setValue(si + 1);
-        selectedIndex_ = si;
+        if(si == -1)
+            selectedIndex_ = 0;
+        else
+            selectedIndex_ = si;
 
         valuesOfCurentInd_.clear();
         for(int r = 0; r < model_->rowCount(); r++)
@@ -115,7 +121,7 @@ void AxisSettingsWidget::setSelectedIndex(int si)
         setMax( FloatService::max(valuesOfCurentInd_) );
         setMin( FloatService::min(valuesOfCurentInd_) );
         setAvr( FloatService::avr(valuesOfCurentInd_) );
-        emit colorChanged(selectedIndex_, getColor());
+        //emit colorChanged(selectedIndex_, getColor());
     } else
         selectedIndex_ = -1;
     emit selectedIndexChanged(si);
@@ -213,11 +219,11 @@ void AxisSettingsWidget::setModel(QAbstractItemModel *model)
         ui->groupBox->setEnabled(true);
 
         if(ui->groupBox->isCheckable())
-            ui->groupBox->setChecked(false);
+            setChecked(this->getType(), true);
 
         dscrNamesListForCB_.clear();
-        ui->valCB->clear();
-        ui->valCB->setMinimumWidth( ui->valCB->width() * 2);
+        for(int i = 0; i < ui->valCB->count(); i++)
+            ui->valCB->removeItem(i);
         for(int i = 0; i < model_->columnCount(); i++)
             dscrNamesListForCB_ << model_->headerData(i, Qt::Horizontal, Qt::StatusTipRole).toString();
 
@@ -230,7 +236,6 @@ void AxisSettingsWidget::setModel(QAbstractItemModel *model)
 
 void AxisSettingsWidget::setChecked(AxisType t, bool chSt)
 {
-    qDebug() << chSt;
     if( ui->groupBox->isCheckable() )
     {
         if(checked_ != chSt)

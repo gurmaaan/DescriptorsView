@@ -47,11 +47,13 @@ public slots:
     void loadModelFromCSVFile(QString filePath);
     void setPointsModel(QStandardItemModel *points);
     void scrollToCol(int colNum);
-     int getColNum(AxisType t);
-     int getPointsColNum(AxisType t);
     void setObjColClr(int colNum, QRgb colorCode);
     void setColBgClr(QList<QStandardItem*> colList, QRgb colorCode);
     void updatePointsTable(AxisType t, bool state);
+
+    int  getColNum(AxisType t);
+    int  getPointsColNum(AxisType t);
+
     QList<QStandardItem *> getColItemsList(int col);
     QList<QStandardItem *> getColItemsList(AxisType t);
 
@@ -60,7 +62,6 @@ signals:
     void cornerRowChanged(QString newCornerRow);
     void colCountinModelChanged(int newColCount);
     void colCountInFileChanged(int newColCount);
-    void rowCountInModelChanged(int newRowCount);
     void rowCountInFileChanged(int newRowCount);
     void objectProccessed(int curObjNum);
     void sendStatusMessage(QString messageText);

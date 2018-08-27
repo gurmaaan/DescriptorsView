@@ -41,7 +41,6 @@ private slots:
     void on_chartBuildAct_triggered();
     void on_pointsAct_triggered();
     void on_addFileAct_triggered();  
-
     void on_pathLineEdit_textChanged(const QString &arg1);
 
 private:

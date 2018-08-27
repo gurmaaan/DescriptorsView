@@ -12,9 +12,9 @@ DescriptorsWidget::DescriptorsWidget(QWidget *parent) :
 
     model_ = new QStandardItemModel();
     pointsModel_ = new QStandardItemModel();
+    initAxisWidgets();
     initTable();
     initChart();
-    initAxisWidgets();
 }
 
 DescriptorsWidget::~DescriptorsWidget()
@@ -26,7 +26,7 @@ QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
 {
     QString wholeFileText = fs_->getTextOfFile(filePath);
     emit colCountInFileChanged( ss_->splitAndRemoveFirstColOfFirstRow(wholeFileText).count() + 1 );
-    emit cornerRowChanged(StringService::getCornerString(wholeFileText));
+    emit cornerRowChanged( StringService::multipleLine(StringService::getCornerString(wholeFileText), ' ') );
 
     for(QString hHItemText : ss_->splitAndRemoveFirstColOfFirstRow(wholeFileText) )
     {
@@ -59,7 +59,7 @@ QVector<Obj *> DescriptorsWidget::convertFileIntoObjectsVector(QString filePath)
         QString rowString = rowsList.at(r);
         if( StringService::notEmpty(rowString) )
         {
-            emit rowCountInModelChanged(r);
+
             QString objectName = ss_->getFirstCol(rowString);
             objNameList_ << objectName;
             Obj* objAtRowR = new Obj( r,  objectName);
@@ -82,7 +82,15 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
 {
     //FIXME:: блок работает очень долго
     QStandardItemModel *model = new QStandardItemModel();
-    model->setColumnCount( descrNameList_.count() );
+   // model->setColumnCount( descrNameList_.count() );
+
+    for (Obj *ob : objectsVector)
+    {
+        int rowCnt = model->rowCount();
+        model->appendRow(ob->modelRow());
+        model->setVerticalHeaderItem(rowCnt, ob->rowVerticalHeader());
+        emit objectProccessed(rowCnt * 2);
+    }
 
     int curC = 0;
     for (QString& descrNameStr : descrNameList_) {
@@ -95,13 +103,6 @@ QStandardItemModel *DescriptorsWidget::convertintoStandardModel(QVector<Obj *> o
         curC++;
     }
 
-    for (Obj *ob : objectsVector)
-    {
-        int rowCnt = model->rowCount();
-        model->appendRow(ob->modelRow());
-        model->setVerticalHeaderItem(rowCnt - 1, ob->rowVerticalHeader());
-        emit objectProccessed(rowCnt * 2);
-    }
 
     return model;
 }
@@ -197,7 +198,7 @@ void DescriptorsWidget::updatePointsTable(AxisType t, bool state)
     for(int r = 0; r < newCol.count(); r++)
         ItemsService::makeItemBGColor( newCol.at(r), getAxisWidget(t)->getColor() );
 
-    int curCol = getColNum(t);
+    //int curCol = getColNum(t);
     int curPCol = getPointsColNum(t);
     switch (pMColCnt) {
     case 0:
@@ -287,7 +288,9 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
 
     QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
-    for(auto axis : axWidgets_)
+
+   // ui->xWid->setModel(model_);
+   for(auto axis : axWidgets_)
         axis->setModel(model_);
 
     QTime t4 = QTime::currentTime();
@@ -404,7 +407,8 @@ void DescriptorsWidget::initAxisWidgets()
 
     for(auto type : axTypes_)
     {
-        AxisSettingsWidget* axis = getAxisWidget(type);
+        AxisSettingsWidget* axis = new AxisSettingsWidget(type);
+        axis = getAxisWidget(type);
         axis->setType(type);
         axWidgets_ << axis;
     }

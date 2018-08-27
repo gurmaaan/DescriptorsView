@@ -11,6 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
     axWidgets_ = v_->getAxWidgets();
     connectAll();
     changeWindowProperties();
+    ui->openFileAction->trigger();
 }
 
 MainWindow::~MainWindow()
@@ -30,16 +31,16 @@ void MainWindow::connectAll()
     connect(v_, &DescriptorsWidget::fileNameChanged,
             this, &MainWindow::setWindowFilePath);
     connect(v_, &DescriptorsWidget::cornerRowChanged,
-            ui->firstRowCOlLineEdit, &QLineEdit::setText);
+            ui->plainTextEdit, &QPlainTextEdit::appendPlainText);
 
     connect(v_, &DescriptorsWidget::colCountInFileChanged,
             ui->fileColSpin, &QSpinBox::setValue);
     connect(v_, &DescriptorsWidget::colCountinModelChanged,
             ui->modelColSpin, &QSpinBox::setValue);
 
-    connect(v_, &DescriptorsWidget::rowCountInModelChanged,
+    connect(v_, &DescriptorsWidget::objectProccessed,
             ui->modelRowSpin, &QSpinBox::setValue);
-    connect(v_, &DescriptorsWidget::rowCountInModelChanged,
+    connect(v_, &DescriptorsWidget::objectProccessed,
             this, &MainWindow::setupProgressBar);
     connect(v_, &DescriptorsWidget::rowCountInFileChanged,
             ui->fileRowSpin, &QSpinBox::setValue);
@@ -75,8 +76,8 @@ void MainWindow::changeWindowProperties()
 
 void MainWindow::on_openFileAction_triggered()
 {
-    QString path = fs_->initDialogAndGetOpenedFileName(QString(OPEN_FD_TITTLE), FileType::CSV);
-    v_->loadModelFromCSVFile(path);
+    //QString path = fs_->initDialogAndGetOpenedFileName(QString(OPEN_FD_TITTLE), FileType::CSV);
+    v_->loadModelFromCSVFile("C:/Users/dmvgu/YandexDisk/EDUCATION/_VIDEO/DescriptorsView/data/C.csv");
 }
 
 void MainWindow::on_originalTextAction_triggered()

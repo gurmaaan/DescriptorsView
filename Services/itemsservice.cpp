@@ -19,6 +19,7 @@ void ItemsService::makeItemTextColor(QStandardItem *item, QRgb colorCode)
 
 void ItemsService::makeItemBGColor(QStandardItem *item, QRgb colorCode)
 {
+    //Вылет при вызове этой функции
     item->setData(QBrush(QColor(colorCode), Qt::SolidPattern), Qt::BackgroundColorRole);
 }
 

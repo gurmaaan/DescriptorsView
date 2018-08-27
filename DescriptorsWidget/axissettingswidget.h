@@ -6,7 +6,7 @@
 #include <QAbstractItemModel>
 #include <QGroupBox>
 #include <QVector>
-
+#include "static.h"
 #include "DescriptorsModel/obj.h"
 #include "Services/floatservice.h"
 
