@@ -34,13 +34,19 @@ void ItemsService::makeAllItemBGColorDefault(QStandardItemModel *model)
 {
     for(int r = 0; r < model->rowCount(); r++)
     {
-        QColor bgClr = (r%2 == 0) ? QColor(QPalette::Base) : QColor(QPalette::AlternateBase);
+        QColor bgClr = (r%2 != 0) ? QColor(QPalette::Base) : QColor(QPalette::AlternateBase);
         for(int c = 0; c < model->columnCount(); c++)
         {
             if(model->item(r,c)->background().color() != bgClr)
                 makeItemBGColor(model->item(r,c), bgClr.rgb());
         }
     }
+}
+
+void ItemsService::makeColBgClr(QList<QStandardItem *> *col, QRgb colorCode)
+{
+    for(int r = 0; r < col->count(); r++)
+        makeItemBGColor( col->at(r), colorCode );
 }
 
 void ItemsService::makeFontBold(QStandardItem *item)
@@ -75,12 +81,19 @@ void ItemsService::alignText(QStandardItem *item, Qt::AlignmentFlag flag)
 
 QStandardItem *ItemsService::fullCopy(QStandardItem *original)
 {
-    QStandardItem *item = new QStandardItem(original->data(Qt::EditRole).toString());
-    item->setData( original->data(Qt::BackgroundRole) );
-    item->setData( original->data(Qt::TextAlignmentRole));
-    item->setData( original->data(Qt::TextColorRole));
-    item->setData( original->data(Qt::DisplayPropertyRole));
-    item->setData( original->data(Qt::DisplayRole));
+    QStandardItem *item = new QStandardItem();
+    if(original != nullptr)
+    {
+        item->setData( original->data(Qt::EditRole) );
+        item->setData( original->data(Qt::BackgroundRole) );
+        item->setData( original->data(Qt::TextAlignmentRole));
+        item->setData( original->data(Qt::TextColorRole));
+        item->setData( original->data(Qt::DisplayPropertyRole));
+        item->setData( original->data(Qt::DisplayRole));
+    } else
+    {
+        item->setData( "NULL");
+    }
     return item;
 }
 

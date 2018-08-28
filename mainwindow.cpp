@@ -38,12 +38,12 @@ void MainWindow::connectAll()
     connect(v_, &DescriptorsWidget::colCountinModelChanged,
             ui->modelColSpin, &QSpinBox::setValue);
 
-    connect(v_, &DescriptorsWidget::objectProccessed,
-            ui->modelRowSpin, &QSpinBox::setValue);
-    connect(v_, &DescriptorsWidget::objectProccessed,
-            this, &MainWindow::setupProgressBar);
     connect(v_, &DescriptorsWidget::rowCountInFileChanged,
             ui->fileRowSpin, &QSpinBox::setValue);
+    connect(v_, &DescriptorsWidget::rowCountInFileChanged,
+            ui->fileProgressBar, &QProgressBar::setMaximum);
+    connect(v_, &DescriptorsWidget::objectProccessed,
+            ui->modelRowSpin, &QSpinBox::setValue);
     connect(v_, &DescriptorsWidget::objectProccessed,
             ui->fileProgressBar, &QProgressBar::setValue);
 
@@ -94,11 +94,6 @@ void MainWindow::messageResiver(QString message)
     ui->statusBar->showMessage(message, MSG_TIME);
 }
 
-void MainWindow::setupProgressBar(int objCnt)
-{
-    ui->fileProgressBar->setMaximum(objCnt * 2);
-}
-
 void MainWindow::on_actionQuit_triggered()
 {
     QCoreApplication::quit();
@@ -134,7 +129,7 @@ void MainWindow::on_githubAct_triggered()
 
 void MainWindow::on_chartBuildAct_triggered()
 {
-
+    //TODO:: Implement me
 }
 
 void MainWindow::on_pointsAct_triggered()

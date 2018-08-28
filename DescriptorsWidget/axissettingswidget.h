@@ -31,17 +31,15 @@ public:
     AxisSettingsWidget(AxisType t, QWidget *parent = nullptr);
     ~AxisSettingsWidget();
 
-    inline bool checked() const { return checked_; }
-    inline QString tittle() const { return tittle_; }
-    QRgb getColor() const
-    {
-        return colorCode_;
-    }
-    inline    int rangeMax()    const { return rangeMax_; }
-    inline    int cnt()         const { return cnt_; }
-    inline double min()         const { return min_; }
-    inline double max()         const { return max_; }
-    inline double avr()         const { return avr_; }
+    inline bool     checked()     const { return checked_;  }
+    inline QString  tittle()      const { return tittle_;   }
+    inline    int   rangeMax()    const { return rangeMax_; }
+    inline    int   cnt()         const { return cnt_;      }
+    inline double   min()         const { return min_;      }
+    inline double   max()         const { return max_;      }
+    inline double   avr()         const { return avr_;      }
+    inline QRgb     getColor()    const { return colorCode_;}
+    inline AxisType getType()     const { return type_;     }
 
     static QString axisTittle(AxisType t);
     void setObjectsVector(const QVector<Obj *> &objctsVctr);
@@ -49,12 +47,9 @@ public:
     void setColor(const QRgb &color);
     void setChecked(AxisType t, bool chSt);
     void setRangeMax(int colCnt);
-    int selectedIndex() const;
+     int selectedIndex() const;
     void setType(const AxisType &t);
-    AxisType getType() const
-    {
-        return type_;
-    }
+
 
 signals:
     void checkedChanged(AxisType t, bool state);

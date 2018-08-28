@@ -9,10 +9,9 @@ AxisSettingsWidget::AxisSettingsWidget(AxisType t, QWidget *parent) :
     setType(t);
     ui->clrBtn->setEnabled(true);
 
-    model_ = new QStandardItemModel;
-    QStandardItem *emptyItem = new QStandardItem(SELECT_MSG);
-    model_->insertRow(0, emptyItem->index());
-    ui->valCB->setModel(model_);
+    model_ = new QStandardItemModel();
+  //  QStandardItem *firstItem = new QStandardItem(EMPTY_CELLS_MSG);
+    ui->valCB->addItem(EMPTY_CELLS_MSG);
     max_ = 0;
     min_ = 0;
     selectedIndex_ = -1;
@@ -44,8 +43,6 @@ void AxisSettingsWidget::on_clrBtn_clicked()
     setColor(axisColor.rgb());
 }
 
-
-
 void AxisSettingsWidget::setColor(const QRgb &colorCode)
 {
     if( colorCode_ != colorCode )
@@ -54,12 +51,13 @@ void AxisSettingsWidget::setColor(const QRgb &colorCode)
         qDebug() << ui->clrBtn->styleSheet();
         //KOSTYL : конкретный стиль кнопки, т. к.
         //функция автоматической генерации строки стиля из стрингсервиса не работает
-//        QString newStyleSheetStr = "border: 1px solid black; background-color: "
-//                                 + QColor(colorCode).name()
-//                                 + ";";
-        ui->clrBtn->setStyleSheet(StringService::changeCSSClrProp( ui->clrBtn->styleSheet(), colorCode, CSSBGCLR));
+        QString newStyleSheetStr = "border: 1px solid black; background-color: "
+                                 + QColor(colorCode).name()
+                                 + ";";
+        ui->clrBtn->setStyleSheet(newStyleSheetStr);
+       // ui->clrBtn->setStyleSheet(StringService::changeCSSClrProp( ui->clrBtn->styleSheet(), colorCode, CSSBGCLR));
         emit colorChanged(selectedIndex_, colorCode);
-        qDebug() << StringService::changeCSSClrProp( ui->clrBtn->styleSheet(), colorCode, CSSBGCLR);
+       // qDebug() << StringService::changeCSSClrProp( ui->clrBtn->styleSheet(), colorCode, CSSBGCLR);
     }
 }
 
@@ -121,7 +119,7 @@ void AxisSettingsWidget::setSelectedIndex(int si)
         setMax( FloatService::max(valuesOfCurentInd_) );
         setMin( FloatService::min(valuesOfCurentInd_) );
         setAvr( FloatService::avr(valuesOfCurentInd_) );
-        //emit colorChanged(selectedIndex_, getColor());
+        emit colorChanged(selectedIndex_, getColor());
     } else
         selectedIndex_ = -1;
     emit selectedIndexChanged(si);
@@ -245,7 +243,6 @@ void AxisSettingsWidget::setChecked(AxisType t, bool chSt)
             ui->colHLayout->setEnabled(chSt);
             ui->paramsHLayout->setEnabled(chSt);
             ui->clrHLayout->setEnabled(chSt);
-            emit checkedChanged(t, chSt);
         }
     }
 }

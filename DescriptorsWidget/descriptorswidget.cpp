@@ -173,22 +173,12 @@ void DescriptorsWidget::setObjColClr(int colNum, QRgb colorCode)
 {
     scrollToCol(colNum);
 
-    ItemsService::makeAllItemBGColorDefault(model_);
+    //ItemsService::makeAllItemBGColorDefault(model_);
     for(int r = 0; r < model_->rowCount(); r++)
-    {
-        QColor hItClr = QColor(colorCode).darker();
-        qDebug() << "Original : " << colorCode << " Custom : " << hItClr;
         ItemsService::makeItemBGColor(model_->item(r, colNum), colorCode);
-        ItemsService::makeItemBGColor( model_->horizontalHeaderItem(colNum), hItClr.rgb() );
-    }
+
     pointsModel_->clear();
     ui->tableViewPoints->setModel(createPointsModel());
-}
-
-void DescriptorsWidget::setColBgClr(QList<QStandardItem *> colList, QRgb colorCode)
-{
-    for(int r = 0; r < colList.count(); r++)
-        ItemsService::makeItemBGColor( colList.at(r), colorCode );
 }
 
 void DescriptorsWidget::updatePointsTable(AxisType t, bool state)
@@ -236,12 +226,6 @@ void DescriptorsWidget::updatePointsTable(AxisType t, bool state)
     }
 }
 
-QList<QStandardItem *> DescriptorsWidget::getColItemsList(AxisType t)
-{
-    int colNum = getColNum(t);
-    getColItemsList(colNum);
-}
-
 QList<AxisSettingsWidget *> DescriptorsWidget::getAxWidgets() const
 {
     if(axWidgets_.count() != 0)
@@ -266,13 +250,19 @@ QList<AxisType> DescriptorsWidget::getAxTypes() const
     }
 }
 
+QList<QStandardItem *> DescriptorsWidget::getColItemsList(AxisType t)
+{
+    int colNum = getColNum(t);
+    return getColItemsList(colNum);
+}
+
 QList<QStandardItem *> DescriptorsWidget::getColItemsList(int col)
 {
     QList<QStandardItem *> itemsList;
     for(int r = 0; r < model_->rowCount(); r++)
     {
-        QStandardItem *old = model_->item(r, col);
-        itemsList << ItemsService::fullCopy(old)    ;
+        QStandardItem *newItem = new QStandardItem(model_->item(r, col)->data().toString());
+        itemsList << newItem;
     }
     return itemsList;
 }
@@ -289,13 +279,11 @@ void DescriptorsWidget::loadModelFromCSVFile(QString filePath)
     QTime t3 = QTime::currentTime();
     model_ = convertintoStandardModel(objInFileVector);
 
-   // ui->xWid->setModel(model_);
-   for(auto axis : axWidgets_)
-        axis->setModel(model_);
-
     QTime t4 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t3, t4, "convertintoStandardModel"));
 
+    for(auto axis : axWidgets_)
+        axis->setModel(model_);
     ui->tableViewObjects->setModel(model_);
     QTime t5 = QTime::currentTime();
     emit sendStatusMessage(StringService::getTimeMessage(t4, t5, "setupModelToUI"));
@@ -348,7 +336,7 @@ AxisSettingsWidget *DescriptorsWidget::getAxisWidget(AxisType t) const
 QAbstractItemModel *DescriptorsWidget::createPointsModel(bool fourColms)
 {
     QStandardItemModel *pointsModel = new QStandardItemModel();
-     QList<QStandardItem*> colList;
+    QList<QStandardItem*> colList;
     for(auto a : axWidgets_)
     {
         AxisType t = a->getType();
@@ -357,7 +345,7 @@ QAbstractItemModel *DescriptorsWidget::createPointsModel(bool fourColms)
             if(t == AxisType::AxisX || t == AxisType ::AxisY)
             {
                 colList = getColItemsList(t);
-                setColBgClr(colList, getAxisWidget(t)->getColor());
+                ItemsService::makeColBgClr(&colList, getAxisWidget(t)->getColor());
                 pointsModel->appendColumn( colList );
             }
             else
@@ -366,7 +354,7 @@ QAbstractItemModel *DescriptorsWidget::createPointsModel(bool fourColms)
         else
         {
             colList = getColItemsList(t);
-            setColBgClr(colList, getAxisWidget(t)->getColor());
+            ItemsService::makeColBgClr(&colList, getAxisWidget(t)->getColor());
             pointsModel->appendColumn( colList );
         }
 
@@ -393,7 +381,6 @@ void DescriptorsWidget::initChart()
 //    mapper->setSeries(series);
 //    mapper->setModel(model_);
 //    chart_->addSeries(series);
-   // ui->gr
     chart_->createDefaultAxes();
     chartView_->setRenderHint(QPainter::Antialiasing);
     chartView_->setChart(chart_);

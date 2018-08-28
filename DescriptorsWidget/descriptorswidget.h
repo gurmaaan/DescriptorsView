@@ -48,7 +48,6 @@ public slots:
     void setPointsModel(QStandardItemModel *points);
     void scrollToCol(int colNum);
     void setObjColClr(int colNum, QRgb colorCode);
-    void setColBgClr(QList<QStandardItem*> colList, QRgb colorCode);
     void updatePointsTable(AxisType t, bool state);
 
     int  getColNum(AxisType t);

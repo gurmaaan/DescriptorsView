@@ -26,6 +26,7 @@ public:
     static void makeItemBGColor(QStandardItem *item, QRgb colorCode);
     static void makeAllItemBGColor(QStandardItemModel *model, QRgb colorCode);
     static void makeAllItemBGColorDefault(QStandardItemModel *model);
+    static void makeColBgClr(QList<QStandardItem*> *col, QRgb colorCode);
     \
     void makeItemTextColor(QStandardItem *item, QRgb colorCode);
     void makeAllItemsTextColor(QStandardItemModel *model, QRgb colorCode);

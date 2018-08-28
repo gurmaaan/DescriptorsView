@@ -44,27 +44,33 @@ QRgb StringService::getCSSClrProp(QString stylesheetStr, QString cssPropName)
         QStringList paramWithVal = clrPart.split(":");
         if(paramWithVal.first().replace(" ", "") == cssPropName)
         {
-            QString btnClrStr = paramWithVal.last(); // rgb(100, 100, 100)
-            btnClrStr.replace(" ", ""); //rgb(100,100,100)
-            btnClrStr.replace("rgb(", ""); //100,100,100)
-            btnClrStr.replace(")", ""); //100,100,100
-
-            int clrCompnts[3];
-            QStringList components = btnClrStr.split(",");
-            bool compInt = false;
-
-            if(components.count() == 3)
+            QString btnClrStr = paramWithVal.last();
+            if(btnClrStr.contains("rgb("))// rgb(100, 100, 100)
             {
-                for(int i = 0; i < components.count() ; i++)
-                    clrCompnts[i] = components.at(i).toInt(&compInt);
-            }
-            QColor btnClr = QColor(clrCompnts[0], clrCompnts[1], clrCompnts[2]).isValid();
-            if(compInt && (components.count() == 3) && btnClr.isValid())
-            {
-                clrCode = btnClr.rgb();
-                break;
-            }
+                btnClrStr.replace(" ", ""); //rgb(100,100,100)
+                btnClrStr.replace("rgb(", ""); //100,100,100)
+                btnClrStr.replace(")", ""); //100,100,100
 
+                int clrCompnts[3];
+                QStringList components = btnClrStr.split(",");
+                bool compInt = false;
+
+                if(components.count() == 3)
+                {
+                    for(int i = 0; i < components.count() ; i++)
+                        clrCompnts[i] = components.at(i).toInt(&compInt);
+                }
+                QColor btnClr = QColor(clrCompnts[0], clrCompnts[1], clrCompnts[2]).isValid();
+
+                if(compInt && (components.count() == 3) && btnClr.isValid())
+                {
+                    clrCode = btnClr.rgb();
+                    break;
+                }
+            } else if (btnClrStr.contains("#")) {
+                if(QColor(btnClrStr).isValid())
+                    clrCode = QColor(btnClrStr).rgb();
+            }
             else
                 clrCode = QColor(Qt::red).rgb();
         }

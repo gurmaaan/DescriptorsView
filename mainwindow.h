@@ -25,7 +25,6 @@ public:
 
 public slots:
     void messageResiver(QString message);
-    void setupProgressBar(int objCnt);
 
 private slots:
     void on_openFileButton_clicked();
